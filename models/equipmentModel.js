@@ -141,6 +141,62 @@ class EquipmentModel {
     const [equipment] = await db.execute(query, [ngoId]);
     return equipment;
   }
+  // Update equipment status and quantity
+  static async updateStatus(equipmentId, status, quantity) {
+    const query = `
+            UPDATE Equipment 
+            SET status = ?, quantity = ? 
+            WHERE equipmentId = ?
+        `;
+
+    const [result] = await db.execute(query, [status, quantity, equipmentId]);
+    return result.affectedRows > 0;
+  }
+
+  // Update entire equipment record
+  static async update(equipmentId, updateData) {
+    const { name, type, location, status, quantity, expirationDate } =
+      updateData;
+
+    const query = `
+            UPDATE Equipment 
+            SET name = ?, type = ?, location = ?, status = ?, quantity = ?, expirationDate = ?
+            WHERE equipmentId = ?
+        `;
+
+    const [result] = await db.execute(query, [
+      name,
+      type,
+      location,
+      status,
+      quantity,
+      expirationDate,
+      equipmentId,
+    ]);
+
+    return result.affectedRows > 0;
+  }
+
+  // Delete equipment
+  static async delete(equipmentId) {
+    const query = "DELETE FROM Equipment WHERE equipmentId = ?";
+    const [result] = await db.execute(query, [equipmentId]);
+    return result.affectedRows > 0;
+  }
+
+  // Get available equipment count by type
+  static async getAvailableCountByType() {
+    const query = `
+            SELECT type, SUM(quantity) as totalQuantity
+            FROM Equipment
+            WHERE status = 'Available'
+            GROUP BY type
+            ORDER BY type
+        `;
+
+    const [counts] = await db.execute(query);
+    return counts;
+  }
 }
 
 module.exports = EquipmentModel;

@@ -197,6 +197,38 @@ class EquipmentModel {
     const [counts] = await db.execute(query);
     return counts;
   }
+  // Get expiring equipment (within 30 days)
+  static async getExpiringEquipment(days = 30) {
+    const query = `
+            SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE e.expirationDate IS NOT NULL 
+            AND e.expirationDate <= DATE_ADD(CURDATE(), INTERVAL ? DAY)
+            ORDER BY e.expirationDate
+        `;
+
+    const [equipment] = await db.execute(query, [days]);
+    return equipment;
+  }
+
+  // Get equipment statistics
+  static async getStatistics() {
+    const query = `
+            SELECT 
+                COUNT(*) as totalEquipment,
+                SUM(quantity) as totalQuantity,
+                SUM(CASE WHEN status = 'Available' THEN quantity ELSE 0 END) as availableQuantity,
+                SUM(CASE WHEN status = 'In Use' THEN quantity ELSE 0 END) as inUseQuantity,
+                SUM(CASE WHEN status = 'Reserved' THEN quantity ELSE 0 END) as reservedQuantity,
+                SUM(CASE WHEN status = 'Out of Service' THEN quantity ELSE 0 END) as outOfServiceQuantity,
+                COUNT(DISTINCT type) as equipmentTypes
+            FROM Equipment
+        `;
+
+    const [stats] = await db.execute(query);
+    return stats[0];
+  }
 }
 
 module.exports = EquipmentModel;

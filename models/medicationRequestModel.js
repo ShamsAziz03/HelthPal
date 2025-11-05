@@ -104,11 +104,65 @@ class MedicationRequestModel {
         const [requests] = await db.execute(query, [urgency]);
         return requests;
     }
+    // Update entire medication request
+    static async update(requestId, updateData) {
+        const { medicationName, quantity, urgency, status, ngoId } = updateData;
 
+        const query = `
+            UPDATE MedicationRequest 
+            SET medicationName = ?, quantity = ?, urgency = ?, status = ?, ngoId = ?
+            WHERE requestId = ?
+        `;
 
+        const [result] = await db.execute(query, [
+            medicationName,
+            quantity,
+            urgency,
+            status,
+            ngoId,
+            requestId
+        ]);
 
+        return result.affectedRows > 0;
+    }
 
+    // Delete medication request
+    static async delete(requestId) {
+        const query = 'DELETE FROM MedicationRequest WHERE requestId = ?';
+        const [result] = await db.execute(query, [requestId]);
+        return result.affectedRows > 0;
+    }
 
+    // Get requests fulfilled by an NGO
+    static async findByNGO(ngoId) {
+        const query = `
+            SELECT mr.*, p.userId, u.fullName as patientName
+            FROM MedicationRequest mr
+            JOIN Patient p ON mr.patientId = p.patientId
+            JOIN User u ON p.userId = u.userId
+            WHERE mr.ngoId = ?
+            ORDER BY mr.requestDate DESC
+        `;
+
+        const [requests] = await db.execute(query, [ngoId]);
+        return requests;
+    }
+
+    // Get statistics for dashboard
+    static async getStatistics() {
+        const query = `
+            SELECT 
+                COUNT(*) as totalRequests,
+                SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as pendingRequests,
+                SUM(CASE WHEN status = 'In Progress' THEN 1 ELSE 0 END) as inProgressRequests,
+                SUM(CASE WHEN status = 'Fulfilled' THEN 1 ELSE 0 END) as fulfilledRequests,
+                SUM(CASE WHEN urgency = 'High' THEN 1 ELSE 0 END) as highUrgencyRequests
+            FROM MedicationRequest
+        `;
+
+        const [stats] = await db.execute(query);
+        return stats[0];
+    }
 
 
 }

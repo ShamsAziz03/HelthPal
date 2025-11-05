@@ -86,6 +86,61 @@ class EquipmentModel {
     const [equipment] = await db.execute(query, params);
     return equipment;
   }
+  // Get equipment by type
+  static async findByType(type) {
+    const query = `
+            SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE e.type = ?
+            ORDER BY e.name
+        `;
+
+    const [equipment] = await db.execute(query, [type]);
+    return equipment;
+  }
+
+  // Get equipment by location
+  static async findByLocation(location) {
+    const query = `
+            SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE e.location LIKE ?
+            ORDER BY e.name
+        `;
+
+    const [equipment] = await db.execute(query, [`%${location}%`]);
+    return equipment;
+  }
+
+  // Get equipment by status
+  static async findByStatus(status) {
+    const query = `
+            SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE e.status = ?
+            ORDER BY e.name
+        `;
+
+    const [equipment] = await db.execute(query, [status]);
+    return equipment;
+  }
+
+  // Get equipment by NGO
+  static async findByNGO(ngoId) {
+    const query = `
+            SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE e.ngoId = ?
+            ORDER BY e.name
+        `;
+
+    const [equipment] = await db.execute(query, [ngoId]);
+    return equipment;
+  }
 }
 
 module.exports = EquipmentModel;

@@ -1,4 +1,4 @@
-const NGO = require('../models/NGO');
+const NGO = require('../models/ngoModel');
 
 const ngoController = {
     add: async (req, res) => {

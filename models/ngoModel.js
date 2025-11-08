@@ -7,8 +7,8 @@ class NGO {
         const ngoId = uuidv4()
 
         //here we should check for user id if exist or not 
-        const qry = "INSERT INTO healthpal.ngo (userId,organizationName,registrationNumber,contactPerson,serviceAreas)VALUES(?, ?, ?, ?, ?);"
-        const res = await db.execute(qry, [userId, organizationName, registrationNumber, contactPerson, serviceAreas])
+        const qry = "INSERT INTO healthpal.ngo (ngoId,userId,organizationName,registrationNumber,contactPerson,serviceAreas)VALUES(?,?, ?, ?, ?, ?);"
+        const res = await db.execute(qry, [ngoId, userId, organizationName, registrationNumber, contactPerson, serviceAreas])
 
         return {ngoId, ...data}
     }
@@ -71,3 +71,5 @@ class NGO {
         return res.affectedRows > 0
     }
 }
+
+module.exports = NGO

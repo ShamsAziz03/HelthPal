@@ -55,4 +55,19 @@ class NGO {
 
         return res
     }
+
+    //NGO verification
+    static async getVerifiedNGOs() {
+        const qry = "SELECT * FROM healthpal.ngo WHERE registrationNumber IS NOT NULL;"
+        const [res] = await db.query(qry)
+
+        return res
+    }
+
+    static async verifyNGO(ngoId, regNum) {
+        const qry = "UPDATE `healthpal`.`ngo` SET `registrationNumber` = ? WHERE `ngoId` = ?;"
+        const [res] = await db.execute(qry, [regNum, ngoId])
+
+        return res.affectedRows > 0
+    }
 }

@@ -20,4 +20,39 @@ class NGO {
         return res.affectedRows > 0;
     }
 
+    //retrieving NGOs using different parameters
+    static async getAll() {
+        const qry = "SELECT * FROM healthpal.ngo;"
+        const [res] = await db.query(qry)
+
+        return res
+    }
+
+    static async getByOrgId(id) {
+        const qry = "SELECT * FROM healthpal.ngo WHERE ngoId = ?;"
+        const [res] = await db.query(qry, [id])
+
+        return res
+    }
+
+    static async getByOrgName(orgName) {
+        const qry = "SELECT * FROM healthpal.ngo WHERE organizationName = ?;"
+        const [res] = await db.query(qry, [orgName])
+
+        return res
+    }
+
+    static async getByRegNumber(regNum) {
+        const qry = "SELECT * FROM healthpal.ngo WHERE registrationNumber = ?;"
+        const [res] = await db.query(qry, [regNum])
+
+        return res
+    }
+
+    static async getByuserId(id) {
+        const qry = "SELECT * FROM healthpal.ngo WHERE userId = ?;"
+        const [res] = await db.query(qry, [id])
+
+        return res
+    }
 }

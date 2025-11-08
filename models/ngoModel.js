@@ -12,4 +12,12 @@ class NGO {
 
         return {ngoId, ...data}
     }
+
+    static async delete(id) {
+        const qry = "DELETE FROM `healthpal`.`ngo` WHERE ngoId = ?;"
+        const [res] = await db.execute(qry, [id])
+
+        return res.affectedRows > 0;
+    }
+
 }

@@ -60,6 +60,26 @@ exports.getMedicationRequestById = async (req, res) => {
         });
     }
 };
+exports.getMedicationRequestsByPatient = async (req, res) => {
+    try {
+        const { patientId } = req.params;
+        const requests = await MedicationRequestModel.findByPatientId(patientId);
+
+        res.status(200).json({
+            success: true,
+            count: requests.length,
+            data: requests
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching patient medication requests',
+            error: error.message
+        });
+    }
+};
+
+
 
 
 

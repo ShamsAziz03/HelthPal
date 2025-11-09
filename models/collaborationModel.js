@@ -1,8 +1,24 @@
 const db = require('../config/db');
 
 class Collaboration {
+    static validateStatus(status) {
+        const allowedStatuses = ['Active', 'Pending', 'Rejected'];
+        if (status && !allowedStatuses.includes(status)) {
+            return { error: `Status must be one of: ${allowedStatuses.join(', ')}` };
+        }
+        return null;
+    }
+
     static async add(data) {
         const { ngoId, partnerNgoId, status } = data;
+
+        // Validate status if provided
+        if (status) {
+            const statusError = this.validateStatus(status);
+            if (statusError) {
+                return statusError;
+            }
+        }
 
         //check for forign keys
         const [ngo] = await db.query("SELECT * FROM healthpal.ngo WHERE ngoId = ?", [ngoId])
@@ -43,6 +59,19 @@ class Collaboration {
             return { error: "Failed to update status" }
         }
         return { message: "Status updated successfully"}
+    }
+
+    static async getAll() {
+        const qry = 'SELECT * FROM healthpal.collaboration'
+        const [data] = await db.query(qry)
+        return data
+    }
+
+    static async getById(id) {
+        const qry = 'SELECT * FROM healthpal.collaboration WHERE collaborationId = ?'
+        const [data] = await db.query(qry, [id])
+        if (data.length === 0) return { error: 'collaboration not found' }
+        return data[0]
     }
 }
 

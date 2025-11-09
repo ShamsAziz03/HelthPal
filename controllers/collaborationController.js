@@ -21,7 +21,24 @@ const collaborationController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
-    }
+    },
+    getAll: async (req, res) => {
+        try {
+            const data = await collaboration.getAll()
+            res.json(data)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    getById: async (req, res) => {
+        try {
+            const { id } = req.params
+            const result = await collaboration.getById(id)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
 }
 
 module.exports = collaborationController

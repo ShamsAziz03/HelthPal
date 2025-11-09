@@ -202,3 +202,39 @@ exports.deleteEquipment = async (req, res) => {
     });
   }
 };
+
+exports.getEquipmentStatistics = async (req, res) => {
+  try {
+    const stats = await EquipmentModel.getStatistics();
+
+    res.status(200).json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching equipment statistics",
+      error: error.message,
+    });
+  }
+};
+
+exports.getExpiringEquipment = async (req, res) => {
+  try {
+    const days = req.query.days || 30;
+    const equipment = await EquipmentModel.getExpiringEquipment(days);
+
+    res.status(200).json({
+      success: true,
+      count: equipment.length,
+      data: equipment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching expiring equipment",
+      error: error.message,
+    });
+  }
+};

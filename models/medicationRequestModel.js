@@ -37,7 +37,6 @@ class MedicationRequestModel {
     return requests;
   }
 
-  //************************************** */
   // Update medication request status
   static async updateStatus(requestId, status, ngoId = null) {
     const query = `

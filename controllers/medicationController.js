@@ -79,6 +79,27 @@ exports.getMedicationRequestsByPatient = async (req, res) => {
     }
 };
 
+exports.getMedicationRequestsByStatus = async (req, res) => {
+    try {
+        const { status } = req.params;
+        const requests = await MedicationRequestModel.findByStatus(status);
+
+        res.status(200).json({
+            success: true,
+            count: requests.length,
+            data: requests
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching medication requests by status',
+            error: error.message
+        });
+    }
+};
+
+
+
 
 
 

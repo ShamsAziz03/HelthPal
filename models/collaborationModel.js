@@ -28,6 +28,22 @@ class Collaboration {
 
         return { ngoId, partnerNgoId, status: status || 'Pending' }
     }
+
+    static async updateStatus (id, newStatus) {
+        //ensure that this collaboration exist
+        const qry = "SELECT * FROM healthpal.collaboration WHERE `collaborationId` = ?;"
+        const [data] = await db.query(qry, [id])
+        if (data.length === 0)
+            return { error: "collaboration not found" }
+
+        const qry2 = "UPDATE `healthpal`.`collaboration` SET `status` = ? WHERE `collaborationId` = ?;"
+        const [res] = await db.execute(qry2, [newStatus, id])
+
+        if (res.affectedRows === 0) {
+            return { error: "Failed to update status" }
+        }
+        return { message: "Status updated successfully"}
+    }
 }
 
 module.exports = Collaboration;

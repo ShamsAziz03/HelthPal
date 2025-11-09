@@ -36,5 +36,31 @@ exports.getAllMedicationRequests = async (req, res) => {
     }
 };
 
+exports.getMedicationRequestById = async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const request = await MedicationRequestModel.findById(requestId);
+
+        if (!request) {
+            return res.status(404).json({
+                success: false,
+                message: 'Medication request not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: request
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching medication request',
+            error: error.message
+        });
+    }
+};
+
+
 
 

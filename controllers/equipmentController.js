@@ -101,7 +101,7 @@ exports.getEquipmentByNGO = async (req, res) => {
 };
 
 // Get equipment by NGO and status
-exports.getEquipmentByNGOANDStatus = async (req, res) => {
+exports.getEquipmentByNGOandStatus = async (req, res) => {
     try {
         const { ngoId, status } = req.params;
         const equipment = await EquipmentModel.findByNGOAndStatus(ngoId, status);

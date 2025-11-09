@@ -6,4 +6,5 @@ router.post('/add', collaborationController.add)
 router.post('/updateStatus', collaborationController.updateStatus)
 router.get('/', collaborationController.getAll)
 router.get('/:id', collaborationController.getById)
+router.delete('/delete/:id', collaborationController.delete)
 module.exports = router

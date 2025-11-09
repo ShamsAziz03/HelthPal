@@ -73,6 +73,14 @@ class Collaboration {
         if (data.length === 0) return { error: 'collaboration not found' }
         return data[0]
     }
+
+    static async delete(id) {
+        const qry = 'DELETE FROM healthpal.collaboration WHERE collaborationId = ?'
+        const [res] = await db.execute(qry, [id])
+        
+        if (res.affectedRows === 0) return { error: 'collaboration not found' }
+        return { message: 'Collaboration deleted successfully' }
+    }
 }
 
 module.exports = Collaboration;

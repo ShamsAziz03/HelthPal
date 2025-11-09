@@ -39,6 +39,15 @@ const collaborationController = {
             res.status(500).json({ error: err.message })
         }
     },
+    delete: async (req, res) => {
+        try {
+            const { id } = req.params
+            const result = await collaboration.delete(id)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    }
 }
 
 module.exports = collaborationController

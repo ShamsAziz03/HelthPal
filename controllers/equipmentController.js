@@ -80,3 +80,42 @@ exports.searchEquipment = async (req, res) => {
     });
   }
 };
+
+exports.getEquipmentByNGO = async (req, res) => {
+  try {
+    const { ngoId } = req.params;
+    const equipment = await EquipmentModel.findByNGO(ngoId);
+
+    res.status(200).json({
+      success: true,
+      count: equipment.length,
+      data: equipment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching NGO equipment",
+      error: error.message,
+    });
+  }
+};
+
+// Get equipment by NGO and status
+exports.getEquipmentByNGO = async (req, res) => {
+  try {
+    const { ngoId, status } = req.params;
+    const equipment = await EquipmentModel.findByNGOAndStatus(ngoId, status);
+
+    res.status(200).json({
+      success: true,
+      count: equipment.length,
+      data: equipment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching NGO equipment",
+      error: error.message,
+    });
+  }
+};

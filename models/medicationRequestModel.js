@@ -1,31 +1,30 @@
-const db = require('../config/db');
+const db = require("../config/db");
 
 class MedicationRequestModel {
+  // Create a new medication request
+  static async create(requestData) {
+    const { patientId, medicationName, quantity, urgency } = requestData;
+    const requestId = "MED" + Date.now();
 
-    // Create a new medication request
-    static async create(requestData) {
-        const { patientId, medicationName, quantity, urgency } = requestData;
-        const requestId = 'MED' + Date.now();
-
-        const query = `
+    const query = `
             INSERT INTO MedicationRequest 
             (requestId, patientId, medicationName, quantity, urgency, status) 
             VALUES (?, ?, ?, ?, ?, 'Pending')
         `;
 
-        const [result] = await db.execute(query, [
-            requestId,
-            patientId,
-            medicationName,
-            quantity,
-            urgency
-        ]);
+    const [result] = await db.execute(query, [
+      requestId,
+      patientId,
+      medicationName,
+      quantity,
+      urgency,
+    ]);
 
-        return { requestId, ...requestData, status: 'Pending' };
-    }
-    // Get medication requests by status
-    static async findByStatus(status) {
-        const query = `
+    return { requestId, ...requestData, status: "Pending" };
+  }
+  // Get medication requests by status
+  static async findByStatus(status) {
+    const query = `
             SELECT mr.*, p.userId, u.fullName as patientName
             FROM MedicationRequest mr
             JOIN Patient p ON mr.patientId = p.patientId
@@ -34,27 +33,26 @@ class MedicationRequestModel {
             ORDER BY mr.requestDate DESC
         `;
 
-        const [requests] = await db.execute(query, [status]);
-        return requests;
-    }
+    const [requests] = await db.execute(query, [status]);
+    return requests;
+  }
 
-
-
-    // Update medication request status
-    static async updateStatus(requestId, status, ngoId = null) {
-        const query = `
+  //************************************** */
+  // Update medication request status
+  static async updateStatus(requestId, status, ngoId = null) {
+    const query = `
             UPDATE MedicationRequest 
             SET status = ?, ngoId = ? 
             WHERE requestId = ?
         `;
 
-        const [result] = await db.execute(query, [status, ngoId, requestId]);
-        return result.affectedRows > 0;
-    }
+    const [result] = await db.execute(query, [status, ngoId, requestId]);
+    return result.affectedRows > 0;
+  }
 
-    // Get all medication requests
-    static async findAll() {
-        const query = `
+  // Get all medication requests
+  static async findAll() {
+    const query = `
             SELECT mr.*, p.userId, u.fullName as patientName
             FROM MedicationRequest mr
             JOIN Patient p ON mr.patientId = p.patientId
@@ -62,23 +60,23 @@ class MedicationRequestModel {
             ORDER BY mr.requestDate DESC
         `;
 
-        const [requests] = await db.execute(query);
-        return requests;
-    }
+    const [requests] = await db.execute(query);
+    return requests;
+  }
 
-    // Get medication requests by patient ID
-    static async findByPatientId(patientId) {
-        const query = `
+  // Get medication requests by patient ID
+  static async findByPatientId(patientId) {
+    const query = `
             SELECT * FROM MedicationRequest 
             WHERE patientId = ? 
             ORDER BY requestDate DESC
         `;
 
-        const [requests] = await db.execute(query, [patientId]);
-        return requests;
-    }
-    static async filteringNGOsMedicationRequestsStatus(ngoId, status) {
-        const query = `
+    const [requests] = await db.execute(query, [patientId]);
+    return requests;
+  }
+  static async filteringNGOsMedicationRequestsStatus(ngoId, status) {
+    const query = `
             SELECT mr.*, p.userId, u.fullName as patientName
             FROM MedicationRequest mr
             JOIN Patient p ON mr.patientId = p.patientId
@@ -87,13 +85,13 @@ class MedicationRequestModel {
             ORDER BY mr.requestDate DESC
         `;
 
-        const [requests] = await db.execute(query, [ngoId, status]);
-        return requests;
-    }
+    const [requests] = await db.execute(query, [ngoId, status]);
+    return requests;
+  }
 
-    // Get medication request by ID
-    static async findById(requestId) {
-        const query = `
+  // Get medication request by ID
+  static async findById(requestId) {
+    const query = `
             SELECT mr.*, p.userId, u.fullName as patientName
             FROM MedicationRequest mr
             JOIN Patient p ON mr.patientId = p.patientId
@@ -101,13 +99,13 @@ class MedicationRequestModel {
             WHERE mr.requestId = ?
         `;
 
-        const [requests] = await db.execute(query, [requestId]);
-        return requests[0] || null;
-    }
+    const [requests] = await db.execute(query, [requestId]);
+    return requests[0] || null;
+  }
 
-    // Get medication requests by urgency
-    static async findByUrgency(urgency) {
-        const query = `
+  // Get medication requests by urgency
+  static async findByUrgency(urgency) {
+    const query = `
             SELECT mr.*, p.userId, u.fullName as patientName
             FROM MedicationRequest mr
             JOIN Patient p ON mr.patientId = p.patientId
@@ -116,44 +114,42 @@ class MedicationRequestModel {
             ORDER BY mr.requestDate DESC
         `;
 
-        const [requests] = await db.execute(query, [urgency]);
-        return requests;
-    }
+    const [requests] = await db.execute(query, [urgency]);
+    return requests;
+  }
 
+  // Update entire medication request
+  static async update(requestId, updateData) {
+    const { medicationName, quantity, urgency, status, ngoId } = updateData;
 
-
-    // Update entire medication request
-    static async update(requestId, updateData) {
-        const { medicationName, quantity, urgency, status, ngoId } = updateData;
-
-        const query = `
+    const query = `
             UPDATE MedicationRequest 
             SET medicationName = ?, quantity = ?, urgency = ?, status = ?, ngoId = ?
             WHERE requestId = ?
         `;
 
-        const [result] = await db.execute(query, [
-            medicationName,
-            quantity,
-            urgency,
-            status,
-            ngoId,
-            requestId
-        ]);
+    const [result] = await db.execute(query, [
+      medicationName,
+      quantity,
+      urgency,
+      status,
+      ngoId,
+      requestId,
+    ]);
 
-        return result.affectedRows > 0;
-    }
+    return result.affectedRows > 0;
+  }
 
-    // Delete medication request
-    static async delete(requestId) {
-        const query = 'DELETE FROM MedicationRequest WHERE requestId = ?';
-        const [result] = await db.execute(query, [requestId]);
-        return result.affectedRows > 0;
-    }
+  // Delete medication request
+  static async delete(requestId) {
+    const query = "DELETE FROM MedicationRequest WHERE requestId = ?";
+    const [result] = await db.execute(query, [requestId]);
+    return result.affectedRows > 0;
+  }
 
-    // Get requests fulfilled by an NGO
-    static async findByNGO(ngoId) {
-        const query = `
+  // Get requests fulfilled by an NGO
+  static async findByNGO(ngoId) {
+    const query = `
             SELECT mr.*, p.userId, u.fullName as patientName
             FROM MedicationRequest mr
             JOIN Patient p ON mr.patientId = p.patientId
@@ -162,13 +158,13 @@ class MedicationRequestModel {
             ORDER BY mr.requestDate DESC
         `;
 
-        const [requests] = await db.execute(query, [ngoId]);
-        return requests;
-    }
+    const [requests] = await db.execute(query, [ngoId]);
+    return requests;
+  }
 
-    // Get statistics for dashboard
-    static async getStatistics() {
-        const query = `
+  // Get statistics for dashboard
+  static async getStatistics() {
+    const query = `
             SELECT 
                 COUNT(*) as totalRequests,
                 SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as pendingRequests,
@@ -178,11 +174,9 @@ class MedicationRequestModel {
             FROM MedicationRequest
         `;
 
-        const [stats] = await db.execute(query);
-        return stats[0];
-    }
-
-
+    const [stats] = await db.execute(query);
+    return stats[0];
+  }
 }
 
 module.exports = MedicationRequestModel;

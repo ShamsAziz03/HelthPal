@@ -141,6 +141,22 @@ class EquipmentModel {
     const [equipment] = await db.execute(query, [ngoId]);
     return equipment;
   }
+
+  // Get equipment by NGO and status
+  static async findByNGOAndStatus(ngoId, status) {
+    const query = `
+            SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE e.ngoId = ? AND e.status = ?
+            ORDER BY e.name
+        `;
+
+    const [equipment] = await db.execute(query, [ngoId, status]);
+    return equipment;
+  }
+
+  //************************************** */
   // Update equipment status and quantity
   static async updateStatus(equipmentId, status, quantity) {
     const query = `

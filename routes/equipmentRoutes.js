@@ -7,9 +7,9 @@ router.post('/create', equipmentController.createEquipment);
 router.get('/getAll', equipmentController.getAllEquipment);
 router.get('/search', equipmentController.searchEquipment);
 router.get('/getEquipment/:equipmentId', equipmentController.getEquipmentById);
-router.get('/:ngoId', equipmentController.getEquipmentByNGO);
-router.get('/:ngoId/:status', equipmentController.getEquipmentByNGOANDStatus);
-router.get('/getStatics', equipmentController.getEquipmentStatics);
+router.get('/getEquipmentByNGO/:ngoId', equipmentController.getEquipmentByNGO);
+router.get('/getEquipmentByNGOAndStatus/:ngoId/:status', equipmentController.getEquipmentByNGOandStatus);
+router.get('/getStatistics', equipmentController.getEquipmentStatistics);
 router.get('/getExpiringEquipment', equipmentController.getExpiringEquipment);
 
 

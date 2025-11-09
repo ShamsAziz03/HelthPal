@@ -10,7 +10,7 @@ router.get('/getMedicationRequestsByPatient/:patientId', medicationController.ge
 router.get('/getMedicationRequestsByStatus/:status', medicationController.getMedicationRequestsByStatus);
 router.get('/getMedicationRequestsByNGO/:ngoId', medicationController.getMedicationRequestsByNGO);
 router.get('/getMedicationStatistics', medicationController.getMedicationStatistics);
-router.get('/getMedicationRequestsByNGOAndStatus/:ngoId/:status', medicationController.getMedicationRequestsByNGOAndStatus);
+router.get('/getMedicationRequestsByNGOAndStatus/:ngoId/:status', medicationController.getMedicationRequestsByNGOandStatus);
 router.put('/handleMedicationRequest', medicationController.handleRequestByNGO);
 router.put('/updateMedicationRequestStatus/:requestId', medicationController.updateMedicationRequestStatus);
 

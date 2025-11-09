@@ -119,3 +119,61 @@ exports.getEquipmentByNGO = async (req, res) => {
     });
   }
 };
+
+exports.updateEquipmentStatus = async (req, res) => {
+  try {
+    const { equipmentId } = req.params;
+    const { status, quantity } = req.body;
+
+    const updated = await EquipmentModel.updateStatus(
+      equipmentId,
+      status,
+      quantity
+    );
+
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        message: "Equipment not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Equipment updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating equipment",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateEquipment = async (req, res) => {
+  try {
+    const { equipmentId } = req.params;
+    const updateData = req.body;
+
+    const updated = await EquipmentModel.update(equipmentId, updateData);
+
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        message: "Equipment not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Equipment updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating equipment",
+      error: error.message,
+    });
+  }
+};

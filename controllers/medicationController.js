@@ -98,10 +98,21 @@ exports.getMedicationRequestsByStatus = async (req, res) => {
     }
 };
 
+exports.getMedicationRequestsByNGO = async (req, res) => {
+    try {
+        const { ngoId } = req.params;
+        const requests = await MedicationRequestModel.findByNGO(ngoId);
 
-
-
-
-
-
-
+        res.status(200).json({
+            success: true,
+            count: requests.length,
+            data: requests
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching NGO medication requests',
+            error: error.message
+        });
+    }
+};

@@ -135,6 +135,37 @@ exports.getMedicationRequestsByNGOandStatus = async (req, res) => {
     }
 };
 
+exports.updateMedicationRequestStatus = async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const { status, ngoId } = req.body;
+
+        const updated = await MedicationRequestModel.updateStatus(requestId, status, ngoId);
+
+        if (!updated) {
+            return res.status(404).json({
+                success: false,
+                message: 'Medication request not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Medication request status updated successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error updating medication request',
+            error: error.message
+        });
+    }
+};
+
+
+
+
+
 
 
 

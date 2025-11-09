@@ -18,4 +18,23 @@ exports.createMedicationRequest = async (req, res) => {
         });
     }
 };
+exports.getAllMedicationRequests = async (req, res) => {
+    try {
+        const requests = await MedicationRequestModel.findAll();
+
+        res.status(200).json({
+            success: true,
+            count: requests.length,
+            data: requests
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching medication requests',
+            error: error.message
+        });
+    }
+};
+
+
 

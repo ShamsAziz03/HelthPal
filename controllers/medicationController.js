@@ -161,6 +161,32 @@ exports.updateMedicationRequestStatus = async (req, res) => {
         });
     }
 };
+exports.deleteMedicationRequest = async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const deleted = await MedicationRequestModel.delete(requestId);
+
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: 'Medication request not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Medication request deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting medication request',
+            error: error.message
+        });
+    }
+};
+
+
 
 
 

@@ -10,7 +10,7 @@ const collaborationController = {
             res.status(500).json({ error: err.message })
         }
     },
-    updateStatue: async (req, res) => {
+    updateStatus: async (req, res) => {
         try {
             const {collaborationId, status} = req.body
             const result = await collaboration.updateStatus(collaborationId, status)

@@ -1,11 +1,9 @@
-// config/db.js
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+// CommonJS everywhere
+const mysql = require('mysql2/promise');
+require('dotenv').config();
 
-dotenv.config();
-
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || '127.0.0.1',   // 127.0.0.1 avoids socket quirks
+const db = mysql.createPool({
+  host: process.env.DB_HOST || '127.0.0.1',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -15,4 +13,4 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-export default pool;
+module.exports = db;

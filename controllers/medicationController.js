@@ -142,7 +142,7 @@ exports.getMedicationRequestsByNGOandStatus = async (req, res) => {
 
 //************************************** */
 
-exports.reduceQuantity = async (req, res) => {
+exports.handleRequestByNGO = async (req, res) => {
   try {
     const { requestId, ngoId, equipmentId, quantity } = req.body;
 

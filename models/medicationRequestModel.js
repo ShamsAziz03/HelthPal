@@ -38,6 +38,8 @@ class MedicationRequestModel {
         return requests;
     }
 
+
+
     // Update medication request status
     static async updateStatus(requestId, status, ngoId = null) {
         const query = `
@@ -75,6 +77,19 @@ class MedicationRequestModel {
         const [requests] = await db.execute(query, [patientId]);
         return requests;
     }
+    static async filteringNGOsMedicationRequestsStatus(ngoId, status) {
+        const query = `
+            SELECT mr.*, p.userId, u.fullName as patientName
+            FROM MedicationRequest mr
+            JOIN Patient p ON mr.patientId = p.patientId
+            JOIN User u ON p.userId = u.userId
+            WHERE mr.ngoId = ? AND mr.status = ?
+            ORDER BY mr.requestDate DESC
+        `;
+
+        const [requests] = await db.execute(query, [ngoId, status]);
+        return requests;
+    }
 
     // Get medication request by ID
     static async findById(requestId) {
@@ -104,6 +119,9 @@ class MedicationRequestModel {
         const [requests] = await db.execute(query, [urgency]);
         return requests;
     }
+
+
+
     // Update entire medication request
     static async update(requestId, updateData) {
         const { medicationName, quantity, urgency, status, ngoId } = updateData;

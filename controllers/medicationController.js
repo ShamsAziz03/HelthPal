@@ -185,7 +185,23 @@ exports.deleteMedicationRequest = async (req, res) => {
         });
     }
 };
+//Statistics for admin dashboard
+exports.getMedicationStatistics = async (req, res) => {
+    try {
+        const stats = await MedicationRequestModel.getStatistics();
 
+        res.status(200).json({
+            success: true,
+            data: stats
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching statistics',
+            error: error.message
+        });
+    }
+};
 
 
 

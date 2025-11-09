@@ -116,3 +116,29 @@ exports.getMedicationRequestsByNGO = async (req, res) => {
         });
     }
 };
+exports.getMedicationRequestsByNGOandStatus = async (req, res) => {
+    try {
+        const { ngoId, status } = req.params;
+        const requests = await MedicationRequestModel.filteringNGOsMedicationRequestsStatus(ngoId, status);
+
+        res.status(200).json({
+            success: true,
+            count: requests.length,
+            data: requests
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching NGO medication requests',
+            error: error.message
+        });
+    }
+};
+
+
+
+
+
+
+
+

@@ -177,3 +177,28 @@ exports.updateEquipment = async (req, res) => {
     });
   }
 };
+
+exports.deleteEquipment = async (req, res) => {
+  try {
+    const { equipmentId } = req.params;
+    const deleted = await EquipmentModel.delete(equipmentId);
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Equipment not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Equipment deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error deleting equipment",
+      error: error.message,
+    });
+  }
+};

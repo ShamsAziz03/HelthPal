@@ -58,7 +58,7 @@ class drAvailability {
     static async getByStatus(status) {
         const qry = "SELECT * FROM healthpal.doctoravailability WHERE status = ? ORDER BY startTime ASC"
         const [res] = await db.query(qry, [status])
-        
+
         return res
     }
     static async updateStatus(availabilityId, newStatus) {
@@ -73,6 +73,17 @@ class drAvailability {
         await db.execute("UPDATE doctorAvailability SET status = ? WHERE availabilityId = ?", [newStatus, availabilityId])
 
         return { message: "status updated successfully" }
+    }
+    static async delete(availabilityId) {
+        const [slot] = await db.query("SELECT * FROM healthpal.doctoravailability WHERE availabilityId = ?", [availabilityId])
+        if (slot.length === 0)
+            return { error: "availability slot not found" }
+
+        const [res] = await db.execute("DELETE FROM healthpal.doctoravailability WHERE availabilityId = ?", [availabilityId])
+        if (res.affectedRows === 0)
+            return { error: "failed to delete availability" }
+
+        return { message: "availability deleted successfully" }
     }
 
 }

@@ -9,5 +9,6 @@ router.get('/getAvailable', availabilityController.getAvailable)
 router.get('/getByDate', availabilityController.getByDate)
 router.get('/getByStatus/:status', availabilityController.getByStatus)
 router.post('/updateStatus', availabilityController.updateStatus)
+router.delete('/delete/:id', availabilityController.delete)
 
 module.exports = router

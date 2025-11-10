@@ -61,6 +61,18 @@ const drAvailabilityController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    },
+    delete: async (req, res) => {
+        try {
+            const id = req.params.id
+            const result = await drAvailability.delete(id)
+
+            if (result.error)
+                 return res.status(400).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
     }
 };
 

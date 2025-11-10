@@ -31,6 +31,36 @@ class drAvailability {
         const [res] = await db.execute(qry, [doctorId, startTime, endTime, status || 'Available'])
         return { availabilityId: res.insertId, doctorId, startTime, endTime, status: status || 'Available' }
     }
+    static async getAll() {
+        const qry = "SELECT * FROM healthpal.doctoravailability;"
+        const [res] = await db.query(qry)
+
+        return res
+    }
+    static async getByDr(id) {
+        const qry = "SELECT * FROM healthpal.doctoravailability WHERE doctorId = ?;"
+        const [res] = await db.query(qry, [id])
+
+        return res
+    }
+    static async getAvailable(id) {
+        const qry = "SELECT * FROM healthpal.doctoravailability WHERE status = 'Available';"
+        const [res] = await db.query(qry, [id])
+
+        return res
+    }
+    static async getByDate(date) {
+        const qry = "SELECT * FROM healthpal.doctoravailability WHERE DATE(startTime) = ? ORDER BY startTime ASC"
+        const [res] = await db.query(qry, [date])
+
+        return res
+    }
+    static async getByStatus(status) {
+        const qry = "SELECT * FROM healthpal.doctoravailability WHERE status = ? ORDER BY startTime ASC"
+        const [res] = await db.query(qry, [status])
+        
+        return res
+    }
 }
 
 module.exports = drAvailability

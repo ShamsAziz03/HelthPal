@@ -30,6 +30,26 @@ class Booking {
         return { requestId: res.insertId, patient_id, availability_id, description, status: 'pending' }
     }
 
+    static async getAll() {
+        const qry = `
+            SELECT br.*, da.doctorId, da.startTime, da.endTime, da.status AS availabilityStatus FROM healthpal.bookRequests AS br
+            JOIN healthpal.patient as p ON br.patient_id = p.patientId
+            JOIN healthpal.doctoravailability da ON br.availability_id = da.availabilityId
+        `
+        const [res] = await db.query(qry)
+        return res
+    }
+
+    static async getByPatient(patient_id) {
+        const qry = `
+            SELECT br.*, da.startTime, da.endTime, da.status AS availabilityStatus
+            FROM healthpal.bookRequests br
+            JOIN healthpal.doctoravailability da ON br.availability_id = da.availabilityId
+            WHERE br.patient_id = ?
+        `
+        const [res] = await db.query(qry, [patient_id])
+        return res
+    }
 }
 
 module.exports = Booking

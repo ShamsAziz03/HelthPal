@@ -110,6 +110,37 @@ exports.updateSponsorship = async (req, res) => {
   }
 };
 
+exports.updateSponsorshipProgress = async (req, res) => {
+  try {
+    const { sponsorshipId } = req.params;
+    const { amount } = req.body;
+    console.log(
+      `Updating sponsorship ${sponsorshipId} progress by amount:`,
+      amount
+    );
+
+    const result = await Sponsorship.updateProgress(sponsorshipId, amount);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Sponsorship not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Sponsorship progress updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error updating sponsorship progress:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating sponsorship progress",
+      error: error.message,
+    });
+  }
+};
+
 // Delete a sponsorship
 exports.deleteSponsorship = async (req, res) => {
   try {

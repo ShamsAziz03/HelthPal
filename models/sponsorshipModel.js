@@ -58,6 +58,35 @@ class Sponsorship {
     return result;
   }
 
+  // Update sponsorship progress
+  static async updateProgress(sponsorshipId, amount) {
+    const query = `
+      UPDATE sponsorship
+      SET currentAmount = currentAmount + ?
+      WHERE sponsorshipId = ?
+    `;
+    const [result] = await db.execute(query, [amount, sponsorshipId]);
+
+    const checkQuery =
+      "SELECT goalAmount, currentAmount FROM sponsorship WHERE sponsorshipId = ?";
+    const [rows] = await db.execute(checkQuery, [sponsorshipId]);
+    const { goalAmount, currentAmount } = rows[0];
+    if (currentAmount == goalAmount) {
+      const statusUpdateQuery =
+        "UPDATE sponsorship SET status = 'completed' WHERE sponsorshipId = ?";
+      await db.execute(statusUpdateQuery, [sponsorshipId]);
+    } else if (currentAmount > goalAmount) {
+      const statusUpdateQuery =
+        "UPDATE sponsorship SET status = 'overfunded' WHERE sponsorshipId = ?";
+      await db.execute(statusUpdateQuery, [sponsorshipId]);
+    } else {
+      const statusUpdateQuery =
+        "UPDATE sponsorship SET status = 'Active' WHERE sponsorshipId = ?";
+      await db.execute(statusUpdateQuery, [sponsorshipId]);
+    }
+    return { message: "Progress updated successfully" };
+  }
+
   // Delete a sponsorship record
   static async delete(sponsorshipId) {
     const query = "DELETE FROM sponsorship WHERE sponsorshipId = ?";

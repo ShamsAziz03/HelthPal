@@ -257,3 +257,27 @@ exports.getExpiringEquipment = async (req, res) => {
     });
   }
 };
+
+exports.getAvailableCountByType = async (req, res) => {
+  try {
+    const equipment = await EquipmentModel.getAvailableCountByType();
+
+    if (!equipment) {
+      return res.status(404).json({
+        success: false,
+        message: "no Available Equipment found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: equipment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching available equipment",
+      error: error.message,
+    });
+  }
+};

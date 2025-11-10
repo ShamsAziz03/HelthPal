@@ -29,6 +29,26 @@ exports.getSponsorshipById = async (req, res) => {
   }
 };
 
+// Get all sponsorships
+exports.getAllSponsorships = async (req, res) => {
+  try {
+    console.log("Fetching all sponsorships...");
+    const sponsorships = await Sponsorship.findAll();
+    res.status(200).json({
+      success: true,
+      count: sponsorships.length,
+      data: sponsorships,
+    });
+  } catch (error) {
+    console.error("Error fetching sponsorships:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching sponsorships",
+      error: error.message,
+    });
+  }
+};
+
 // Create a new sponsorship
 exports.createSponsorship = async (req, res) => {
   try {

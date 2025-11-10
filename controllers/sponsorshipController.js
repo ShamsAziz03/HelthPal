@@ -109,3 +109,34 @@ exports.updateSponsorship = async (req, res) => {
     });
   }
 };
+
+// Delete a sponsorship
+exports.deleteSponsorship = async (req, res) => {
+  try {
+    const { sponsorshipId } = req.params;
+
+    console.log(`Deleting sponsorship ${sponsorshipId}`);
+
+    const result = await Sponsorship.delete(sponsorshipId);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Sponsorship not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Sponsorship deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error deleting sponsorship:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting sponsorship",
+      error: error.message,
+    });
+  }
+};

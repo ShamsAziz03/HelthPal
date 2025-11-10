@@ -5,6 +5,7 @@ const {
   getAllSponsorships,
   getSponsorshipById,
   updateSponsorship,
+  deleteSponsorship,
 } = require("../controllers/sponsorshipController");
 
 // Route for getting all sponsorships
@@ -18,5 +19,8 @@ router.post("/", createSponsorship);
 
 // Route for updating a sponsorship
 router.put("/:sponsorshipId", updateSponsorship);
+
+// Route for deleting a sponsorship
+router.delete("/:sponsorshipId", deleteSponsorship);
 
 module.exports = router;

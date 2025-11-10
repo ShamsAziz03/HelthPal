@@ -77,3 +77,35 @@ exports.createSponsorship = async (req, res) => {
     });
   }
 };
+
+// Update a sponsorship
+exports.updateSponsorship = async (req, res) => {
+  try {
+    const { sponsorshipId } = req.params;
+    const updateData = req.body;
+
+    console.log(`Updating sponsorship ${sponsorshipId}:`, updateData);
+
+    const result = await Sponsorship.update(sponsorshipId, updateData);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Sponsorship not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Sponsorship updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error updating sponsorship:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating sponsorship",
+      error: error.message,
+    });
+  }
+};

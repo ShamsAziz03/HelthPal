@@ -4,6 +4,7 @@ const {
   createSponsorship,
   getAllSponsorships,
   getSponsorshipById,
+  updateSponsorship,
 } = require("../controllers/sponsorshipController");
 
 // Route for getting all sponsorships
@@ -14,5 +15,8 @@ router.get("/:sponsorshipId", getSponsorshipById);
 
 // Route for creating a new sponsorship
 router.post("/", createSponsorship);
+
+// Route for updating a sponsorship
+router.put("/:sponsorshipId", updateSponsorship);
 
 module.exports = router;

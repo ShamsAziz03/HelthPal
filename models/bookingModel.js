@@ -50,6 +50,36 @@ class Booking {
         const [res] = await db.query(qry, [patient_id])
         return res
     }
+
+    static async updateStatus(id, newStatus) {
+        const allowed = ['Pending', 'Accepted', 'Rejected']
+        if (!allowed.includes(newStatus))
+            return { error: `invalid status, allowed: ${allowed.join(', ')}` }
+
+        //ensure that booking request is exist
+        const qry1 = "SELECT * FROM healthpal.bookRequests WHERE id = ?;"
+        const [reqData] = await db.query(qry1, [id])
+        if (reqData.length === 0)
+            return { error: "booking request not found" }
+
+        //update request status
+        const qry2 = "UPDATE healthpal.bookRequests SET status = ? WHERE id = ?;"
+        await db.execute(qry2, [newStatus, id])
+
+        //update availability table
+        if (newStatus === 'Accepted')
+        {
+            const qry3 = "UPDATE healthpal.doctoravailability SET status = 'Booked' WHERE availabilityId = ?;"
+            await db.execute(qry3, [reqData[0].availability_id])
+        }
+        else if (newStatus === 'Rejected')
+        {
+            const qry3 = "UPDATE healthpal.doctoravailability SET status = 'Available' WHERE availabilityId = ?;"
+            await db.execute(qry3, [reqData[0].availability_id])
+        }
+
+        return { message: "status updated successfully" }
+    }
 }
 
 module.exports = Booking

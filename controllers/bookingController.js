@@ -23,6 +23,16 @@ const bookingController = {
             res.status(500).json({ error: err.message })
         }
     },
+    updateStatus: async (req, res) => {
+        try {
+            const { id, status } = req.body
+            const result = await bookRequests.updateStatus(id, status)
+            if (result.error) return res.status(400).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
 }
 
 module.exports = bookingController

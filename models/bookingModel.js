@@ -80,6 +80,17 @@ class Booking {
 
         return { message: "status updated successfully" }
     }
+
+    static async delete(id) {
+        const qry1 = "SELECT * FROM healthpal.bookRequests WHERE id = ?;"
+        const [reqData] = await db.query(qry1, [id])
+        if (reqData.length === 0)
+            return { error: "booking request not found" }
+
+        const qry2 = "DELETE FROM healthpal.bookRequests WHERE id = ?;"
+        await db.execute(qry2, [id])
+        return { message: "booking request deleted successfully" }
+    }
 }
 
 module.exports = Booking

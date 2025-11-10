@@ -1,5 +1,6 @@
 const db = require("../config/db");
 const Patient = require("./patientModel");
+const Donor = require("./donorModel");
 const { v4: uuidv4 } = require("uuid");
 
 class User {
@@ -39,7 +40,6 @@ class User {
 
     const [result] = await db.execute(query, values);
 
-    // create a patient record if the user is a patient
     if (role === "patient") {
       await Patient.create({
         userId,
@@ -48,6 +48,12 @@ class User {
         dateOfBirth,
         address,
         consentGiven,
+      });
+    } else if (role === "donor") {
+      await Donor.create({
+        userId,
+        totalDonated: 0,
+        sponsorshipsCount: 0,
       });
     }
 

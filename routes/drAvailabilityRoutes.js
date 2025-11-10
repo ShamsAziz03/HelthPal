@@ -8,6 +8,6 @@ router.get('/getByDr/:id', availabilityController.getByDr)
 router.get('/getAvailable', availabilityController.getAvailable)
 router.get('/getByDate', availabilityController.getByDate)
 router.get('/getByStatus/:status', availabilityController.getByStatus)
-
+router.post('/updateStatus', availabilityController.updateStatus)
 
 module.exports = router

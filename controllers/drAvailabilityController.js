@@ -49,6 +49,18 @@ const drAvailabilityController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    },
+    updateStatus: async (req, res) => {
+        try {
+            const { availabilityId, status } = req.body
+            const result = await drAvailability.updateStatus(availabilityId, status)
+
+            if (result.error) 
+                return res.status(400).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
     }
 };
 

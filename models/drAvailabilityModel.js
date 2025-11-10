@@ -61,6 +61,20 @@ class drAvailability {
         
         return res
     }
+    static async updateStatus(availabilityId, newStatus) {
+        const allowed = ['Available', 'Requested', 'Booked', 'Blocked']
+        if (!allowed.includes(newStatus))
+            return { error: `Invalid status, allowed: ${allowed.join(', ')}` }
+
+        const [slot] = await db.query("SELECT * FROM doctorAvailability WHERE availabilityId = ?", [availabilityId])
+        if (slot.length === 0) 
+            return { error: "Availability slot not found" }
+
+        await db.execute("UPDATE doctorAvailability SET status = ? WHERE availabilityId = ?", [newStatus, availabilityId])
+
+        return { message: "status updated successfully" }
+    }
+
 }
 
 module.exports = drAvailability

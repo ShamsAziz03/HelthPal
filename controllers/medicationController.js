@@ -168,8 +168,7 @@ exports.handleRequestByNGO = async (req, res) => {
     const newQuantity = equipment.quantity - quantity;
     const newStatus = newQuantity === 0 ? "Out of Service" : "Available";
 
-    // 1️⃣ Update equipment
-    const updatedEquipment = await EquipmentModel.updateStatus(
+    const updatedEquipment = await EquipmentModel.updateStatusQnt(
       equipmentId,
       newStatus,
       newQuantity
@@ -180,7 +179,6 @@ exports.handleRequestByNGO = async (req, res) => {
         .json({ success: false, message: "Failed to update equipment" });
     }
 
-    // 2️⃣ Update medication request
     const updatedRequest = await MedicationRequestModel.updateStatus(
       requestId,
       "handled",

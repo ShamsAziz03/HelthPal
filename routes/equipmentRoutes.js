@@ -21,6 +21,10 @@ router.get(
 );
 router.get("/getStatistics", equipmentController.getEquipmentStatistics);
 router.get("/getExpiringEquipment", equipmentController.getExpiringEquipment);
+router.get(
+  "/getAvailableEquipments",
+  equipmentController.getAvailableCountByType
+);
 
 router.put(
   "/updateEquipmentStatusQnt/:equipmentId",

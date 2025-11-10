@@ -3,9 +3,16 @@ const db = require("../config/db");
 class EquipmentModel {
   // Create new equipment
   static async create(equipmentData) {
-    const { name, type, location, ngoId, quantity, expirationDate } =
-      equipmentData;
-    const equipmentId = "EQP" + Date.now();
+    const {
+      equipmentId,
+      name,
+      type,
+      location,
+      ngoId,
+      quantity,
+      expirationDate,
+    } = equipmentData;
+    // const equipmentId = "EQP" + Date.now();
 
     const query = `
             INSERT INTO Equipment 
@@ -86,52 +93,11 @@ class EquipmentModel {
     const [equipment] = await db.execute(query, params);
     return equipment;
   }
-  // Get equipment by type
-  static async findByType(type) {
-    const query = `
-            SELECT e.*, n.organizationName 
-            FROM Equipment e
-            LEFT JOIN NGO n ON e.ngoId = n.ngoId
-            WHERE e.type = ?
-            ORDER BY e.name
-        `;
-
-    const [equipment] = await db.execute(query, [type]);
-    return equipment;
-  }
-
-  // Get equipment by location
-  static async findByLocation(location) {
-    const query = `
-            SELECT e.*, n.organizationName 
-            FROM Equipment e
-            LEFT JOIN NGO n ON e.ngoId = n.ngoId
-            WHERE e.location LIKE ?
-            ORDER BY e.name
-        `;
-
-    const [equipment] = await db.execute(query, [`%${location}%`]);
-    return equipment;
-  }
-
-  // Get equipment by status
-  static async findByStatus(status) {
-    const query = `
-            SELECT e.*, n.organizationName 
-            FROM Equipment e
-            LEFT JOIN NGO n ON e.ngoId = n.ngoId
-            WHERE e.status = ?
-            ORDER BY e.name
-        `;
-
-    const [equipment] = await db.execute(query, [status]);
-    return equipment;
-  }
 
   // Get equipment by NGO
-  static async findByNGO(ngoId) {
+  static async findByNGOId(ngoId) {
     const query = `
-            SELECT e.*, n.organizationName 
+            SELECT e.*, n.organizationName
             FROM Equipment e
             LEFT JOIN NGO n ON e.ngoId = n.ngoId
             WHERE e.ngoId = ?
@@ -141,24 +107,47 @@ class EquipmentModel {
     const [equipment] = await db.execute(query, [ngoId]);
     return equipment;
   }
-
-  // Get equipment by NGO and status
-  static async findByNGOAndStatus(ngoId, status) {
+  // Get equipment by NGO Name
+  static async findByNGOName(orgName) {
     const query = `
-            SELECT e.*, n.organizationName 
-            FROM Equipment e
-            LEFT JOIN NGO n ON e.ngoId = n.ngoId
-            WHERE e.ngoId = ? AND e.status = ?
+            SELECT e.*, n.organizationName
+            FROM ngo n
+            LEFT JOIN equipment e ON n.ngoId = e.ngoId
+            WHERE n.organizationName = ?
             ORDER BY e.name
         `;
 
-    const [equipment] = await db.execute(query, [ngoId, status]);
+    const [equipment] = await db.execute(query, [orgName]);
     return equipment;
   }
 
-  //************************************** */
+  // Get equipment by NGO and status
+  static async findByNGOAndStatus(filters) {
+    const { ngoId, status } = filters;
+    let query = `
+             SELECT e.*, n.organizationName 
+            FROM Equipment e
+            LEFT JOIN NGO n ON e.ngoId = n.ngoId
+            WHERE 1=1
+        `;
+    const params = [];
+    if (status) {
+      query += " AND e.status = ?";
+      params.push(status);
+    }
+    if (ngoId) {
+      query += " AND e.ngoId = ?";
+      params.push(ngoId);
+    }
+
+    query += " ORDER BY e.name";
+
+    const [equipment] = await db.execute(query, params);
+    return equipment;
+  }
+
   // Update equipment status and quantity
-  static async updateStatus(equipmentId, status, quantity) {
+  static async updateStatusQnt(equipmentId, status, quantity) {
     const query = `
             UPDATE Equipment 
             SET status = ?, quantity = ? 

@@ -30,6 +30,44 @@ class Mission {
         return res[0]
     }
 
+    //update using different metrics
+    static async updateTitle(id, newTitle) {
+        const [mission] = await db.query("SELECT * FROM healthpal.missions WHERE id = ?", [id])
+        if (mission.length === 0)
+            return { error: "mission not found" }
+
+        await db.execute("UPDATE healthpal.missions SET title = ? WHERE id = ?", [newTitle, id])
+        return { message: "title updated successfully" }
+    }
+    static async updateDescription(id, newDescription) {
+        const [mission] = await db.query("SELECT * FROM healthpal.missions WHERE id = ?", [id])
+        if (mission.length === 0)
+            return { error: "mission not found" }
+
+        await db.execute("UPDATE healthpal.missions SET description = ? WHERE id = ?", [newDescription, id])
+        return { message: "description updated successfully" }
+    }
+    static async updateLocation(id, newLocation) {
+        const [mission] = await db.query("SELECT * FROM healthpal.missions WHERE id = ?", [id])
+        if (mission.length === 0)
+            return { error: "mission not found" }
+
+        await db.execute("UPDATE healthpal.missions SET location = ? WHERE id = ?", [newLocation, id])
+        return { message: "location updated successfully" }
+    }
+    static async updateDates(id, start_at, end_at) {
+        const [mission] = await db.query("SELECT * FROM healthpal.missions WHERE id = ?", [id])
+        if (mission.length === 0)
+            return { error: "mission not found" }
+
+        const start = new Date(start_at)
+        const end = new Date(end_at)
+        if (start >= end)
+            return { error: "start date must be before end date" }
+
+        await db.execute("UPDATE healthpal.missions SET start_at = ?, end_at = ? WHERE id = ?", [start_at, end_at, id])
+        return { message: "mssion dates updated successfully" }
+    }
 }
 
 module.exports = Mission

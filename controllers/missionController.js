@@ -95,6 +95,23 @@ const missionController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    },
+    delete: async (req, res) => {
+        try {
+            const id = req.params.id
+
+            if (!id)
+                return res.status(400).json({ error: "mission id is required" })
+
+            const result = await mission.delete(id)
+
+            if (result.error)
+                return res.status(404).json(result)
+
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
     }
 }
 

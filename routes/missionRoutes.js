@@ -9,5 +9,6 @@ router.post('/updateTitle/:id', missionController.updateTitle)
 router.post('/updateDescription/:id', missionController.updateDescription)
 router.post('/updateLocation/:id', missionController.updateLocation)
 router.post('/updateDates/:id', missionController.updateDates)
+router.delete('/delete/:id', missionController.delete)
 
 module.exports = router

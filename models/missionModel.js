@@ -68,6 +68,14 @@ class Mission {
         await db.execute("UPDATE healthpal.missions SET start_at = ?, end_at = ? WHERE id = ?", [start_at, end_at, id])
         return { message: "mssion dates updated successfully" }
     }
+    static async delete(id) {
+        const [mission] = await db.query("SELECT * FROM healthpal.missions WHERE id = ?", [id])
+        if (mission.length === 0)
+            return { error: "mission not found" }
+
+        await db.execute("DELETE FROM healthpal.missions WHERE id = ?", [id])
+        return { message: "mission deleted successfully" }
+    }
 }
 
 module.exports = Mission

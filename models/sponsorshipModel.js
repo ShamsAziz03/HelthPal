@@ -87,6 +87,19 @@ class Sponsorship {
     return { message: "Progress updated successfully" };
   }
 
+  // Generate a basic report for sponsorship
+  static async generateReport(sponsorshipId) {
+    const query = `
+      SELECT sponsorshipId, treatmentType, goalAmount, currentAmount, status,
+             (currentAmount / goalAmount) * 100 AS progressPercentage,
+             createdAt
+      FROM sponsorship
+      WHERE sponsorshipId = ?
+    `;
+    const [rows] = await db.execute(query, [sponsorshipId]);
+    return rows[0];
+  }
+
   // Delete a sponsorship record
   static async delete(sponsorshipId) {
     const query = "DELETE FROM sponsorship WHERE sponsorshipId = ?";

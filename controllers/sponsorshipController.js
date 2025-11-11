@@ -141,6 +141,26 @@ exports.updateSponsorshipProgress = async (req, res) => {
   }
 };
 
+exports.generateSponsorshipReport = async (req, res) => {
+  try {
+    const { sponsorshipId } = req.params;
+    console.log(`Generating report for sponsorship ${sponsorshipId}`);
+
+    const result = await Sponsorship.generateReport(sponsorshipId);
+    res.status(200).json({
+      success: true,
+      message: "Sponsorship report gererated successfully",
+      data: result,
+    });
+  } catch {
+    res.status(500).json({
+      success: false,
+      message: "Error generating sponsorship report",
+      error: error.message,
+    });
+  }
+};
+
 // Delete a sponsorship
 exports.deleteSponsorship = async (req, res) => {
   try {

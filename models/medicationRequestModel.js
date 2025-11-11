@@ -176,6 +176,24 @@ class MedicationRequestModel {
     const [stats] = await db.execute(query);
     return stats[0];
   }
+  static async getRequestQuantityById(requestId) {
+    const query = `
+      SELECT quantity FROM MedicationRequest WHERE requestId = ?
+  `;
+    const [rows] = await db.execute(query, [requestId]);
+    return rows[0]?.quantity || 0;
+
+  }
+  static async updateQuantity(requestId, newQuantity) {
+    const query = `
+      UPDATE MedicationRequest 
+      SET quantity = ?
+      WHERE requestId = ?
+  `;
+    const [result] = await db.execute(query, [newQuantity, requestId]);
+    return result.affectedRows > 0;
+  }
 }
+
 
 module.exports = MedicationRequestModel;

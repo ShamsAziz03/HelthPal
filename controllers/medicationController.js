@@ -178,12 +178,29 @@ exports.handleRequestByNGO = async (req, res) => {
         .status(500)
         .json({ success: false, message: "Failed to update equipment" });
     }
+    let requestStatus = "handled";
+
+    const requestQty = await MedicationRequestModel.getRequestQuantityById(requestId);
+    const NewQty = requestQty - quantity;
+    if (quantity < requestQty) {
+      requestStatus = "Partially Fulfilled";
+    }
 
     const updatedRequest = await MedicationRequestModel.updateStatus(
       requestId,
-      "handled",
+      requestStatus,
       ngoId
     );
+    const updaterequestqty = await MedicationRequestModel.updateQuantity(
+      requestId,
+      NewQty
+    );
+    if (!updaterequestqty) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to update request quantity" });
+    }
+
     if (!updatedRequest) {
       return res
         .status(500)

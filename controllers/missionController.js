@@ -7,6 +7,23 @@ const missionController = {
         if (result.error) return res.status(400).json(result);
         res.json(result);
     },
+    getAll: async (req, res) => {
+        try {
+            const m = await mission.getAll()
+            res.json(m)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    getById: async (req, res) => {
+        try {
+            const id = req.params.id
+            const m = await mission.getById(id)
+            res.json(m)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
 }
 
 module.exports = missionController

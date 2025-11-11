@@ -15,6 +15,21 @@ class Mission {
 
         return ({title, description, location, start_at, end_at})
     }
+    static async getAll() {
+        const qry = "SELECT * FROM healthpal.missions;"
+        const [res] = await db.query(qry)
+
+        return res
+    }
+    static async getById(id) {
+        const qry = "SELECT * FROM healthpal.missions WHERE id = ?;"
+        const [res] = await db.query(qry, [id])
+        
+        if (res.length === 0)
+            return { error: "Mission not found" }
+        return res[0]
+    }
+
 }
 
 module.exports = Mission

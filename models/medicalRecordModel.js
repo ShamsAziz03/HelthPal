@@ -44,7 +44,15 @@ class MedicalRecord {
 
   // Get a medical record by ID
   static async findById(recordId) {
-    const query = "SELECT * FROM medicalrecord WHERE recordId = ?";
+    const query = `
+    SELECT mr.*, 
+           p.userId AS patientUserId, 
+           d.userId AS doctorUserId
+    FROM medicalrecord mr
+    JOIN patient p ON mr.patientId = p.patientId
+    JOIN doctor d ON mr.doctorId = d.doctorId
+    WHERE mr.recordId = ?
+  `;
     const [rows] = await db.execute(query, [recordId]);
     return rows[0];
   }

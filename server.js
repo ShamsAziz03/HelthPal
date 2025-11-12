@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const sponsorshipRoutes = require("./routes/sponsorshipRoutes");
 const userRoutes = require("./routes/userRoutes");
+const medicalRecordRoutes = require("./routes/medicalRecordRoutes");
 const db = require("./config/db");
 
 dotenv.config();
@@ -18,6 +19,9 @@ app.use("/api/sponsorships", sponsorshipRoutes);
 
 // Use user routes
 app.use("/api/users", userRoutes);
+
+// Use medical record routes
+app.use("/api", medicalRecordRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

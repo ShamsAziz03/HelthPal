@@ -89,6 +89,13 @@ class SharedRecord {
     const [rows] = await db.execute(query, [receiverId]);
     return rows;
   }
+
+  // Delete a shared record
+  static async delete(shareId) {
+    const query = "DELETE FROM sharedrecords WHERE shareId = ?";
+    const [result] = await db.execute(query, [shareId]);
+    return result;
+  }
 }
 
 module.exports = SharedRecord;

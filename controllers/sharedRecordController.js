@@ -45,3 +45,18 @@ exports.getSharedRecordsByReceiverId = async (req, res) => {
     });
   }
 };
+
+// Delete a shared record by share ID
+exports.deleteSharedRecord = async (req, res) => {
+  try {
+    const { shareId } = req.params;
+    const result = await SharedRecord.delete(shareId);
+    res
+      .status(200)
+      .json({ message: "Shared record deleted successfully", data: result });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting shared record", error: error.message });
+  }
+};

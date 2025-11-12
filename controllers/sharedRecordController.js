@@ -29,3 +29,19 @@ exports.getAllSharedRecords = async (req, res) => {
     });
   }
 };
+
+// Get shared records by receiver ID
+exports.getSharedRecordsByReceiverId = async (req, res) => {
+  try {
+    const { receiverId } = req.params;
+    const records = await SharedRecord.findByReceiverId(receiverId);
+    res
+      .status(200)
+      .json({ success: true, count: records.length, data: records });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching shared records for receiver",
+      error: error.message,
+    });
+  }
+};

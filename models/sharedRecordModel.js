@@ -72,6 +72,23 @@ class SharedRecord {
     const [rows] = await db.execute(query);
     return rows;
   }
+
+  // Find shared records by receiver ID
+  static async findByReceiverId(receiverId) {
+    const query = `
+      SELECT sr.*, 
+             u1.fullName AS senderName,
+                mr.diagnosis, mr.treatment, mr.attachments,
+                sr.message, sr.sharedAt
+        FROM sharedrecords sr
+        JOIN user u1 ON sr.senderId = u1.userId
+        JOIN medicalrecord mr ON sr.recordId = mr.recordId
+        WHERE sr.receiverId = ?
+        ORDER BY sr.sharedAt DESC;
+    `;
+    const [rows] = await db.execute(query, [receiverId]);
+    return rows;
+  }
 }
 
 module.exports = SharedRecord;

@@ -29,3 +29,19 @@ exports.getAllMedicalRecords = async (req, res) => {
     });
   }
 };
+
+// Get medical records by patient ID
+exports.getMedicalRecordsByPatientId = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const records = await MedicalRecord.findByPatientId(patientId);
+    res
+      .status(200)
+      .json({ success: true, count: records.length, data: records });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching medical records for patient",
+      error: error.message,
+    });
+  }
+};

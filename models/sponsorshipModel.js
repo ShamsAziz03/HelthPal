@@ -45,6 +45,32 @@ class Sponsorship {
     return rows[0];
   }
 
+  // Find sponsorships by patient ID
+  static async findByPatientId(patientId) {
+    const query = `
+      SELECT s.*, u1.fullName AS patientName, u2.fullName AS donorName
+      FROM sponsorship s
+      LEFT JOIN user u1 ON s.patientId = u1.userId
+      LEFT JOIN user u2 ON s.donorId = u2.userId
+      WHERE s.patientId = ?
+    `;
+    const [rows] = await db.execute(query, [patientId]);
+    return rows;
+  }
+
+  // Find sponsorships by donor ID
+  static async findByDonorId(donorId) {
+    const query = `
+      SELECT s.*, u1.fullName AS patientName, u2.fullName AS donorName  
+      FROM sponsorship s
+      LEFT JOIN user u1 ON s.patientId = u1.userId
+      LEFT JOIN user u2 ON s.donorId = u2.userId
+      WHERE s.donorId = ?
+    `;
+    const [rows] = await db.execute(query, [donorId]);
+    return rows;
+  }
+
   // Update sponsorship
   static async update(sponsorshipId, data) {
     const { currentAmount, status } = data;

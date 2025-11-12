@@ -4,6 +4,8 @@ const {
   createSponsorship,
   getAllSponsorships,
   getSponsorshipById,
+  getSponsorshipsByPatientId,
+  getSponsorshipsByDonorId,
   updateSponsorship,
   updateSponsorshipProgress,
   generateSponsorshipReport,
@@ -15,6 +17,12 @@ router.get("/", getAllSponsorships);
 
 // Route for getting a single sponsorship by ID
 router.get("/:sponsorshipId", getSponsorshipById);
+
+// Route for getting sponsorships by patient ID
+router.get("/patient/:patientId", getSponsorshipsByPatientId);
+
+// Route for getting sponsorships by donor ID
+router.get("/donor/:donorId", getSponsorshipsByDonorId);
 
 // Route for creating a new sponsorship
 router.post("/", createSponsorship);

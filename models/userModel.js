@@ -1,6 +1,7 @@
 const db = require("../config/db");
 const Patient = require("./patientModel");
 const Donor = require("./donorModel");
+const Doctor = require("./doctorModel");
 const { v4: uuidv4 } = require("uuid");
 
 class User {
@@ -54,6 +55,16 @@ class User {
         userId,
         totalDonated: 0,
         sponsorshipsCount: 0,
+      });
+    } else if (role === "doctor") {
+      await Doctor.create({
+        userId,
+        specialty: null,
+        licenseNumber: null,
+        languages: [],
+        yearsOfExperience: 0,
+        isVerified: false,
+        rating: null,
       });
     }
 

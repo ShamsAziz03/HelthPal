@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const sponsorshipRoutes = require("./routes/sponsorshipRoutes");
 const userRoutes = require("./routes/userRoutes");
 const medicalRecordRoutes = require("./routes/medicalRecordRoutes");
+const sharedRecordRoutes = require("./routes/sharedRecordRoutes");
 const db = require("./config/db");
 
 dotenv.config();
@@ -22,6 +23,9 @@ app.use("/api/users", userRoutes);
 
 // Use medical record routes
 app.use("/api", medicalRecordRoutes);
+
+// Use shared record routes
+app.use("/api", sharedRecordRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

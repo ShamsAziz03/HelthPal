@@ -14,3 +14,18 @@ exports.SharedRecord = async (req, res) => {
       .json({ message: "Error sharing record", error: error.message });
   }
 };
+
+// Get all shared records
+exports.getAllSharedRecords = async (req, res) => {
+  try {
+    const records = await SharedRecord.findAll();
+    res
+      .status(200)
+      .json({ success: true, count: records.length, data: records });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching shared records",
+      error: error.message,
+    });
+  }
+};

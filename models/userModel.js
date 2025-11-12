@@ -70,6 +70,46 @@ class User {
 
     return { userId, ...userData };
   }
+
+  // Get a user by ID with role-specific details
+  static async findById(userId) {
+    const [users] = await db.execute("SELECT * FROM user WHERE userId = ?", [
+      userId,
+    ]);
+    if (!users.length) return null;
+
+    const user = users[0];
+    let query = "";
+    let values = [userId];
+
+    if (user.role.toLowerCase() === "patient") {
+      query = `
+      SELECT u.*, p.patientId, p.medicalHistory, p.bloodType, p.dateOfBirth, p.address, p.consentGiven
+      FROM user u
+      JOIN patient p ON u.userId = p.userId
+      WHERE u.userId = ?
+    `;
+    } else if (user.role.toLowerCase() === "doctor") {
+      query = `
+      SELECT u.*, d.doctorId, d.specialty, d.licenseNumber, d.languages, d.yearsOfExperience, d.isVerified, d.rating
+      FROM user u
+      JOIN doctor d ON u.userId = d.userId
+      WHERE u.userId = ?
+    `;
+    } else if (user.role.toLowerCase() === "donor") {
+      query = `
+      SELECT u.*, dr.donorId, dr.totalDonated, dr.sponsorshipsCount
+      FROM user u
+      JOIN donor dr ON u.userId = dr.userId
+      WHERE u.userId = ?
+    `;
+    } else {
+      return user;
+    }
+
+    const [rows] = await db.execute(query, values);
+    return rows[0];
+  }
 }
 
 module.exports = User;

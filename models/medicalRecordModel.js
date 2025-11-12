@@ -27,6 +27,13 @@ class MedicalRecord {
     const [result] = await db.execute(query, values);
     return result;
   }
+
+  // Get all medical records
+  static async findAll() {
+    const query = "SELECT * FROM medicalrecord";
+    const [rows] = await db.execute(query);
+    return rows;
+  }
 }
 
 module.exports = MedicalRecord;

@@ -62,3 +62,19 @@ exports.getMedicalRecordById = async (req, res) => {
     });
   }
 };
+
+// Update a medical record
+exports.updateMedicalRecord = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const updateData = req.body;
+    const result = await MedicalRecord.update(recordId, updateData);
+    res
+      .status(200)
+      .json({ message: "Medical record updated successfully", data: result });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating medical record", error: error.message });
+  }
+};

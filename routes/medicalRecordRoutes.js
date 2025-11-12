@@ -5,6 +5,7 @@ const {
   getAllMedicalRecords,
   getMedicalRecordsByPatientId,
   getMedicalRecordById,
+  updateMedicalRecord,
 } = require("../controllers/medicalRecordController");
 
 // Route to get all medical records
@@ -18,5 +19,8 @@ router.get("/medical-records/:recordId", getMedicalRecordById);
 
 // Route to create a new medical record
 router.post("/medical-records", createMedicalRecord);
+
+// Route to update a medical record
+router.put("/medical-records/:recordId", updateMedicalRecord);
 
 module.exports = router;

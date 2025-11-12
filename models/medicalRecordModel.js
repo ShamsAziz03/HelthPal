@@ -48,6 +48,20 @@ class MedicalRecord {
     const [rows] = await db.execute(query, [recordId]);
     return rows[0];
   }
+
+  // Update a medical record
+  static async update(recordId, data) {
+    const { diagnosis, treatment, attachments } = data;
+    const query =
+      "UPDATE medicalrecord SET diagnosis = ?, treatment = ?, attachments = ? WHERE recordId = ?";
+    const [result] = await db.execute(query, [
+      diagnosis,
+      treatment,
+      JSON.stringify(attachments || []),
+      recordId,
+    ]);
+    return result;
+  }
 }
 
 module.exports = MedicalRecord;

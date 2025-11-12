@@ -62,6 +62,13 @@ class MedicalRecord {
     ]);
     return result;
   }
+
+  // Delete a medical record
+  static async delete(recordId) {
+    const query = "DELETE FROM medicalrecord WHERE recordId = ?";
+    const [result] = await db.execute(query, [recordId]);
+    return result;
+  }
 }
 
 module.exports = MedicalRecord;

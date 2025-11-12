@@ -78,3 +78,18 @@ exports.updateMedicalRecord = async (req, res) => {
       .json({ message: "Error updating medical record", error: error.message });
   }
 };
+
+// Delete a medical record
+exports.deleteMedicalRecord = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const result = await MedicalRecord.delete(recordId);
+    res
+      .status(200)
+      .json({ message: "Medical record deleted successfully", data: result });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting medical record", error: error.message });
+  }
+};

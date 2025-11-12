@@ -6,6 +6,7 @@ const {
   getMedicalRecordsByPatientId,
   getMedicalRecordById,
   updateMedicalRecord,
+  deleteMedicalRecord,
 } = require("../controllers/medicalRecordController");
 
 // Route to get all medical records
@@ -22,5 +23,8 @@ router.post("/medical-records", createMedicalRecord);
 
 // Route to update a medical record
 router.put("/medical-records/:recordId", updateMedicalRecord);
+
+// Route to delete a medical record
+router.delete("/medical-records/:recordId", deleteMedicalRecord);
 
 module.exports = router;

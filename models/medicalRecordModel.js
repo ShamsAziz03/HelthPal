@@ -41,6 +41,13 @@ class MedicalRecord {
     const [rows] = await db.execute(query, [patientId]);
     return rows;
   }
+
+  // Get a medical record by ID
+  static async findById(recordId) {
+    const query = "SELECT * FROM medicalrecord WHERE recordId = ?";
+    const [rows] = await db.execute(query, [recordId]);
+    return rows[0];
+  }
 }
 
 module.exports = MedicalRecord;

@@ -45,3 +45,20 @@ exports.getMedicalRecordsByPatientId = async (req, res) => {
     });
   }
 };
+
+// Get a medical record by ID
+exports.getMedicalRecordById = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const record = await MedicalRecord.findById(recordId);
+    if (!record) {
+      return res.status(404).json({ message: "Medical record not found" });
+    }
+    res.status(200).json({ success: true, data: record });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching medical record",
+      error: error.message,
+    });
+  }
+};

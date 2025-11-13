@@ -160,4 +160,15 @@ class HealthEducation {
         }
     }
 
+    static async delete(contentId) {
+        const query = 'DELETE FROM HealthEducation WHERE contentId = ?';
+
+        try {
+            const [result] = await db.execute(query, [contentId]);
+            return result.affectedRows > 0;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

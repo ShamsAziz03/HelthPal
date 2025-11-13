@@ -60,3 +60,23 @@ exports.getAlertById = async (req, res) => {
     }
 };
 
+
+exports.updateAlert = async (req, res) => {
+    try {
+        const { alertId } = req.params;
+        const updates = req.body;
+
+        const updatedAlert = await PublicHealthAlert.update(alertId, updates);
+        if (!updatedAlert) {
+            return res.status(404).json({ message: 'Alert not found or no changes applied' });
+        }
+
+        res.status(200).json({
+            message: 'Alert updated successfully',
+            data: updatedAlert
+        });
+    } catch (error) {
+        console.error('Error updating alert:', error);
+        res.status(500).json({ message: 'Failed to update alert', error: error.message });
+    }
+};

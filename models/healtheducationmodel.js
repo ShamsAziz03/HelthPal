@@ -1,6 +1,7 @@
 const db = require('../config/db');
 
 class HealthEducation {
+
     static async create(alertData) {
         const { alertId, title, description, severity, affectedAreas, expiresAt } = alertData;
 
@@ -32,5 +33,47 @@ class HealthEducation {
         }
     }
 
+    // Filtered retrieval of health education alerts 
+    static async getAll(filters = {}) {
+        let query = 'SELECT * FROM HealthEducation WHERE 1=1';
+        const params = [];
+
+        if (filters.category) {
+            query += ' AND category = ?';
+            params.push(filters.category);
+        }
+
+        if (filters.language) {
+            query += ' AND language = ?';
+            params.push(filters.language);
+        }
+
+        if (filters.search) {
+            query += ' AND (title LIKE ? OR content LIKE ?)';
+            params.push(`%${filters.search}%`, `%${filters.search}%`);
+        }
+
+        query += ' ORDER BY publishedDate DESC';
+
+        if (filters.limit) {
+            query += ' LIMIT ?';
+            params.push(parseInt(filters.limit));
+        }
+
+        if (filters.offset) {
+            query += ' OFFSET ?';
+            params.push(parseInt(filters.offset));
+        }
+
+        try {
+            const [rows] = await db.execute(query, params);
+            return rows.map(row => ({
+                ...row,
+                mediaFiles: row.mediaFiles ? JSON.parse(row.mediaFiles) : []
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }

@@ -20,3 +20,15 @@ exports.createAlert = async (req, res) => {
         res.status(500).json({ message: 'Failed to create alert', error: error.message });
     }
 };
+
+
+exports.getAllAlerts = async (req, res) => {
+    try {
+        const filters = req.query;
+        const alerts = await PublicHealthAlert.getAll(filters);
+        res.status(200).json(alerts);
+    } catch (error) {
+        console.error('Error fetching alerts:', error);
+        res.status(500).json({ message: 'Failed to fetch alerts', error: error.message });
+    }
+};

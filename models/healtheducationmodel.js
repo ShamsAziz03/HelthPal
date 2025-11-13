@@ -202,3 +202,5 @@ class HealthEducation {
     }
 
 }
+
+module.exports = HealthEducation;

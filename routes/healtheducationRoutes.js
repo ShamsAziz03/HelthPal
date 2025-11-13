@@ -6,6 +6,7 @@ const HealthEducationController = require("../controllers/healthEducation.contro
 router.post("/", HealthEducationController.create);
 router.get("/", HealthEducationController.getAll);
 router.get("/:id", HealthEducationController.getById);
+router.get("/category/:category", HealthEducationController.getByCategory);
 
 
 

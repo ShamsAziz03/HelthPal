@@ -44,5 +44,18 @@ class HealthEducationController {
             });
         }
     }
+    static async getByCategory(req, res) {
+        try {
+            const { category } = req.params;
+            const { language } = req.query;
+            const content = await HealthEducation.getByCategory(category, language);
+            res.status(200).json(content);
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to fetch category content",
+                error: error.message
+            });
+        }
+    }
 }
 

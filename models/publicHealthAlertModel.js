@@ -128,6 +128,25 @@ class PublicHealthAlert {
         }
     }
 
+    static async getBySeverity(severity) {
+        const query = `
+      SELECT * FROM PublicHealthAlert 
+      WHERE severity = ? 
+      AND (expiresAt IS NULL OR expiresAt > NOW())
+      ORDER BY issuedAt DESC
+    `;
+
+        try {
+            const [rows] = await db.execute(query, [severity]);
+            return rows.map(row => ({
+                ...row,
+                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : []
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
 
 

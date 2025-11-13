@@ -110,6 +110,24 @@ class PublicHealthAlert {
         }
     }
 
+    static async getById(alertId) {
+        const query = 'SELECT * FROM PublicHealthAlert WHERE alertId = ?';
+
+        try {
+            const [rows] = await db.execute(query, [alertId]);
+            if (rows.length === 0) return null;
+
+            const alert = rows[0];
+            return {
+                ...alert,
+                affectedAreas: alert.affectedAreas ? JSON.parse(alert.affectedAreas) : [],
+                isActive: !alert.expiresAt || new Date(alert.expiresAt) > new Date()
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
 
 

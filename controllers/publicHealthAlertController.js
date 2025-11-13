@@ -111,3 +111,14 @@ exports.deleteAlert = async (req, res) => {
         res.status(500).json({ message: 'Failed to delete alert', error: error.message });
     }
 };
+
+exports.getAlertsBySeverity = async (req, res) => {
+    try {
+        const { severity } = req.params;
+        const alerts = await PublicHealthAlert.getBySeverity(severity);
+        res.status(200).json(alerts);
+    } catch (error) {
+        console.error('Error fetching alerts by severity:', error);
+        res.status(500).json({ message: 'Failed to fetch alerts', error: error.message });
+    }
+};

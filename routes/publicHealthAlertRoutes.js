@@ -12,4 +12,9 @@ router.get('/severity/:severity', alertController.getAlertsBySeverity);
 router.get('/area/:area', alertController.getAlertsByArea);
 router.get('/:alertId', alertController.getAlertById);
 
+router.put('/:alertId', alertController.updateAlert);
+
+router.patch('/:alertId/expire', alertController.expireAlert);
+router.delete('/:alertId', alertController.deleteAlert);
+
 module.exports = router;

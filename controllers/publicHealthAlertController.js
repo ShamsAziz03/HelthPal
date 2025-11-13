@@ -80,3 +80,18 @@ exports.updateAlert = async (req, res) => {
         res.status(500).json({ message: 'Failed to update alert', error: error.message });
     }
 };
+exports.expireAlert = async (req, res) => {
+    try {
+        const { alertId } = req.params;
+        const result = await PublicHealthAlert.expire(alertId);
+
+        if (!result) {
+            return res.status(404).json({ message: 'Alert not found' });
+        }
+
+        res.status(200).json({ message: 'Alert expired successfully' });
+    } catch (error) {
+        console.error('Error expiring alert:', error);
+        res.status(500).json({ message: 'Failed to expire alert', error: error.message });
+    }
+};

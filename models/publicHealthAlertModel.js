@@ -272,11 +272,4 @@ class PublicHealthAlert {
             throw error;
         }
     }
-
-
-
-
-
-
-
 }

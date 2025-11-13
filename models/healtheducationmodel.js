@@ -171,4 +171,15 @@ class HealthEducation {
         }
     }
 
+    static async getCategories() {
+        const query = 'SELECT DISTINCT category FROM HealthEducation ORDER BY category';
+
+        try {
+            const [rows] = await db.execute(query);
+            return rows.map(row => row.category);
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

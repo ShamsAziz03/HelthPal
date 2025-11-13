@@ -95,3 +95,19 @@ exports.expireAlert = async (req, res) => {
         res.status(500).json({ message: 'Failed to expire alert', error: error.message });
     }
 };
+
+exports.deleteAlert = async (req, res) => {
+    try {
+        const { alertId } = req.params;
+        const deleted = await PublicHealthAlert.delete(alertId);
+
+        if (!deleted) {
+            return res.status(404).json({ message: 'Alert not found' });
+        }
+
+        res.status(200).json({ message: 'Alert deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting alert:', error);
+        res.status(500).json({ message: 'Failed to delete alert', error: error.message });
+    }
+};

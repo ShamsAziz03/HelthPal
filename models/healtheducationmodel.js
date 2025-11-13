@@ -1,39 +1,36 @@
 const db = require('../config/db');
 
 class HealthEducation {
+    // Create new health education content
+    static async create(contentData) {
 
-    static async create(alertData) {
-        const { alertId, title, description, severity, affectedAreas, expiresAt } = alertData;
-
-        if (!alertId) {
-            throw new Error('alertId is required');
-        }
+        const { contentId, title, content, category, mediaFiles, language } = contentData;
 
         const query = `
-    INSERT INTO PublicHealthAlert 
-    (alertId, title, description, severity, affectedAreas, issuedAt, expiresAt)
-    VALUES (?, ?, ?, ?, ?, NOW(), ?)
-  `;
+      INSERT INTO HealthEducation 
+      (contentId, title, content, category, mediaFiles, language, publishedDate)
+      VALUES (?, ?, ?, ?, ?, ?, NOW())
+    `;
 
-        const affectedAreasJson = affectedAreas ? JSON.stringify(affectedAreas) : null;
+        const mediaFilesJson = mediaFiles ? JSON.stringify(mediaFiles) : null;
 
         try {
             const [result] = await db.execute(query, [
-                alertId,
+                contentId,
                 title,
-                description,
-                severity,
-                affectedAreasJson,
-                expiresAt || null
+                content,
+                category,
+                mediaFilesJson,
+                language || 'Arabic'
             ]);
 
-            return { alertId, ...alertData, issuedAt: new Date() };
+            return { contentId, ...contentData, publishedDate: new Date() };
         } catch (error) {
             throw error;
         }
     }
 
-    // Filtered retrieval of health education alerts 
+    // Get all health education content with filters
     static async getAll(filters = {}) {
         let query = 'SELECT * FROM HealthEducation WHERE 1=1';
         const params = [];
@@ -76,6 +73,7 @@ class HealthEducation {
         }
     }
 
+    // Get content by ID
     static async getById(contentId) {
         const query = 'SELECT * FROM HealthEducation WHERE contentId = ?';
 
@@ -93,6 +91,7 @@ class HealthEducation {
         }
     }
 
+    // Get content by category
     static async getByCategory(category, language = null) {
         let query = 'SELECT * FROM HealthEducation WHERE category = ?';
         const params = [category];
@@ -115,6 +114,7 @@ class HealthEducation {
         }
     }
 
+    // Update health education content
     static async update(contentId, updates) {
         const fields = [];
         const params = [];
@@ -160,6 +160,7 @@ class HealthEducation {
         }
     }
 
+    // Delete health education content
     static async delete(contentId) {
         const query = 'DELETE FROM HealthEducation WHERE contentId = ?';
 
@@ -171,6 +172,7 @@ class HealthEducation {
         }
     }
 
+    // Get all unique categories
     static async getCategories() {
         const query = 'SELECT DISTINCT category FROM HealthEducation ORDER BY category';
 
@@ -181,6 +183,7 @@ class HealthEducation {
             throw error;
         }
     }
+
     // Get content count by category
     static async getStatistics() {
         const query = `
@@ -200,7 +203,7 @@ class HealthEducation {
             throw error;
         }
     }
-
 }
 
 module.exports = HealthEducation;
+

@@ -233,6 +233,28 @@ class PublicHealthAlert {
         }
     }
 
+    static async getStatistics() {
+        const query = `
+      SELECT 
+        severity,
+        COUNT(*) as total,
+        SUM(CASE WHEN expiresAt IS NULL OR expiresAt > NOW() THEN 1 ELSE 0 END) as active,
+        SUM(CASE WHEN expiresAt IS NOT NULL AND expiresAt <= NOW() THEN 1 ELSE 0 END) as expired
+      FROM PublicHealthAlert
+      GROUP BY severity
+      ORDER BY 
+        FIELD(severity, 'Critical', 'High', 'Medium', 'Low')
+    `;
+
+        try {
+            const [rows] = await db.execute(query);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 
 
 

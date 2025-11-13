@@ -4,6 +4,9 @@ const router = express.Router();
 const HealthEducationController = require("../controllers/healthEducation.controller");
 
 router.post("/", HealthEducationController.create);
+router.get("/", HealthEducationController.getAll);
+router.get("/:id", HealthEducationController.getById);
+
 
 
 

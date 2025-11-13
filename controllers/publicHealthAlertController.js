@@ -32,3 +32,16 @@ exports.getAllAlerts = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch alerts', error: error.message });
     }
 };
+
+
+exports.getActiveAlerts = async (req, res) => {
+    try {
+        const filters = req.query;
+        const activeAlerts = await PublicHealthAlert.getActive(filters);
+        res.status(200).json(activeAlerts);
+    } catch (error) {
+        console.error('Error fetching active alerts:', error);
+        res.status(500).json({ message: 'Failed to fetch active alerts', error: error.message });
+    }
+};
+

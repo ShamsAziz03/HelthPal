@@ -1,16 +1,33 @@
 const db = require('../config/db')
 const { v4: uuidv4 } = require("uuid")
-
+const isVerifiedNGO = require('../services/ngoVerifyService').isVerifiedNGO
 class NGO {
     static async add(data) {
         const { userId, organizationName, registrationNumber, contactPerson, serviceAreas } = data;
         const ngoId = uuidv4()
 
-        //here we should check for user id if exist or not 
-        const qry = "INSERT INTO healthpal.ngo (ngoId,userId,organizationName,registrationNumber,contactPerson,serviceAreas)VALUES(?,?, ?, ?, ?, ?);"
-        const res = await db.execute(qry, [ngoId, userId, organizationName, registrationNumber, contactPerson, serviceAreas])
+        if (!organizationName)
+            return { error: "organization name is required" }
+        if(!userId)
+            return { error: "userId is required" }
+        if(!serviceAreas)
+            return { error: "service areas is required" }
+        
+        let safeRegNum = registrationNumber ?? null
+        const safeContact = contactPerson ?? null
+        const isVerified = await isVerifiedNGO(organizationName)
+        console.log("is verified:", isVerified.verified)
+        if (registrationNumber && !isVerified.verified) {
+            safeRegNum = null
+        }
 
-        return {ngoId, ...data}
+        const qry = "INSERT INTO healthpal.ngo (ngoId,userId,organizationName,registrationNumber,contactPerson,serviceAreas)VALUES(?,?, ?, ?, ?, ?);"
+        const res = await db.execute(qry, [ngoId, userId, organizationName, safeRegNum, safeContact, serviceAreas])
+
+        if (isVerified.verified)
+            return { ngoId, userId, organizationName, registrationNumber: safeRegNum, contactPerson: safeContact, serviceAreas, message: "NGO registered and verified successfully" }
+        else
+            return {warnning: "NGO registered but it is not verified"}
     }
 
     static async delete(id) {

@@ -76,4 +76,21 @@ class HealthEducation {
         }
     }
 
+    static async getById(contentId) {
+        const query = 'SELECT * FROM HealthEducation WHERE contentId = ?';
+
+        try {
+            const [rows] = await db.execute(query, [contentId]);
+            if (rows.length === 0) return null;
+
+            const content = rows[0];
+            return {
+                ...content,
+                mediaFiles: content.mediaFiles ? JSON.parse(content.mediaFiles) : []
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

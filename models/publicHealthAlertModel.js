@@ -210,6 +210,18 @@ class PublicHealthAlert {
             throw error;
         }
     }
+    // to expire an alert immediately
+    static async expire(alertId) {
+        const query = 'UPDATE PublicHealthAlert SET expiresAt = NOW() WHERE alertId = ?';
+
+        try {
+            const [result] = await db.execute(query, [alertId]);
+            if (result.affectedRows === 0) return false;
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 
 

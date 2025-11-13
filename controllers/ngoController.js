@@ -5,6 +5,9 @@ const ngoController = {
         try {
             const data = req.body
             const newNGO = await NGO.add(data)
+            if (newNGO.error)
+                return res.status(400).json(newNGO)
+
             res.status(200).json(newNGO)
         } catch (err) {
             res.status(500).json({ error: err.message })

@@ -222,6 +222,16 @@ class PublicHealthAlert {
             throw error;
         }
     }
+    static async delete(alertId) {
+        const query = 'DELETE FROM PublicHealthAlert WHERE alertId = ?';
+
+        try {
+            const [result] = await db.execute(query, [alertId]);
+            return result.affectedRows > 0;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 
 

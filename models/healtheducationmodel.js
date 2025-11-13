@@ -115,4 +115,49 @@ class HealthEducation {
         }
     }
 
+    static async update(contentId, updates) {
+        const fields = [];
+        const params = [];
+
+        if (updates.title) {
+            fields.push('title = ?');
+            params.push(updates.title);
+        }
+
+        if (updates.content) {
+            fields.push('content = ?');
+            params.push(updates.content);
+        }
+
+        if (updates.category) {
+            fields.push('category = ?');
+            params.push(updates.category);
+        }
+
+        if (updates.mediaFiles) {
+            fields.push('mediaFiles = ?');
+            params.push(JSON.stringify(updates.mediaFiles));
+        }
+
+        if (updates.language) {
+            fields.push('language = ?');
+            params.push(updates.language);
+        }
+
+        if (fields.length === 0) {
+            throw new Error('No fields to update');
+        }
+
+        params.push(contentId);
+        const query = `UPDATE HealthEducation SET ${fields.join(', ')} WHERE contentId = ?`;
+
+        try {
+            const [result] = await db.execute(query, params);
+            if (result.affectedRows === 0) return null;
+            return await this.getById(contentId);
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

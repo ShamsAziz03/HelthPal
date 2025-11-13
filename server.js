@@ -5,7 +5,7 @@ import db from './config/db.js';
 import equipmentRouter from './routes/equipmentRoutes.js';
 import medicationRouter from './routes/medicationRoutes.js';
 import publichealthaleartRouter from './routes/publicHealthAlertRoutes.js';
-import healtheducationRouter from './routes/healthEducationRoutes.js';
+import healtheducationRouter from './routes/healtheducationRoutes.js';
 dotenv.config();
 
 const app = express();

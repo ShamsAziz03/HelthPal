@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const HealthEducationController = require("../controllers/healthEducation.controller");
+const HealthEducationController = require("../controllers/healthEducationController.js");
 
 router.post("/", HealthEducationController.create);
 router.get("/", HealthEducationController.getAll);

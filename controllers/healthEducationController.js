@@ -1,4 +1,4 @@
-const HealthEducation = require("../models/HealthEducation");
+const HealthEducation = require("../models/healtheducationmodel");
 
 class HealthEducationController {
 
@@ -123,4 +123,6 @@ class HealthEducationController {
 
 
 }
+module.exports = HealthEducationController;
+
 

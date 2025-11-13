@@ -143,3 +143,14 @@ exports.getAlertStatistics = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch alert statistics', error: error.message });
     }
 };
+
+exports.getRecentAlerts = async (req, res) => {
+    try {
+        const days = req.query.days ? parseInt(req.query.days) : 7;
+        const recentAlerts = await PublicHealthAlert.getRecent(days);
+        res.status(200).json(recentAlerts);
+    } catch (error) {
+        console.error('Error fetching recent alerts:', error);
+        res.status(500).json({ message: 'Failed to fetch recent alerts', error: error.message });
+    }
+};

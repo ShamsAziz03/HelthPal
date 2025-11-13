@@ -1,16 +1,54 @@
 const db = require('../config/db');
+
 class PublicHealthAlert {
+
+    // Helper function to safely parse JSON
+    static safeJSONParse(jsonString) {
+        if (!jsonString) return [];
+
+        // If it's already an array, return it
+        if (Array.isArray(jsonString)) return jsonString;
+
+        // If it's not a string, try to convert it
+        if (typeof jsonString !== 'string') return [];
+
+        try {
+            const parsed = JSON.parse(jsonString);
+            // If parsed result is not an array, wrap it in an array
+            return Array.isArray(parsed) ? parsed : [parsed];
+        } catch (error) {
+            console.warn('Invalid JSON in affectedAreas:', jsonString);
+            // If parsing fails, return it as a single-item array
+            return [jsonString];
+        }
+    }
 
     static async create(alertData) {
         const { alertId, title, description, severity, affectedAreas, expiresAt } = alertData;
 
         const query = `
-      INSERT INTO PublicHealthAlert 
-      (alertId, title, description, severity, affectedAreas, issuedAt, expiresAt)
-      VALUES (?, ?, ?, ?, ?, NOW(), ?)
-    `;
+            INSERT INTO PublicHealthAlert 
+            (alertId, title, description, severity, affectedAreas, issuedAt, expiresAt)
+            VALUES (?, ?, ?, ?, ?, NOW(), ?)
+        `;
 
-        const affectedAreasJson = affectedAreas ? JSON.stringify(affectedAreas) : null;
+        // Ensure affectedAreas is properly formatted as JSON array
+        let affectedAreasJson = null;
+        if (affectedAreas) {
+            if (Array.isArray(affectedAreas)) {
+                affectedAreasJson = JSON.stringify(affectedAreas);
+            } else if (typeof affectedAreas === 'string') {
+                // If it's already a JSON string, use it as is, otherwise wrap it
+                try {
+                    JSON.parse(affectedAreas);
+                    affectedAreasJson = affectedAreas;
+                } catch {
+                    affectedAreasJson = JSON.stringify([affectedAreas]);
+                }
+            } else {
+                affectedAreasJson = JSON.stringify([affectedAreas]);
+            }
+        }
 
         try {
             const [result] = await db.execute(query, [
@@ -28,12 +66,12 @@ class PublicHealthAlert {
         }
     }
 
-    // get all active public health alerts with optional filteers 
+    // Get all active public health alerts with optional filters 
     static async getActive(filters = {}) {
         let query = `
-      SELECT * FROM PublicHealthAlert 
-      WHERE (expiresAt IS NULL OR expiresAt > NOW())
-    `;
+            SELECT * FROM PublicHealthAlert 
+            WHERE (expiresAt IS NULL OR expiresAt > NOW())
+        `;
         const params = [];
 
         if (filters.severity) {
@@ -57,13 +95,14 @@ class PublicHealthAlert {
             const [rows] = await db.execute(query, params);
             return rows.map(row => ({
                 ...row,
-                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : []
+                affectedAreas: this.safeJSONParse(row.affectedAreas)
             }));
         } catch (error) {
             throw error;
         }
     }
 
+    // Get all alerts with optional filters
     static async getAll(filters = {}) {
         let query = 'SELECT * FROM PublicHealthAlert WHERE 1=1';
         const params = [];
@@ -102,7 +141,7 @@ class PublicHealthAlert {
             const [rows] = await db.execute(query, params);
             return rows.map(row => ({
                 ...row,
-                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : [],
+                affectedAreas: this.safeJSONParse(row.affectedAreas),
                 isActive: !row.expiresAt || new Date(row.expiresAt) > new Date()
             }));
         } catch (error) {
@@ -110,6 +149,7 @@ class PublicHealthAlert {
         }
     }
 
+    // Get alert by ID
     static async getById(alertId) {
         const query = 'SELECT * FROM PublicHealthAlert WHERE alertId = ?';
 
@@ -120,7 +160,7 @@ class PublicHealthAlert {
             const alert = rows[0];
             return {
                 ...alert,
-                affectedAreas: alert.affectedAreas ? JSON.parse(alert.affectedAreas) : [],
+                affectedAreas: this.safeJSONParse(alert.affectedAreas),
                 isActive: !alert.expiresAt || new Date(alert.expiresAt) > new Date()
             };
         } catch (error) {
@@ -128,44 +168,47 @@ class PublicHealthAlert {
         }
     }
 
+    // Get alerts by severity
     static async getBySeverity(severity) {
         const query = `
-      SELECT * FROM PublicHealthAlert 
-      WHERE severity = ? 
-      AND (expiresAt IS NULL OR expiresAt > NOW())
-      ORDER BY issuedAt DESC
-    `;
+            SELECT * FROM PublicHealthAlert 
+            WHERE severity = ? 
+            AND (expiresAt IS NULL OR expiresAt > NOW())
+            ORDER BY issuedAt DESC
+        `;
 
         try {
             const [rows] = await db.execute(query, [severity]);
             return rows.map(row => ({
                 ...row,
-                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : []
+                affectedAreas: this.safeJSONParse(row.affectedAreas)
             }));
         } catch (error) {
             throw error;
         }
     }
 
+    // Get alerts by area
     static async getByArea(area) {
         const query = `
-      SELECT * FROM PublicHealthAlert 
-      WHERE JSON_CONTAINS(affectedAreas, ?)
-      AND (expiresAt IS NULL OR expiresAt > NOW())
-      ORDER BY severity DESC, issuedAt DESC
-    `;
+            SELECT * FROM PublicHealthAlert 
+            WHERE JSON_CONTAINS(affectedAreas, ?)
+            AND (expiresAt IS NULL OR expiresAt > NOW())
+            ORDER BY severity DESC, issuedAt DESC
+        `;
 
         try {
             const [rows] = await db.execute(query, [JSON.stringify(area)]);
             return rows.map(row => ({
                 ...row,
-                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : []
+                affectedAreas: this.safeJSONParse(row.affectedAreas)
             }));
         } catch (error) {
             throw error;
         }
     }
 
+    // Update alert
     static async update(alertId, updates) {
         const fields = [];
         const params = [];
@@ -187,7 +230,11 @@ class PublicHealthAlert {
 
         if (updates.affectedAreas) {
             fields.push('affectedAreas = ?');
-            params.push(JSON.stringify(updates.affectedAreas));
+            // Ensure it's always an array before stringifying
+            const areasArray = Array.isArray(updates.affectedAreas)
+                ? updates.affectedAreas
+                : [updates.affectedAreas];
+            params.push(JSON.stringify(areasArray));
         }
 
         if (updates.expiresAt !== undefined) {
@@ -210,7 +257,8 @@ class PublicHealthAlert {
             throw error;
         }
     }
-    // to expire an alert immediately
+
+    // Expire an alert immediately
     static async expire(alertId) {
         const query = 'UPDATE PublicHealthAlert SET expiresAt = NOW() WHERE alertId = ?';
 
@@ -222,6 +270,8 @@ class PublicHealthAlert {
             throw error;
         }
     }
+
+    // Delete alert (hard delete)
     static async delete(alertId) {
         const query = 'DELETE FROM PublicHealthAlert WHERE alertId = ?';
 
@@ -233,18 +283,19 @@ class PublicHealthAlert {
         }
     }
 
+    // Get alert statistics
     static async getStatistics() {
         const query = `
-      SELECT 
-        severity,
-        COUNT(*) as total,
-        SUM(CASE WHEN expiresAt IS NULL OR expiresAt > NOW() THEN 1 ELSE 0 END) as active,
-        SUM(CASE WHEN expiresAt IS NOT NULL AND expiresAt <= NOW() THEN 1 ELSE 0 END) as expired
-      FROM PublicHealthAlert
-      GROUP BY severity
-      ORDER BY 
-        FIELD(severity, 'Critical', 'High', 'Medium', 'Low')
-    `;
+            SELECT 
+                severity,
+                COUNT(*) as total,
+                SUM(CASE WHEN expiresAt IS NULL OR expiresAt > NOW() THEN 1 ELSE 0 END) as active,
+                SUM(CASE WHEN expiresAt IS NOT NULL AND expiresAt <= NOW() THEN 1 ELSE 0 END) as expired
+            FROM PublicHealthAlert
+            GROUP BY severity
+            ORDER BY 
+                FIELD(severity, 'Critical', 'High', 'Medium', 'Low')
+        `;
 
         try {
             const [rows] = await db.execute(query);
@@ -254,18 +305,19 @@ class PublicHealthAlert {
         }
     }
 
+    // Get recent alerts (last N days)
     static async getRecent(days = 7) {
         const query = `
-      SELECT * FROM PublicHealthAlert 
-      WHERE issuedAt >= DATE_SUB(NOW(), INTERVAL ? DAY)
-      ORDER BY severity DESC, issuedAt DESC
-    `;
+            SELECT * FROM PublicHealthAlert 
+            WHERE issuedAt >= DATE_SUB(NOW(), INTERVAL ? DAY)
+            ORDER BY severity DESC, issuedAt DESC
+        `;
 
         try {
             const [rows] = await db.execute(query, [days]);
             return rows.map(row => ({
                 ...row,
-                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : [],
+                affectedAreas: this.safeJSONParse(row.affectedAreas),
                 isActive: !row.expiresAt || new Date(row.expiresAt) > new Date()
             }));
         } catch (error) {
@@ -273,3 +325,5 @@ class PublicHealthAlert {
         }
     }
 }
+
+module.exports = PublicHealthAlert;

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import db from './config/db.js';
 import equipmentRouter from './routes/equipmentRoutes.js';
 import medicationRouter from './routes/medicationRoutes.js';
-
+import publichealthaleartRouter from './routes/publicHealthAlertRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use('/equipment', equipmentRouter);
 app.use('/medication', medicationRouter);
-
+app.use('/alerts', publichealthaleartRouter);
 app.get('/', (req, res) => res.send('project API is running'));
 
 // Test DB connection (promise style)

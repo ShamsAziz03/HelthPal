@@ -181,5 +181,24 @@ class HealthEducation {
             throw error;
         }
     }
+    // Get content count by category
+    static async getStatistics() {
+        const query = `
+      SELECT 
+        category,
+        language,
+        COUNT(*) as count
+      FROM HealthEducation
+      GROUP BY category, language
+      ORDER BY category, language
+    `;
+
+        try {
+            const [rows] = await db.execute(query);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }

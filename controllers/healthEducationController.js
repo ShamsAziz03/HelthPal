@@ -109,6 +109,17 @@ class HealthEducationController {
             });
         }
     }
+    static async getStatistics(req, res) {
+        try {
+            const stats = await HealthEducation.getStatistics();
+            res.status(200).json(stats);
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to fetch statistics",
+                error: error.message
+            });
+        }
+    }
 
 
 }

@@ -93,4 +93,26 @@ class HealthEducation {
         }
     }
 
+    static async getByCategory(category, language = null) {
+        let query = 'SELECT * FROM HealthEducation WHERE category = ?';
+        const params = [category];
+
+        if (language) {
+            query += ' AND language = ?';
+            params.push(language);
+        }
+
+        query += ' ORDER BY publishedDate DESC';
+
+        try {
+            const [rows] = await db.execute(query, params);
+            return rows.map(row => ({
+                ...row,
+                mediaFiles: row.mediaFiles ? JSON.parse(row.mediaFiles) : []
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

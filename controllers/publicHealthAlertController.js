@@ -133,3 +133,13 @@ exports.getAlertsByArea = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch alerts', error: error.message });
     }
 };
+
+exports.getAlertStatistics = async (req, res) => {
+    try {
+        const stats = await PublicHealthAlert.getStatistics();
+        res.status(200).json(stats);
+    } catch (error) {
+        console.error('Error fetching alert statistics:', error);
+        res.status(500).json({ message: 'Failed to fetch alert statistics', error: error.message });
+    }
+};

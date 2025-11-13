@@ -166,6 +166,52 @@ class PublicHealthAlert {
         }
     }
 
+    static async update(alertId, updates) {
+        const fields = [];
+        const params = [];
+
+        if (updates.title) {
+            fields.push('title = ?');
+            params.push(updates.title);
+        }
+
+        if (updates.description) {
+            fields.push('description = ?');
+            params.push(updates.description);
+        }
+
+        if (updates.severity) {
+            fields.push('severity = ?');
+            params.push(updates.severity);
+        }
+
+        if (updates.affectedAreas) {
+            fields.push('affectedAreas = ?');
+            params.push(JSON.stringify(updates.affectedAreas));
+        }
+
+        if (updates.expiresAt !== undefined) {
+            fields.push('expiresAt = ?');
+            params.push(updates.expiresAt);
+        }
+
+        if (fields.length === 0) {
+            throw new Error('No fields to update');
+        }
+
+        params.push(alertId);
+        const query = `UPDATE PublicHealthAlert SET ${fields.join(', ')} WHERE alertId = ?`;
+
+        try {
+            const [result] = await db.execute(query, params);
+            if (result.affectedRows === 0) return null;
+            return await this.getById(alertId);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 
 
 

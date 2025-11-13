@@ -254,6 +254,25 @@ class PublicHealthAlert {
         }
     }
 
+    static async getRecent(days = 7) {
+        const query = `
+      SELECT * FROM PublicHealthAlert 
+      WHERE issuedAt >= DATE_SUB(NOW(), INTERVAL ? DAY)
+      ORDER BY severity DESC, issuedAt DESC
+    `;
+
+        try {
+            const [rows] = await db.execute(query, [days]);
+            return rows.map(row => ({
+                ...row,
+                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : [],
+                isActive: !row.expiresAt || new Date(row.expiresAt) > new Date()
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
 
 

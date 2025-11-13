@@ -28,5 +28,43 @@ class PublicHealthAlert {
         }
     }
 
+    // get all active public health alerts with optional filteers 
+    static async getActive(filters = {}) {
+        let query = `
+      SELECT * FROM PublicHealthAlert 
+      WHERE (expiresAt IS NULL OR expiresAt > NOW())
+    `;
+        const params = [];
+
+        if (filters.severity) {
+            query += ' AND severity = ?';
+            params.push(filters.severity);
+        }
+
+        if (filters.area) {
+            query += ' AND JSON_CONTAINS(affectedAreas, ?)';
+            params.push(JSON.stringify(filters.area));
+        }
+
+        query += ' ORDER BY severity DESC, issuedAt DESC';
+
+        if (filters.limit) {
+            query += ' LIMIT ?';
+            params.push(parseInt(filters.limit));
+        }
+
+        try {
+            const [rows] = await db.execute(query, params);
+            return rows.map(row => ({
+                ...row,
+                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : []
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+
 
 }

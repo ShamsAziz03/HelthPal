@@ -57,5 +57,27 @@ class HealthEducationController {
             });
         }
     }
+
+    static async update(req, res) {
+        try {
+            const { id } = req.params;
+            const updated = await HealthEducation.update(id, req.body);
+
+            if (!updated) {
+                return res.status(404).json({ message: "Content not found" });
+            }
+
+            res.status(200).json({
+                message: "Content updated successfully",
+                data: updated
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to update content",
+                error: error.message
+            });
+        }
+    }
+
 }
 

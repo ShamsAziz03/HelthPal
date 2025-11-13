@@ -147,6 +147,26 @@ class PublicHealthAlert {
         }
     }
 
+    static async getByArea(area) {
+        const query = `
+      SELECT * FROM PublicHealthAlert 
+      WHERE JSON_CONTAINS(affectedAreas, ?)
+      AND (expiresAt IS NULL OR expiresAt > NOW())
+      ORDER BY severity DESC, issuedAt DESC
+    `;
+
+        try {
+            const [rows] = await db.execute(query, [JSON.stringify(area)]);
+            return rows.map(row => ({
+                ...row,
+                affectedAreas: row.affectedAreas ? JSON.parse(row.affectedAreas) : []
+            }));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 
 
 

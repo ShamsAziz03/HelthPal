@@ -46,10 +46,9 @@ class Sponsorship {
   // Find sponsorships by patient ID
   static async findByPatientId(patientId) {
     const query = `
-      SELECT s.*, u1.fullName AS patientName, u2.fullName AS donorName
+      SELECT s.*, u1.fullName AS patientName
       FROM sponsorship s
       LEFT JOIN user u1 ON s.patientId = u1.userId
-      LEFT JOIN user u2 ON s.donorId = u2.userId
       WHERE s.patientId = ?
     `;
     const [rows] = await db.execute(query, [patientId]);
@@ -100,7 +99,7 @@ class Sponsorship {
 
   // check donation goal
   static async checkGoal(sponsorshipId) {
-    const checkQuery = 
+    const checkQuery =
       "SELECT goalAmount, currentAmount FROM sponsorship WHERE sponsorshipId = ?";
     const [rows] = await db.execute(checkQuery, [sponsorshipId]);
     return rows[0];

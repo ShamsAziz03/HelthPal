@@ -52,6 +52,32 @@ class Transaction {
     return rows;
   }
 
+  // Donor report: donation history
+  static async getDonorHistory(donorId) {
+    const query = `
+    SELECT 
+      t.*,
+      s.treatmentType,
+      p.patientId,
+      uDonor.fullName AS donorName,
+      uPatient.fullName AS patientName
+    FROM transaction t
+
+    JOIN sponsorship s ON t.sponsorshipId = s.sponsorshipId
+
+    JOIN donor d ON t.donorId = d.donorId
+    JOIN user uDonor ON d.userId = uDonor.userId
+
+    JOIN patient p ON s.patientId = p.patientId
+    JOIN user uPatient ON p.userId = uPatient.userId
+
+    WHERE t.donorId = ?
+  `;
+
+    const [rows] = await db.execute(query, [donorId]);
+    return rows;
+  }
+
   // Delete a transaction record
   static async delete(transactionId) {
     const query = "DELETE FROM transaction WHERE transactionId = ?";

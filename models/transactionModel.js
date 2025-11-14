@@ -28,6 +28,10 @@ class Transaction {
     const [result] = await db.execute(query, values);
     // update sponsorship currentAmount
     sponsorshipModel.updateProgress(sponsorshipId, amount);
+    await db.execute(
+      "UPDATE donor SET totalDonated = totalDonated + ?, sponsorshipsCount = sponsorshipsCount + 1 WHERE donorId = ?",
+      [amount, donorId]
+    );
     return result;
   }
 

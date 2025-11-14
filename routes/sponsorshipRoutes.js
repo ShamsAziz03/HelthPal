@@ -33,9 +33,6 @@ router.put("/:sponsorshipId", updateSponsorship);
 // Route for updating sponsorship progress
 router.put("/:sponsorshipId/progress", updateSponsorshipProgress);
 
-// Route for generating sponsorship report
-router.get("/:sponsorshipId/report", generateSponsorshipReport);
-
 // Route for deleting a sponsorship
 router.delete("/:sponsorshipId", deleteSponsorship);
 

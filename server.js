@@ -1,10 +1,10 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const ngoRoutes = require('./routes/ngoRoutes');
-const collaborationRoutes = require('./routes/collaborationRoutes');
-const availabilityRoutes = require('./routes/drAvailabilityRoutes')
-const bookingRoutes = require('./routes/bookingRoutes')
-const missionRoutes = require('./routes/missionRoutes')
+import express from "express";
+import dotenv from "dotenv";
+import ngoRoutes from "./routes/ngoRoutes.js";
+import collaborationRoutes from "./routes/collaborationRoutes.js";
+import availabilityRoutes from "./routes/drAvailabilityRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
+import missionRoutes from "./routes/missionRoutes.js";
 dotenv.config();
 const app = express();
 

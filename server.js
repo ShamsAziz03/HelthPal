@@ -2,8 +2,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import db from './config/db.js';
-import equipmentRouter from './routes/equipmentRoutes.js';
-import medicationRouter from './routes/medicationRoutes.js';
+
 // Alerts and educational posts 
 import publichealthaleartRouter from './routes/publicHealthAlertRoutes.js';
 import healtheducationRouter from './routes/healtheducationRoutes.js';

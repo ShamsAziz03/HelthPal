@@ -76,7 +76,7 @@ exports.createSponsorship = async (req, res) => {
     console.log("Creating sponsorship with data:", req.body);
     const sponsorshipData = req.body;
 
-    if (!sponsorshipData.patientId || !sponsorshipData.donorId) {
+    if (!sponsorshipData.patientId) {
       return res.status(400).json({
         success: false,
         message: "patientId and donorId are required",
@@ -157,6 +157,35 @@ exports.updateSponsorshipProgress = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error updating sponsorship progress",
+      error: error.message,
+    });
+  }
+};
+
+// check sponsorship goal
+exports.checkSponsorshipGoal = async (req, res) => {
+  try {
+    const { sponsorshipId } = req.params;
+    console.log(`Checking goal for sponsorship ${sponsorshipId}`);
+    const result = await Sponsorship.checkGoal(sponsorshipId);
+    if (result.goalAmount === result.currentAmount) {
+      result.status = "completed";
+    } else if (result.currentAmount > result.goalAmount) {
+      result.status = "overfunded";
+    } else if (result.currentAmount === 0) {
+      result.status = "pending";
+    } else {
+      result.status = "Active";
+    }
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error checking sponsorship goal:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error checking sponsorship goal",
       error: error.message,
     });
   }

@@ -15,7 +15,7 @@ class Sponsorship {
     const sponsorshipId = uuidv4();
 
     const query = `INSERT INTO sponsorship (sponsorshipId, patientId, treatmentType, goalAmount, currentAmount, status, createdAt)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       sponsorshipId,
       patientId,
@@ -96,6 +96,14 @@ class Sponsorship {
       await db.execute(statusUpdateQuery, [sponsorshipId]);
     }
     return { message: "Progress updated successfully" };
+  }
+
+  // check donation goal
+  static async checkGoal(sponsorshipId) {
+    const checkQuery = 
+      "SELECT goalAmount, currentAmount FROM sponsorship WHERE sponsorshipId = ?";
+    const [rows] = await db.execute(checkQuery, [sponsorshipId]);
+    return rows[0];
   }
 
   // Delete a sponsorship record

@@ -8,7 +8,7 @@ const {
   getSponsorshipsByDonorId,
   updateSponsorship,
   updateSponsorshipProgress,
-  generateSponsorshipReport,
+  checkSponsorshipGoal,
   deleteSponsorship,
 } = require("../controllers/sponsorshipController");
 
@@ -29,6 +29,9 @@ router.put("/:sponsorshipId", updateSponsorship);
 
 // Route for updating sponsorship progress
 router.put("/:sponsorshipId/progress", updateSponsorshipProgress);
+
+// Route for checking sponsorship goal
+router.get("/:sponsorshipId/goal", checkSponsorshipGoal);
 
 // Route for deleting a sponsorship
 router.delete("/:sponsorshipId", deleteSponsorship);

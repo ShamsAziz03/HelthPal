@@ -1,4 +1,5 @@
 const db = require("../config/db");
+const sponsorshipModel = require("./sponsorshipModel");
 const { v4: uuidv4 } = require("uuid");
 
 class Transaction {
@@ -26,10 +27,7 @@ class Transaction {
     ];
     const [result] = await db.execute(query, values);
     // update sponsorship currentAmount
-    await db.execute(
-      "UPDATE sponsorship SET currentAmount = currentAmount + ? WHERE sponsorshipId = ?",
-      [amount, sponsorshipId]
-    );
+    sponsorshipModel.updateProgress(sponsorshipId, amount);
     return result;
   }
 

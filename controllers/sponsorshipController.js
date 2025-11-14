@@ -70,27 +70,6 @@ exports.getSponsorshipsByPatientId = async (req, res) => {
   }
 };
 
-// Get sponsorships by donor ID
-exports.getSponsorshipsByDonorId = async (req, res) => {
-  try {
-    const { donorId } = req.params;
-    console.log(`Fetching sponsorships for donor ${donorId}`);
-    const sponsorships = await Sponsorship.findByDonorId(donorId);
-    res.status(200).json({
-      success: true,
-      count: sponsorships.length,
-      data: sponsorships,
-    });
-  } catch (error) {
-    console.error("Error fetching sponsorships by donor ID:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error fetching sponsorships by donor ID",
-      error: error.message,
-    });
-  }
-};
-
 // Create a new sponsorship
 exports.createSponsorship = async (req, res) => {
   try {

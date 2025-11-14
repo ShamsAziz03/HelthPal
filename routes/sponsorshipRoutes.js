@@ -21,9 +21,6 @@ router.get("/:sponsorshipId", getSponsorshipById);
 // Route for getting sponsorships by patient ID
 router.get("/patient/:patientId", getSponsorshipsByPatientId);
 
-// Route for getting sponsorships by donor ID
-router.get("/donor/:donorId", getSponsorshipsByDonorId);
-
 // Route for creating a new sponsorship
 router.post("/", createSponsorship);
 

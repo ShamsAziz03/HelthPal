@@ -6,7 +6,6 @@ class Sponsorship {
   static async create(sponsorshipData) {
     const {
       patientId,
-      donorId,
       treatmentType,
       goalAmount,
       currentAmount,
@@ -15,12 +14,11 @@ class Sponsorship {
     } = sponsorshipData;
     const sponsorshipId = uuidv4();
 
-    const query = `INSERT INTO sponsorship (sponsorshipId, patientId, donorId, treatmentType, goalAmount, currentAmount, status, createdAt)
+    const query = `INSERT INTO sponsorship (sponsorshipId, patientId, treatmentType, goalAmount, currentAmount, status, createdAt)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       sponsorshipId,
       patientId,
-      donorId,
       treatmentType,
       goalAmount,
       currentAmount,
@@ -55,19 +53,6 @@ class Sponsorship {
       WHERE s.patientId = ?
     `;
     const [rows] = await db.execute(query, [patientId]);
-    return rows;
-  }
-
-  // Find sponsorships by donor ID
-  static async findByDonorId(donorId) {
-    const query = `
-      SELECT s.*, u1.fullName AS patientName, u2.fullName AS donorName  
-      FROM sponsorship s
-      LEFT JOIN user u1 ON s.patientId = u1.userId
-      LEFT JOIN user u2 ON s.donorId = u2.userId
-      WHERE s.donorId = ?
-    `;
-    const [rows] = await db.execute(query, [donorId]);
     return rows;
   }
 

@@ -1,0 +1,48 @@
+const bookRequests = require('../models/bookingModel')
+
+const bookingController = {
+    add: async (req, res) => {
+        const result = await bookRequests.add(req.body)
+        if (result.error) return res.status(400).json(result)
+        res.json(result)
+    },
+    getAll: async (req, res) => {
+        try {
+            const data = await bookRequests.getAll()
+            res.json(data)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+     getByPatient: async (req, res) => {
+        try {
+            const patientId = req.params.patientId
+            const data = await bookRequests.getByPatient(patientId)
+            res.json(data)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    updateStatus: async (req, res) => {
+        try {
+            const { id, status } = req.body
+            const result = await bookRequests.updateStatus(id, status)
+            if (result.error) return res.status(400).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    delete: async (req, res) => {
+        try {
+            const { id } = req.params
+            const result = await bookRequests.delete(id)
+            if (result.error) return res.status(400).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    }
+}
+
+module.exports = bookingController

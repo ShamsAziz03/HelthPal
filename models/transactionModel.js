@@ -1,56 +1,62 @@
-const db = require("../config/database");
+const db = require("../config/db");
+const { v4: uuidv4 } = require("uuid");
 
 class Transaction {
   // Create a new transaction record
   static async create(transactionData) {
-    const {
-      transactionId,
-      sponsorshipId,
-      donorId,
-      amount,
-      transactionDate,
-      paymentMethod,
-      receipt,
-    } = transactionData;
-    const query = `INSERT INTO transactions (transactionId, sponsorshipId, donorId, amount, transactionDate, paymentMethod, receipt)
+    const { donorId, sponsorshipId, amount, paymentMethod, receipt } =
+      transactionData;
+
+    const transactionId = uuidv4();
+    const transactionDate = new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
+    const query = `INSERT INTO transaction (transactionId, donorId ,sponsorshipId, amount, transactionDate, paymentMethod, receipt)
                     VALUES (?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       transactionId,
-      sponsorshipId,
       donorId,
+      sponsorshipId,
       amount,
       transactionDate,
       paymentMethod,
       receipt,
     ];
     const [result] = await db.execute(query, values);
+    // update sponsorship currentAmount
+    await db.execute(
+      "UPDATE sponsorship SET currentAmount = currentAmount + ? WHERE sponsorshipId = ?",
+      [amount, sponsorshipId]
+    );
     return result;
   }
 
   // Get all transactions
   static async findAll() {
-    const query = "SELECT * FROM transactions";
+    const query = "SELECT * FROM transaction";
     const [rows] = await db.execute(query);
     return rows;
   }
 
   // Find a transaction by its ID
   static async findById(transactionId) {
-    const query = "SELECT * FROM transactions WHERE transactionId = ?";
+    const query = "SELECT * FROM transaction WHERE transactionId = ?";
     const [rows] = await db.execute(query, [transactionId]);
     return rows[0];
   }
 
   // Find transactions by sponsorship ID
   static async findBySponsorshipId(sponsorshipId) {
-    const query = "SELECT * FROM transactions WHERE sponsorshipId = ?";
+    const query = "SELECT * FROM transaction WHERE sponsorshipId = ?";
     const [rows] = await db.execute(query, [sponsorshipId]);
     return rows;
   }
 
   // Delete a transaction record
   static async delete(transactionId) {
-    const query = "DELETE FROM transactions WHERE transactionId = ?";
+    const query = "DELETE FROM transaction WHERE transactionId = ?";
     const [result] = await db.execute(query, [transactionId]);
     return result;
   }

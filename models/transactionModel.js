@@ -78,6 +78,21 @@ class Transaction {
     return rows;
   }
 
+  // Transperency dashboard
+  static async getFullSponsorshipReport(sponsorshipId) {
+    const query = `
+      SELECT t.*, u.fullName AS donorName, s.treatmentType, s.goalAmount, s.currentAmount
+      FROM transaction t
+      JOIN donor d ON t.donorId = d.donorId
+      JOIN user u ON d.userId = u.userId
+      JOIN sponsorship s ON t.sponsorshipId = s.sponsorshipId
+      WHERE t.sponsorshipId = ?
+      ORDER BY t.transactionDate DESC
+    `;
+    const [rows] = await db.execute(query, [sponsorshipId]);
+    return rows;
+  }
+
   // Delete a transaction record
   static async delete(transactionId) {
     const query = "DELETE FROM transaction WHERE transactionId = ?";

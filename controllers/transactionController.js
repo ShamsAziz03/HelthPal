@@ -110,6 +110,26 @@ exports.getDonorHistory = async (req, res) => {
   }
 };
 
+// transperency dashboard
+exports.getFullSponsorshipReport = async (req, res) => {
+  try {
+    const { sponsorshipId } = req.params;
+    const report = await Transaction.getFullSponsorshipReport(sponsorshipId);
+    res.status(200).json({
+      success: true,
+      count: report.length,
+      data: report,
+    });
+  } catch (error) {
+    console.error("Error fetching sponsorship report:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching sponsorship report",
+      error: error.message,
+    });
+  }
+};
+
 // Delete a transaction
 exports.deleteTransaction = async (req, res) => {
   try {

@@ -7,6 +7,7 @@ const {
   getTransactionsBySponsorshipId,
   getDonorHistory,
   deleteTransaction,
+  getFullSponsorshipReport,
 } = require("../controllers/transactionController");
 
 // Route for creating a new transaction
@@ -23,6 +24,9 @@ router.get("/transaction/:sponsorshipId", getTransactionsBySponsorshipId);
 
 // Route for getting donor donation history
 router.get("/donor/:donorId/history", getDonorHistory);
+
+// Route for getting full sponsorship report
+router.get("/sponsorship/:sponsorshipId/report", getFullSponsorshipReport);
 
 // Route for deleting a transaction
 router.delete("/:transactionId", deleteTransaction);

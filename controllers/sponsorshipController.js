@@ -1,4 +1,5 @@
 const Sponsorship = require("../models/sponsorshipModel");
+const db = require("../config/db");
 
 // Get a single sponsorship by ID
 exports.getSponsorshipById = async (req, res) => {
@@ -80,6 +81,27 @@ exports.createSponsorship = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "patientId and donorId are required",
+      });
+    }
+
+    // Verify patient exists and has given consent
+    const [patientRows] = await db.execute(
+      "SELECT * FROM patient WHERE patientId = ?",
+      [sponsorshipData.patientId]
+    );
+    if (!patientRows || patientRows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Patient not found",
+      });
+    }
+    const patient = patientRows[0];
+    // If the patient hasn't given consent, forbid creating a sponsorship
+    if (!patient.consentGiven) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Patient has not given consent for sharing medical data or receiving sponsorships",
       });
     }
 

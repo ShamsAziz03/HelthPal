@@ -4,15 +4,10 @@ const { v4: uuidv4 } = require("uuid");
 class Sponsorship {
   // Create a new sponsorship record
   static async create(sponsorshipData) {
-    const {
-      patientId,
-      treatmentType,
-      goalAmount,
-      currentAmount,
-      status,
-      createdAt,
-    } = sponsorshipData;
+    const { patientId, treatmentType, goalAmount, currentAmount, status } =
+      sponsorshipData;
     const sponsorshipId = uuidv4();
+    const createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
 
     const query = `INSERT INTO sponsorship (sponsorshipId, patientId, treatmentType, goalAmount, currentAmount, status, createdAt)
                     VALUES (?, ?, ?, ?, ?, ?, ?)`;

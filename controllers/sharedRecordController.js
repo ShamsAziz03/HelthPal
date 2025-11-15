@@ -4,6 +4,13 @@ const SharedRecord = require("../models/sharedRecordModel");
 exports.SharedRecord = async (req, res) => {
   try {
     const shareData = req.body;
+    const { recordId, senderId, receiverId } = shareData;
+    if (!recordId || !senderId || !receiverId) {
+      return res.status(400).json({
+        message: "recordId, senderId and receiverId are required",
+      });
+    }
+
     const result = await SharedRecord.create(shareData);
     res
       .status(201)

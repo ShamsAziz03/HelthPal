@@ -5,6 +5,7 @@ const userRoutes = require("./routes/userRoutes");
 const medicalRecordRoutes = require("./routes/medicalRecordRoutes");
 const sharedRecordRoutes = require("./routes/sharedRecordRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
+const patientUpdateRoutes = require("./routes/patientUpdateRoutes");
 const db = require("./config/db");
 
 dotenv.config();
@@ -30,6 +31,9 @@ app.use("/api", sharedRecordRoutes);
 
 // Use transaction routes
 app.use("/api/transactions", transactionRoutes);
+
+// Use patient update routes
+app.use("/api/patient-updates", patientUpdateRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

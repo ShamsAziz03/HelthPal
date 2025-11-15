@@ -6,7 +6,7 @@ const {
   getPatientUpdateById,
   getUpdatesByPatientId,
   getUpdatesBySponsorshipId,
-} = require("../controllers/patientUpdateController");
+} = require("../../controllers/medicalSponsorshipSystem/patientUpdateController");
 
 // Route for getting all patient updates
 router.get("/", getAllPatientUpdates);

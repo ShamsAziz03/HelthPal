@@ -10,7 +10,7 @@ const {
   updateSponsorshipProgress,
   checkSponsorshipGoal,
   deleteSponsorship,
-} = require("../controllers/sponsorshipController");
+} = require("../../controllers/medicalSponsorshipSystem/sponsorshipController");
 
 // Route for getting all sponsorships
 router.get("/", getAllSponsorships);

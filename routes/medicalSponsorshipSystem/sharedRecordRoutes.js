@@ -5,21 +5,18 @@ const {
   getAllSharedRecords,
   getSharedRecordsByReceiverId,
   deleteSharedRecord,
-} = require("../controllers/sharedRecordController");
+} = require("../../controllers/medicalSponsorshipSystem/sharedRecordController");
 
 // Route to get all shared records
-router.get("/shared-records", getAllSharedRecords);
+router.get("/", getAllSharedRecords);
 
 // Route to get shared records by receiver ID
-router.get(
-  "/shared-records/receiver/:receiverId",
-  getSharedRecordsByReceiverId
-);
+router.get("/receiver/:receiverId", getSharedRecordsByReceiverId);
 
 // Route to create a new shared record
-router.post("/shared-records", SharedRecord);
+router.post("/", SharedRecord);
 
 // Route to delete a shared record by share ID
-router.delete("/shared-records/:shareId", deleteSharedRecord);
+router.delete("/:shareId", deleteSharedRecord);
 
 module.exports = router;

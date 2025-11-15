@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const db = require("../../config/db");
 const sponsorshipModel = require("./sponsorshipModel");
 const { v4: uuidv4 } = require("uuid");
 

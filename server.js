@@ -1,13 +1,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const sponsorshipRoutes = require("./routes/sponsorshipRoutes");
+const sponsorshipRoutes = require("./routes/medicalSponsorshipSystem/sponsorshipRoutes");
 const userRoutes = require("./routes/userRoutes");
-const medicalRecordRoutes = require("./routes/medicalRecordRoutes");
-const sharedRecordRoutes = require("./routes/sharedRecordRoutes");
-const transactionRoutes = require("./routes/transactionRoutes");
-const patientUpdateRoutes = require("./routes/patientUpdateRoutes");
-const invoiceRoutes = require("./routes/invoiceRoutes");
-const patientFeedbackRoutes = require("./routes/patientFeedbackRoutes");
+const medicalRecordRoutes = require("./routes/medicalSponsorshipSystem/medicalRecordRoutes");
+const sharedRecordRoutes = require("./routes/medicalSponsorshipSystem/sharedRecordRoutes");
+const transactionRoutes = require("./routes/medicalSponsorshipSystem/transactionRoutes");
+const patientUpdateRoutes = require("./routes/medicalSponsorshipSystem/patientUpdateRoutes");
+const invoiceRoutes = require("./routes/medicalSponsorshipSystem/invoiceRoutes");
+const patientFeedbackRoutes = require("./routes/medicalSponsorshipSystem/patientFeedbackRoutes");
 const db = require("./config/db");
 
 dotenv.config();
@@ -26,10 +26,10 @@ app.use("/api/sponsorships", sponsorshipRoutes);
 app.use("/api/users", userRoutes);
 
 // Use medical record routes
-app.use("/api", medicalRecordRoutes);
+app.use("/api/medical-records", medicalRecordRoutes);
 
 // Use shared record routes
-app.use("/api", sharedRecordRoutes);
+app.use("/api/shared-records", sharedRecordRoutes);
 
 // Use transaction routes
 app.use("/api/transactions", transactionRoutes);

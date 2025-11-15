@@ -1,5 +1,5 @@
-const Sponsorship = require("../models/sponsorshipModel");
-const db = require("../config/db");
+const Sponsorship = require("../../models/medicalSponsorshipSystem/sponsorshipModel");
+const db = require("../../config/db");
 
 // Get a single sponsorship by ID
 exports.getSponsorshipById = async (req, res) => {

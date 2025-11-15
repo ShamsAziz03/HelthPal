@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   createPatientFeedback,
   getFeedbacksBySponsorshipId,
-} = require("../controllers/patientFeedbackController");
+} = require("../../controllers/medicalSponsorshipSystem/patientFeedbackController");
 
 // Route for creating a new patient feedback
 router.post("/", createPatientFeedback);

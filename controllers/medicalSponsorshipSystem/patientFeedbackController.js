@@ -1,5 +1,5 @@
-const PatientFeedback = require("../models/patientFeedbackModel");
-const db = require("../config/db");
+const PatientFeedback = require("../../models/medicalSponsorshipSystem/patientFeedbackModel");
+const db = require("../../config/db");
 
 // Create a new patient feedback
 exports.createPatientFeedback = async (req, res) => {

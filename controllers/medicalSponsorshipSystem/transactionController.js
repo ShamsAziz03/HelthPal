@@ -1,4 +1,4 @@
-const Transaction = require("../models/transactionModel");
+const Transaction = require("../../models/medicalSponsorshipSystem/transactionModel");
 
 // Create a new transaction
 exports.createTransaction = async (req, res) => {

@@ -71,6 +71,27 @@ class Invoice {
     const [result] = await db.execute(query, values);
     return result;
   }
+
+  // Get all invoices
+  static async findAll() {
+    const query = "SELECT * FROM invoices";
+    const [rows] = await db.execute(query);
+    return rows;
+  }
+
+  // Find invoice by ID
+  static async findById(invoiceId) {
+    const query = "SELECT * FROM invoices WHERE invoiceId = ?";
+    const [rows] = await db.execute(query, [invoiceId]);
+    return rows[0];
+  }
+
+  // Delete invoice by ID
+  static async delete(invoiceId) {
+    const query = "DELETE FROM invoices WHERE invoiceId = ?";
+    const [result] = await db.execute(query, [invoiceId]);
+    return result;
+  }
 }
 
 module.exports = Invoice;

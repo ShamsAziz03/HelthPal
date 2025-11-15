@@ -19,10 +19,32 @@ class PatientFeedback {
     ]);
   }
 
+  // Get feedbacks by sponsorship ID
   static async getFeedbacksBySponsorshipId(sponsorshipId) {
     const sql = `SELECT * FROM patient_feedback WHERE sponsorshipId = ?`;
     const [rows] = await db.execute(sql, [sponsorshipId]);
     return rows;
+  }
+
+  // Get all feedbacks
+  static async getAllFeedbacks() {
+    const sql = `SELECT * FROM patient_feedback`;
+    const [rows] = await db.execute(sql);
+    return rows;
+  }
+
+  // Find feedback by its ID
+  static async findById(feedbackId) {
+    const sql = `SELECT * FROM patient_feedback WHERE feedbackId = ?`;
+    const [rows] = await db.execute(sql, [feedbackId]);
+    return rows[0];
+  }
+
+  // Delete feedback by its ID
+  static async delete(feedbackId) {
+    const sql = `DELETE FROM patient_feedback WHERE feedbackId = ?`;
+    const [result] = await db.execute(sql, [feedbackId]);
+    return result;
   }
 }
 

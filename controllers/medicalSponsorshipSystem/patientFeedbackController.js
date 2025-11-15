@@ -76,3 +76,63 @@ exports.getFeedbacksBySponsorshipId = async (req, res) => {
     });
   }
 };
+
+// Get all feedbacks
+exports.getAllFeedbacks = async (req, res) => {
+  try {
+    const feedbacks = await PatientFeedback.getAllFeedbacks();
+    res.status(200).json({
+      success: true,
+      count: feedbacks.length,
+      data: feedbacks,
+    });
+  } catch (error) {
+    console.error("Error fetching all feedbacks:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching all feedbacks",
+      error: error.message,
+    });
+  }
+};
+
+// Get feedback by ID
+exports.getFeedbackById = async (req, res) => {
+  try {
+    const { feedbackId } = req.params;
+    const feedback = await PatientFeedback.findById(feedbackId);
+    if (!feedback) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+    res.status(200).json({ success: true, data: feedback });
+  } catch (error) {
+    console.error("Error fetching feedback by ID:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching feedback by ID",
+      error: error.message,
+    });
+  }
+};
+
+// Delete feedback by ID
+exports.deleteFeedbackById = async (req, res) => {
+  try {
+    const { feedbackId } = req.params;
+    const deleted = await PatientFeedback.delete(feedbackId);
+    if (!deleted) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Feedback deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting feedback by ID:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting feedback by ID",
+      error: error.message,
+    });
+  }
+};

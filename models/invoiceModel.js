@@ -20,7 +20,7 @@ class Invoice {
     );
 
     // Check if donor transact donation for this sponsorship
-    const [donorRows] = await db.execute(
+    const [transactionRows] = await db.execute(
       "SELECT * FROM transaction WHERE sponsorshipId = ? AND donorId = ?",
       [sponsorshipId, donorId]
     );
@@ -29,12 +29,17 @@ class Invoice {
       throw new Error("Sponsorship does not exist");
     }
 
-    if (donorRows.length === 0) {
+    if (transactionRows.length === 0) {
       throw new Error("Donor has not made a transaction for this sponsorship");
     }
 
     const sponsorship = rows[0];
-    const transaction = donorRows[0];
+    const transaction = transactionRows[0];
+
+    // Validate amount
+    if (amount > transaction.amount) {
+      throw new Error("Invoice amount cannot exceed the transaction amount");
+    }
 
     // Validate patient match
     if (sponsorship.patientId !== patientId) {

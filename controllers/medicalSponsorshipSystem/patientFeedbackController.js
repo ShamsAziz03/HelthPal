@@ -1,4 +1,4 @@
-const PatientFeedback = require("../../models/medicalSponsorshipSystem/patientFeedbackModel");
+const PatientFeedback = require("../../models/MedicalSponsorshipSystem/patientFeedbackModel");
 const db = require("../../config/db");
 
 // Create a new patient feedback

@@ -5,7 +5,7 @@ const {
   getAllSharedRecords,
   getSharedRecordsByReceiverId,
   deleteSharedRecord,
-} = require("../../controllers/medicalSponsorshipSystem/sharedRecordController");
+} = require("../../controllers/MedicalSponsorshipSystem/sharedRecordController");
 
 // Route to get all shared records
 router.get("/", getAllSharedRecords);

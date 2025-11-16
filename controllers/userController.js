@@ -1,0 +1,40 @@
+const User = require("../models/userModel");
+
+// Create a new user
+exports.createUser = async (req, res) => {
+  try {
+    console.log("Creating user with data:", req.body);
+    const userData = req.body;
+
+    const newUser = await User.create(userData);
+
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: newUser,
+    });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error creating user",
+      error: error.message,
+    });
+  }
+};
+
+// Get a user by ID
+exports.getUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user", error: error.message });
+  }
+};

@@ -1,5 +1,7 @@
 const supportGroup = require('../models/supportGroupsModel')
+const groupMembers = require('../models/groupMembersModel')
 const supportGroupController = { 
+    //support group
     addGroup: async (req, res) => {
         try {
             const result = await supportGroup.add(req.body)
@@ -30,6 +32,18 @@ const supportGroupController = {
         try {
             const id = req.params.id
             const result = await supportGroup.deleteById(id)
+            if (result.error) 
+                return res.status(404).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+
+    //members
+    joinGroup: async (req, res) => {
+        try {
+            const result = await groupMembers.addMember(req.body)
             if (result.error) 
                 return res.status(404).json(result)
             res.json(result)

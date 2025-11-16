@@ -48,6 +48,14 @@ class GroupMembers {
         const [rows] = await db.query(qry2, [groupId])
         return rows
     }
-
+    static async removeMember(memberId) {
+        const qry1 = "SELECT * FROM group_members WHERE memberId = ?;"
+        const [memberRows] = await db.query(qry1, [memberId])
+        if (memberRows.length === 0)
+            return { error: "member not found" }
+        const sql = "DELETE FROM group_members WHERE memberId = ?;"
+        const [result] = await db.query(sql, [memberId])
+        return result
+    }
 }
 module.exports = GroupMembers

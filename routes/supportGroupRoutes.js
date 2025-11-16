@@ -10,5 +10,5 @@ router.delete('/deleteGroup/:id', supportGroupController.deleteGroup)
 router.post('/joinGroup', supportGroupController.joinGroup)
 router.get('/getGroupMembers/:id', supportGroupController.getGroupMembers)
 router.get('/getAllMembers', supportGroupController.getAllMembers)
-
+router.delete('/removeMember/:memberId', supportGroupController.removeMember)
 module.exports = router

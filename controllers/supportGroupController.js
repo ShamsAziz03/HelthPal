@@ -69,6 +69,19 @@ const supportGroupController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    },
+    removeMember: async (req, res) => {
+        try {
+            const { memberId } = req.params;
+            const result = await groupMembers.removeMember(memberId);
+            if (result.affectedRows === 0 || result.error) {
+                return res.status(404).json({ error: "member not found" });
+            }
+            res.json({ message: "member removed successfully" });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
+
 }
 module.exports = supportGroupController

@@ -57,6 +57,13 @@ class TherapySession {
     const [result] = await db.execute(query, [notes, sessionId]);
     return result;
   }
+
+  // Delete therapy session
+  static async delete(sessionId) {
+    const query = `DELETE FROM therapysession WHERE sessionId = ?`;
+    const [result] = await db.execute(query, [sessionId]);
+    return result;
+  }
 }
 
 module.exports = TherapySession;

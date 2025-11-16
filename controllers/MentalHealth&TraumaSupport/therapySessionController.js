@@ -96,3 +96,27 @@ exports.updateTherapySession = async (req, res) => {
     });
   }
 };
+
+// Delete therapy session
+exports.deleteTherapySession = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const deleted = await TherapySession.delete(sessionId);
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Therapy session not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Therapy session deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error deleting therapy session",
+      error: error.message,
+    });
+  }
+};

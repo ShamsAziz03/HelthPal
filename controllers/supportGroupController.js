@@ -9,6 +9,22 @@ const supportGroupController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    },
+    getGroups: async (req, res) => {
+        try {
+            const groups = await supportGroup.getAll()
+            res.json(groups)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    getGroupById: async (req, res) => {
+        try {
+            const group = await supportGroup.getById(req.params.id);
+            res.json(group);
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
 }
 module.exports = supportGroupController

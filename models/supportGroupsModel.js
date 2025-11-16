@@ -15,6 +15,17 @@ class SupportGroup {
         return { groupId: result.insertId, groupName, description, createdBy }
     }
 
+    static async getAll() {
+        const qry = "SELECT * FROM supportgroup;"
+        const [rows] = await db.query(qry)
+        return rows
+    }
+
+    static async getById(id) {
+        const qry = "SELECT * FROM supportgroup WHERE groupId = ?;"
+        const [rows] = await db.query(qry, [id])
+        return rows[0]
+    }
 }
 
 module.exports = SupportGroup;

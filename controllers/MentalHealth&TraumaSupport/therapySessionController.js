@@ -97,6 +97,25 @@ exports.updateTherapySession = async (req, res) => {
   }
 };
 
+// Get therapy sessions by therapist ID
+exports.getTherapySessionsByTherapistId = async (req, res) => {
+  try {
+    const { therapistId } = req.params;
+    const sessions = await TherapySession.findByTherapistId(therapistId);
+    res.status(200).json({
+      success: true,
+      count: sessions.length,
+      data: sessions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching therapy sessions by therapist ID",
+      error: error.message,
+    });
+  }
+};
+
 // Delete therapy session
 exports.deleteTherapySession = async (req, res) => {
   try {

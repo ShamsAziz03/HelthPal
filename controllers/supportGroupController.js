@@ -25,6 +25,17 @@ const supportGroupController = {
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
+    },
+    deleteGroup: async (req, res) => {
+        try {
+            const id = req.params.id
+            const result = await supportGroup.deleteById(id)
+            if (result.error) 
+                return res.status(404).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
     }
 }
 module.exports = supportGroupController

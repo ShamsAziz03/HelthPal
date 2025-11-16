@@ -26,6 +26,17 @@ class SupportGroup {
         const [rows] = await db.query(qry, [id])
         return rows[0]
     }
+    
+    static async deleteById(id) {
+        const qry1 = "SELECT * FROM supportgroup WHERE groupId = ?;"
+        const [rows] = await db.query(qry1, [id])
+        if (rows.length === 0)
+            return { error: "support group does not exist" }
+
+        const qry = "DELETE FROM supportgroup WHERE groupId = ?;"
+        const [result] = await db.query(qry, [id])  
+        return { message: "support group deleted successfully" }
+    }
 }
 
 module.exports = SupportGroup;

@@ -29,6 +29,9 @@ import missionRoutes from "./routes/missionRoutes.js";
 import equipmentRouter from "./routes/equipmentRoutes.js";
 import medicationRouter from "./routes/medicationRoutes.js";
 
+// Mental Health & Trauma Support
+import therapySessionRoutes from "./routes/MentalHealth&TraumaSupport/therapySessionRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -57,6 +60,9 @@ app.use("/equipment", equipmentRouter);
 app.use("/medication", medicationRouter);
 app.use("/alerts", publichealthaleartRouter);
 app.use("/education", healtheducationRouter);
+
+app.use("/api/therapy-sessions", therapySessionRoutes);
+
 app.get("/", (req, res) => res.send("project API is running"));
 
 // Error handling middleware

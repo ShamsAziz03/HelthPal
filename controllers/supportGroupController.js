@@ -55,6 +55,8 @@ const supportGroupController = {
         try {
             const groupId = req.params.id
             const members = await groupMembers.getGroupMembers(groupId)
+            if (members.error)
+                return res.status(404).json(members)
             res.json(members)
         } catch (err) {
             res.status(500).json({ error: err.message })

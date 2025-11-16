@@ -37,6 +37,23 @@ class SupportGroup {
         const [result] = await db.query(qry, [id])  
         return { message: "support group deleted successfully" }
     }
+
+    static async updateDescription(id, newDescription) {
+        const [group] = await db.query("SELECT * FROM supportgroup WHERE groupId = ?", [id])
+        if (group.length === 0)
+            return { error: "support group not found" }
+        await db.execute("UPDATE supportgroup SET description = ? WHERE groupId = ?", [newDescription, id])
+        return { message: "description updated successfully" }
+    }
+
+    static async updateName(id, newName) {
+        const [group] = await db.query("SELECT * FROM supportgroup WHERE groupId = ?", [id])
+        if (group.length === 0)
+            return { error: "support group not found" }
+
+        await db.execute("UPDATE supportgroup SET groupName = ? WHERE groupId = ?", [newName, id])
+        return { message: "group name updated successfully" }
+    }
 }
 
 module.exports = SupportGroup;

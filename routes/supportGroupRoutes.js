@@ -6,6 +6,8 @@ router.post('/addGroup', supportGroupController.addGroup)
 router.get('/getGroups', supportGroupController.getGroups)
 router.get('/getGroupById/:id', supportGroupController.getGroupById)
 router.delete('/deleteGroup/:id', supportGroupController.deleteGroup)
+router.post('/updateName/:id', supportGroupController.updateName)
+router.post('/updateDescription/:id', supportGroupController.updateDescription)
 
 router.post('/joinGroup', supportGroupController.joinGroup)
 router.get('/getGroupMembers/:id', supportGroupController.getGroupMembers)

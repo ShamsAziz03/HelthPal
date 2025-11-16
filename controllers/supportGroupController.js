@@ -39,6 +39,31 @@ const supportGroupController = {
             res.status(500).json({ error: err.message })
         }
     },
+    updateName: async (req, res) => {
+        try {
+            const id = req.params.id
+            const { newName } = req.body
+            const result = await supportGroup.updateName(id, newName)
+            if (result.error)
+                return res.status(404).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    updateDescription: async (req, res) => {
+        try {       
+            const id = req.params.id
+            const { newDescription } = req.body
+            const result = await supportGroup.updateDescription(id, newDescription)
+
+            if (result.error)
+                return res.status(404).json(result)
+            res.json(result)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
 
     //members
     joinGroup: async (req, res) => {

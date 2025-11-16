@@ -1,14 +1,16 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const sponsorshipRoutes = require("./routes/medicalSponsorshipSystem/sponsorshipRoutes");
-const userRoutes = require("./routes/userRoutes");
-const medicalRecordRoutes = require("./routes/medicalSponsorshipSystem/medicalRecordRoutes");
-const sharedRecordRoutes = require("./routes/medicalSponsorshipSystem/sharedRecordRoutes");
-const transactionRoutes = require("./routes/medicalSponsorshipSystem/transactionRoutes");
-const patientUpdateRoutes = require("./routes/medicalSponsorshipSystem/patientUpdateRoutes");
-const invoiceRoutes = require("./routes/medicalSponsorshipSystem/invoiceRoutes");
-const patientFeedbackRoutes = require("./routes/medicalSponsorshipSystem/patientFeedbackRoutes");
-const db = require("./config/db");
+// server.js
+import express from "express";
+import dotenv from "dotenv";
+import db from "./config/db.js";
+
+import sponsorshipRoutes from "./routes/medicalSponsorshipSystem/sponsorshipRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import medicalRecordRoutes from "./routes/medicalSponsorshipSystem/medicalRecordRoutes.js";
+import sharedRecordRoutes from "./routes/medicalSponsorshipSystem/sharedRecordRoutes.js";
+import transactionRoutes from "./routes/medicalSponsorshipSystem/transactionRoutes.js";
+import patientUpdateRoutes from "./routes/medicalSponsorshipSystem/patientUpdateRoutes.js";
+import invoiceRoutes from "./routes/medicalSponsorshipSystem/invoiceRoutes.js";
+import patientFeedbackRoutes from "./routes/medicalSponsorshipSystem/patientFeedbackRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -46,9 +48,10 @@ app.use("/api/patient-feedbacks", patientFeedbackRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res
-    .status(500)
-    .json({ message: "Something went wrong!", error: err.message });
+  res.status(500).json({
+    message: "Something went wrong!",
+    error: err.message,
+  });
 });
 
 // 404 handler
@@ -64,6 +67,4 @@ db.execute("SELECT 1")
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Test at: http://localhost:${PORT}`);
-  console.log(`API endpoints: http://localhost:${PORT}/api/sponsorships`);
 });

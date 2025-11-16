@@ -32,6 +32,31 @@ class TherapySession {
     const [result] = await db.execute(query, values);
     return result;
   }
+
+  // Get all therapy sessions
+  static async findAll() {
+    const query = `SELECT * FROM therapysession`;
+    const [sessions] = await db.execute(query);
+    return sessions;
+  }
+
+  // Get therapy session by ID
+  static async findById(sessionId) {
+    const query = `SELECT * FROM therapysession WHERE sessionId = ?`;
+    const [sessions] = await db.execute(query, [sessionId]);
+    return sessions[0] || null;
+  }
+
+  // Update therapy session notes
+  static async updateNotes(sessionId, notes) {
+    const query = `
+            UPDATE therapysession 
+            SET notes = ? 
+            WHERE sessionId = ?
+        `;
+    const [result] = await db.execute(query, [notes, sessionId]);
+    return result;
+  }
 }
 
 module.exports = TherapySession;

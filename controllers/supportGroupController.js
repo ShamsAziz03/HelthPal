@@ -132,6 +132,17 @@ const supportGroupController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    }, 
+    deleteGroupMsgs: async (req, res) => {
+        try {
+            const groupId = req.params.groupId
+            const result = await chatModel.deleteGroupMsgs(groupId)
+            if(result.error)
+                return res.status(404).json(result)
+            res.json({message: "all messages for this group deleted successfully"})
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
     }
 }
 module.exports = supportGroupController

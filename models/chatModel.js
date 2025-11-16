@@ -1,5 +1,6 @@
 const db = require('../config/db')
-const { v4: uuidv4 } = require('uuid')
+const { v4: uuidv4 } = require('uuid');
+const { deleteGroup } = require('../controllers/supportGroupController');
 
 class Chat {
     static async sendGroupMsg(data) {
@@ -45,6 +46,22 @@ class Chat {
             return { error: "no messages found for this group" }
         return rows
     }   
+
+    static async deleteGroupMsgs(groupId) {
+        const qry1 = "SELECT * FROM supportgroup WHERE groupId = ?;"
+        const [groupRows] = await db.query(qry1, [groupId])
+        if (groupRows.length === 0)
+            return { error: "support group not found" }
+
+        const qry2 = "SELECT * FROM chatting WHERE groupId = ?;"
+        const [chatRows] = await db.query(qry2, [groupId])
+        if (chatRows.length === 0)
+            return { error: "no messages found for this group" }
+
+        const sql = "DELETE FROM chatting WHERE groupId = ?;"
+        const [result] = await db.query(sql, [groupId])
+        return result
+    }
 }
 
 module.exports = Chat;

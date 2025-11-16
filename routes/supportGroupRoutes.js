@@ -16,4 +16,5 @@ router.delete('/removeMember/:memberId', supportGroupController.removeMember)
 
 router.post('/sendGroupMessage', supportGroupController.sendGroupMsg)
 router.get('/getGroupMessages/:groupId', supportGroupController.getGroupMsgs)
+router.delete('/deleteGroupMessages/:groupId', supportGroupController.deleteGroupMsgs)
 module.exports = router

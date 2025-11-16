@@ -1,6 +1,7 @@
 const supportGroup = require('../models/supportGroupsModel')
 const groupMembers = require('../models/groupMembersModel')
-const { sendGroupMsg } = require('../models/chatModel')
+const chatModel = require('../models/chatModel')
+
 const supportGroupController = { 
     //support group
     addGroup: async (req, res) => {
@@ -113,10 +114,21 @@ const supportGroupController = {
     sendGroupMsg: async (req, res) => {
         try {
             const msgData = req.body
-            const result = await sendGroupMsg(msgData)
+            const result = await chatModel.sendGroupMsg(msgData)
             if (result.error) 
                 return res.status(404).json(result)
             res.json({message:"message sent successfully", result})
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    },
+    getGroupMsgs: async (req, res) => {
+        try {
+            const groupId = req.params.groupId
+            const rows = await chatModel.getGroupMsgs(groupId)
+            if(rows.error)
+                return res.status(404).json(rows)
+            res.json(rows)
         } catch (err) {
             res.status(500).json({ error: err.message })
         }

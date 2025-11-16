@@ -22,13 +22,29 @@ class Chat {
         const [memberRows] = await db.query(qry3, [groupId, senderId])  
         if (memberRows.length === 0)
             return { error: "sender is not a member of the group" }
-        
+
         const sql = "INSERT INTO chatting (chatId, senderId, groupId, message) VALUES (?, ?, ?, ?);"
         const [result] = await db.query(sql, [ chatId, senderId, groupId ,message])
 
         return { chatId, senderId, groupId, message };
     }
 
+    static async getGroupMsgs(groupId) {
+        const qry1 = "SELECT * FROM supportgroup WHERE groupId = ?;"
+        const [groupRows] = await db.query(qry1, [groupId])
+        if (groupRows.length === 0)
+            return { error: "support group not found" }
+
+        const qry2 = `SELECT c.chatId, c.senderId, u.fullName AS senderName, c.message, c.messageTime, c.groupId
+                    FROM chatting c
+                    INNER JOIN user u ON c.senderId = u.userId
+                    WHERE c.groupId = ?
+                    ORDER BY c.messageTime ASC;`
+        const [rows] = await db.query(qry2, [groupId])
+        if (rows.length === 0)
+            return { error: "no messages found for this group" }
+        return rows
+    }   
 }
 
 module.exports = Chat;

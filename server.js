@@ -63,8 +63,6 @@ app.use("/education", healtheducationRouter);
 
 app.use("/api/therapy-sessions", therapySessionRoutes);
 
-app.get("/", (req, res) => res.send("project API is running"));
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

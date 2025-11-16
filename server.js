@@ -31,6 +31,8 @@ import medicationRouter from "./routes/medicationRoutes.js";
 
 // Mental Health & Trauma Support
 import therapySessionRoutes from "./routes/MentalHealth&TraumaSupport/therapySessionRoutes.js";
+import supportGroupRoutes from "./routes/supportGroupRoutes.js";
+
 
 dotenv.config();
 
@@ -56,12 +58,13 @@ app.use("/api/drAvailability", availabilityRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/missions", missionRoutes);
 
-app.use("/equipment", equipmentRouter);
-app.use("/medication", medicationRouter);
-app.use("/alerts", publichealthaleartRouter);
-app.use("/education", healtheducationRouter);
+app.use('/equipment', equipmentRouter);
+app.use('/medication', medicationRouter);
+app.use('/alerts', publichealthaleartRouter);
+app.use('/education', healtheducationRouter);
 
 app.use("/api/therapy-sessions", therapySessionRoutes);
+app.use('/api/support-groups', supportGroupRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

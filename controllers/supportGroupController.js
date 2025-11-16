@@ -50,6 +50,23 @@ const supportGroupController = {
         } catch (err) {
             res.status(500).json({ error: err.message })
         }
+    },
+    getGroupMembers: async (req, res) => {
+        try {
+            const groupId = req.params.id
+            const members = await groupMembers.getGroupMembers(groupId)
+            res.json(members)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
+    }   ,
+    getAllMembers: async (req, res) => {
+        try {
+            const members = await groupMembers.getAllMembers()
+            res.json(members)
+        } catch (err) {
+            res.status(500).json({ error: err.message })
+        }
     }
 }
 module.exports = supportGroupController

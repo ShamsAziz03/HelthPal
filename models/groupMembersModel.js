@@ -24,5 +24,30 @@ class GroupMembers {
         const [result] = await db.query(sql, [groupId, userId])
         return { memberId: result.insertId, groupId, userId }
     }
+
+    static async getAllMembers() {
+        const sql = `SELECT sg.groupId, sg.groupName, sg.description,
+                    JSON_ARRAYAGG(JSON_OBJECT('userId', u.userId, 'fullName', u.fullName)) AS members
+                    FROM supportgroup sg
+                    LEFT JOIN group_members gm ON sg.groupId = gm.groupId
+                    LEFT JOIN user u ON gm.userId = u.userId
+                    GROUP BY sg.groupId;`
+        const [rows] = await db.query(sql)
+        return rows
+    }
+    static async getGroupMembers(groupId) {
+        const qry1 = "SELECT * FROM supportgroup WHERE groupId = ?;"
+        const [groupRows] = await db.query(qry1, [groupId])
+        if (groupRows.length === 0)
+            return { error: "support group not found" }
+
+        const qry2 = `SELECT u.userId, u.fullName
+                    FROM group_members gm
+                    INNER JOIN user u ON gm.userId = u.userId
+                    WHERE gm.groupId = ?;`
+        const [rows] = await db.query(qry2, [groupId])
+        return rows
+    }
+
 }
 module.exports = GroupMembers

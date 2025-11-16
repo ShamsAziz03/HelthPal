@@ -8,5 +8,7 @@ router.get('/getGroupById/:id', supportGroupController.getGroupById)
 router.delete('/deleteGroup/:id', supportGroupController.deleteGroup)
 
 router.post('/joinGroup', supportGroupController.joinGroup)
+router.get('/getGroupMembers/:id', supportGroupController.getGroupMembers)
+router.get('/getAllMembers', supportGroupController.getAllMembers)
 
 module.exports = router

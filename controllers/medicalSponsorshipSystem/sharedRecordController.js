@@ -1,4 +1,4 @@
-const SharedRecord = require("../../models/medicalSponsorshipSystem/sharedRecordModel");
+const SharedRecord = require("../../models/MedicalSponsorshipSystem/sharedRecordModel");
 
 // Create a new shared record
 exports.SharedRecord = async (req, res) => {

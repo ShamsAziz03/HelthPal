@@ -6,7 +6,7 @@ const {
   getAllFeedbacks,
   getFeedbackById,
   deleteFeedbackById,
-} = require("../../controllers/medicalSponsorshipSystem/patientFeedbackController");
+} = require("../../controllers/MedicalSponsorshipSystem/patientFeedbackController");
 
 // Route for getting all patient feedbacks
 router.get("/", getAllFeedbacks);

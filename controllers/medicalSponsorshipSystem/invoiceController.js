@@ -1,4 +1,4 @@
-const Invoice = require("../../models/medicalSponsorshipSystem/invoiceModel");
+const Invoice = require("../../models/MedicalSponsorshipSystem/invoiceModel");
 
 // Create a new invoice
 exports.createInvoice = async (req, res) => {

@@ -65,6 +65,13 @@ class TherapySession {
     return sessions;
   }
 
+  // Get therapy sessions by patient ID
+  static async findByPatientId(patientId) {
+    const query = `SELECT * FROM therapysession WHERE patientId = ?`;
+    const [sessions] = await db.execute(query, [patientId]);
+    return sessions;
+  }
+
   // Delete therapy session
   static async delete(sessionId) {
     const query = `DELETE FROM therapysession WHERE sessionId = ?`;

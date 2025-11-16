@@ -6,6 +6,7 @@ const {
   getTherapySessionById,
   updateTherapySession,
   getTherapySessionsByTherapistId,
+  getTherapySessionsByPatientId,
   deleteTherapySession,
 } = require("../../controllers/MentalHealth&TraumaSupport/therapySessionController");
 
@@ -23,6 +24,9 @@ router.put("/:sessionId", updateTherapySession);
 
 // Route for getting therapy sessions by therapist ID
 router.get("/therapist/:therapistId", getTherapySessionsByTherapistId);
+
+// Route for getting therapy sessions by patient ID
+router.get("/patient/:patientId", getTherapySessionsByPatientId);
 
 // Route for deleting a therapy session by ID
 router.delete("/:sessionId", deleteTherapySession);

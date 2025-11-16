@@ -13,4 +13,6 @@ router.post('/joinGroup', supportGroupController.joinGroup)
 router.get('/getGroupMembers/:id', supportGroupController.getGroupMembers)
 router.get('/getAllMembers', supportGroupController.getAllMembers)
 router.delete('/removeMember/:memberId', supportGroupController.removeMember)
+
+router.post('/sendGroupMessage', supportGroupController.sendGroupMsg)
 module.exports = router

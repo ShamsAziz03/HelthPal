@@ -29,6 +29,12 @@ import missionRoutes from "./routes/missionRoutes.js";
 import equipmentRouter from "./routes/equipmentRoutes.js";
 import medicationRouter from "./routes/medicationRoutes.js";
 
+
+//Remote Medical Consulation
+import doctorConsultationRoutes from "./routes/remoteMedicalConsultations/doctorConsultationRoutes.js";
+
+
+
 dotenv.config();
 
 const app = express();
@@ -57,6 +63,11 @@ app.use('/equipment', equipmentRouter);
 app.use('/medication', medicationRouter);
 app.use('/alerts', publichealthaleartRouter);
 app.use('/education', healtheducationRouter);
+
+
+app.use("/api/doctorConsultation",doctorConsultationRoutes);
+
+
 app.get('/', (req, res) => res.send('project API is running'));
 
 // Error handling middleware

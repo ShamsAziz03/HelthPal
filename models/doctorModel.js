@@ -45,9 +45,42 @@ class Doctor {
             ORDER BY u.fullName;
         `;
 
-    const [doctor] = await db.execute(query);
-    return doctor;
+    const [doctors] = await db.execute(query);
+    return doctors;
   }
+
+  //to search on doctor info by name or id
+  static async searchDrsByNameId(filters) {
+    const { drId, drName } = filters;
+
+    let query = `
+            SELECT
+   u.fullName,
+      d.languages,
+  d.rating, 
+  d.yearsOfExperience,
+  d.specialty
+            FROM doctor d
+			JOIN user u ON d.userId = u.userId
+            WHERE 1=1
+        `;
+    const params = [];
+
+    if (drId) {
+      query += " AND d.doctorId= ?";
+      params.push(drId);
+    }
+    if (drName) {
+      query += " AND u.fullName LIKE ?";
+      params.push(`%${drName}%`);
+    }
+    query += " ORDER BY u.fullName";
+
+    const [doctors] = await db.execute(query, params);
+    return doctors;
+  }
+
+
 }
 
 module.exports = Doctor;

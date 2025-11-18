@@ -8,7 +8,7 @@ const {
   getDonorHistory,
   deleteTransaction,
   getFullSponsorshipReport,
-} = require("../../controllers/medicalSponsorshipSystem/transactionController");
+} = require("../../controllers/MedicalSponsorshipSystem/transactionController");
 
 // Route for creating a new transaction
 router.post("/", createTransaction);

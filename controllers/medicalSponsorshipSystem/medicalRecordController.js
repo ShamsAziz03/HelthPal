@@ -1,4 +1,4 @@
-const MedicalRecord = require("../../models/medicalSponsorshipSystem/medicalRecordModel");
+const MedicalRecord = require("../../models/MedicalSponsorshipSystem/medicalRecordModel");
 
 // Create a new medical record
 exports.createMedicalRecord = async (req, res) => {

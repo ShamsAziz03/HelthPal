@@ -5,7 +5,7 @@ const {
   getAllInvoices,
   getInvoiceById,
   deleteInvoiceById,
-} = require("../../controllers/medicalSponsorshipSystem/invoiceController");
+} = require("../../controllers/MedicalSponsorshipSystem/invoiceController");
 
 // Route for creating a new invoice
 router.post("/", createInvoice);

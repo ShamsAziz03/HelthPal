@@ -86,6 +86,40 @@ class Chat {
     ]);
     return result;
   }
+
+    static async getTherapistMsgs(therapistId, patientId) {
+
+        const checkQry = "SELECT t.therapistId, u.userId, d.doctorId FROM therapySession as t INNER JOIN doctor as d ON d.doctorId = t.therapistId INNER JOIN User as u ON u.userId = d.userId WHERE u.userId = ?;";
+        const [therapistRows] = await db.query(checkQry, [therapistId]);
+        if (therapistRows.length === 0) {
+            return { error: "therapist not found" };
+        }
+
+        const checkQry2 = "SELECT u.userId, p.patientId FROM user u INNER JOIN patient p ON u.userId = p.userId WHERE u.userId = ?;";
+        const [pateintRows] = await db.query(checkQry2, [patientId]);
+        if (pateintRows.length === 0) {
+            return { error: "patient not found" };
+        }
+
+        const sql = `SELECT c.chatId, c.senderId,
+        CASE 
+            WHEN p.isAnonymous = 1 THEN 'Anonymous'
+            ELSE u.fullName END AS senderName,
+        c.message, c.messageTime, c.receivers, p.isAnonymous
+        FROM chatting c
+        INNER JOIN user u ON c.senderId = u.userId
+        INNER JOIN patient p ON p.userId = u.userId
+        WHERE 
+        ( JSON_CONTAINS(c.receivers, JSON_ARRAY( ? )) OR JSON_CONTAINS(c.receivers, JSON_ARRAY(?)))
+        AND 
+        ( c.senderId = ? OR c.senderId = ?)
+        ORDER BY c.messageTime ASC;`;
+        
+        const [rows] = await db.query(sql, [therapistId, patientId, therapistId, patientId]);
+        if (rows.length === 0)
+            return { error: "no messages found between therapist and patient" };
+        return rows;
+    }
 }
 
 module.exports = Chat;

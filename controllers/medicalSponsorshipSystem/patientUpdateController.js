@@ -1,4 +1,4 @@
-const PatientUpdate = require("../../models/medicalSponsorshipSystem/patientUpdateModel");
+const PatientUpdate = require("../../models/MedicalSponsorshipSystem/patientUpdateModel");
 
 // Create a new patient update
 exports.createPatientUpdate = async (req, res) => {

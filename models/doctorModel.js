@@ -80,7 +80,43 @@ class Doctor {
     return doctors;
   }
 
+  //to search on doctor info by name or availability(status) or speciality 
+  static async searchDrsByStatusSepcialityName(filters) {
+    const { drName, drStatus, drSpeciality } = filters;
 
+    let query = `
+    SELECT
+   d.doctorId,
+   u.fullName,
+  d.rating, 
+  d.specialty,
+  da.startTime,
+  da.endTime
+            FROM doctor d
+			JOIN user u ON d.userId = u.userId
+            join doctoravailability da on d.doctorId=da.doctorId
+            WHERE 1=1
+        `;
+    const params = [];
+
+    if (drStatus) {
+      query += " AND da.status= ?";
+      params.push(drStatus);
+    }
+    
+    if (drSpeciality) {
+      query += " AND d.specialty LIKE ?";
+      params.push(`%${drSpeciality}%`);
+    }
+    if (drName) {
+      query += " AND u.fullName LIKE ?";
+      params.push(`%${drName}%`);
+    }
+    query += " ORDER BY u.fullName";
+
+    const [doctors] = await db.execute(query, params);
+    return doctors;
+  }
 }
 
 module.exports = Doctor;

@@ -4,5 +4,7 @@ const doctorConsultationController = require("../../controllers/remoteMedicalCon
 
 // Equipment Routes
 router.get("/getAllDrs", doctorConsultationController.getAllDoctors);
+router.get("/searchDoctorByNameId", doctorConsultationController.searchDoctorByNameId);
+router.get("/searchDrByStatusSepcialityName", doctorConsultationController.searchDoctorByStatusSepcialityName);
 
 module.exports = router;

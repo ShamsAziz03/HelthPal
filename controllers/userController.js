@@ -38,3 +38,22 @@ exports.getUserById = async (req, res) => {
       .json({ message: "Error fetching user", error: error.message });
   }
 };
+
+// Update patient isAnonymous preference
+exports.updateIsAnonymous = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const { isAnonymous } = req.body;
+    const result = await User.updateIsAnonymous(patientId, isAnonymous);
+    res.status(200).json({
+      success: true,
+      message: "Patient isAnonymous preference updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating isAnonymous preference",
+      error: error.message,
+    });
+  }
+};

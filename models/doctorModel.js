@@ -29,6 +29,25 @@ class Doctor {
     const [result] = await db.execute(query, values);
     return result;
   }
+
+  //to get all drs
+  static async getAllDrs() {
+    const query = `
+            SELECT
+   u.fullName,
+     d.specialty,
+      d.languages,
+  d.rating, 
+  d.yearsOfExperience,
+  d.isVerified
+            FROM doctor d
+			JOIN user u ON d.userId = u.userId
+            ORDER BY u.fullName;
+        `;
+
+    const [doctor] = await db.execute(query);
+    return doctor;
+  }
 }
 
 module.exports = Doctor;

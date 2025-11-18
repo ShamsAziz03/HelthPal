@@ -16,3 +16,17 @@ exports.sendTherapistMsg = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getTherapistMsgs = async (req, res) => {
+  try {
+    const { therapistId, patientId } = req.body;  
+    const result = await Chat.getTherapistMsgs(therapistId, patientId);
+    if (result.error) {
+      return res.status(404).json({ error: result.error });
+    }
+    return res.status(200).json({ data: result });
+  } catch (error) {
+    console.error("Error retrieving therapist messages:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};

@@ -37,3 +37,22 @@ exports.searchDoctorByNameId = async (req, res) => {
     });
   }
 };
+
+exports.searchDoctorByStatusSepcialityName = async (req, res) => {
+  try {
+    const filters = req.query;
+    const doctor = await doctorModel.searchDrsByStatusSepcialityName(filters);
+
+    res.status(200).json({
+      success: true,
+      count: doctor.length,
+      data: doctor,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error searching doctor",
+      error: error.message,
+    });
+  }
+};

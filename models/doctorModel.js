@@ -81,8 +81,8 @@ class Doctor {
   }
 
   //to search on doctor info by name or availability(status) or speciality 
-  static async searchDrsByStatusSepcialityName(filters) {
-    const { drName, drStatus, drSpeciality } = filters;
+  static async searchDrsByStatusSepcialityNameDate(filters) {
+    const { drName, drStatus, drSpeciality , date} = filters;
 
     let query = `
     SELECT
@@ -111,6 +111,10 @@ class Doctor {
     if (drName) {
       query += " AND u.fullName LIKE ?";
       params.push(`%${drName}%`);
+    }
+    if (date) {
+      query += " AND da.startTime LIKE ?";
+      params.push(`%${date}%`);
     }
     query += " ORDER BY u.fullName";
 

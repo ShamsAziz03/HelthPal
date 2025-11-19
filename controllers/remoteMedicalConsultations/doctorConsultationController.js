@@ -38,10 +38,10 @@ exports.searchDoctorByNameId = async (req, res) => {
   }
 };
 
-exports.searchDoctorByStatusSepcialityName = async (req, res) => {
+exports.searchDoctorByStatusSepcialityNameDate = async (req, res) => {
   try {
     const filters = req.query;
-    const doctor = await doctorModel.searchDrsByStatusSepcialityName(filters);
+    const doctor = await doctorModel.searchDrsByStatusSepcialityNameDate(filters);
 
     res.status(200).json({
       success: true,

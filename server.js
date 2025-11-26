@@ -32,6 +32,7 @@ import medicationRouter from "./routes/medicationRoutes.js";
 
 //Remote Medical Consulation
 import doctorConsultationRoutes from "./routes/remoteMedicalConsultations/doctorConsultationRoutes.js";
+import bookingRequestRoutes from "./routes/remoteMedicalConsultations/bookingRequestRoutes.js";
 
 
 
@@ -66,6 +67,7 @@ app.use('/education', healtheducationRouter);
 
 
 app.use("/api/doctorConsultation",doctorConsultationRoutes);
+app.use("/api/bookingReqForConsultation",bookingRequestRoutes);
 
 
 app.get('/', (req, res) => res.send('project API is running'));

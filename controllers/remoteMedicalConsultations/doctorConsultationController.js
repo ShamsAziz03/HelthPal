@@ -125,3 +125,21 @@ exports.deleteDoctorappointment = async (req, res) => {
     });
   }
 };
+
+//doctor can update status of his appointments
+exports.updateAppointmentStatus = async (req, res) => {
+  try {
+    const {availabilityId, newStatus}=req.body;
+    const result = await doctorAvailabilityModel.updateStatus(availabilityId, newStatus);
+     res.status(200).json({
+      success: true,
+      data:result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Can't update status of an appointment",
+      error: err.message,
+    });
+  }
+};

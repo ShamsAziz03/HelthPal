@@ -10,5 +10,6 @@ router.get("/getDoctorSchedule/:doctorId",doctorConsultationController.getDoctor
 router.get("/getAvailableDoctors",doctorConsultationController.getDoctorsAvailable);
 router.post("/addDoctorAvailableTime",doctorConsultationController.addDoctorAvailableTime);
 router.delete("/deleteDoctorAppointment/:drAvailabilityId",doctorConsultationController.deleteDoctorappointment);
+router.put("/updateAppointmentSatatus",doctorConsultationController.updateAppointmentStatus);
 
 module.exports = router;

@@ -91,16 +91,15 @@ exports.getDoctorsAvailable = async (req, res) => {
 };
 
 //doctor can add new appointment
-exports.addDoctorAvailableTime=async(req,res)=>{
-  try{
-    const data=req.body;
-    const result=await doctorAvailabilityModel.add(data);
-     res.status(200).json({
+exports.addDoctorAvailableTime = async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await doctorAvailabilityModel.add(data);
+    res.status(200).json({
       success: true,
       data: result,
     });
-  }
-  catch(err){
+  } catch (err) {
     res.status(500).json({
       success: false,
       message: "Error adding doctor availablity time",
@@ -109,5 +108,20 @@ exports.addDoctorAvailableTime=async(req,res)=>{
   }
 };
 
-
-
+//doctor can delete appointment
+exports.deleteDoctorappointment = async (req, res) => {
+  try {
+    const drAvailabilityId = req.params.drAvailabilityId;
+    const result = await doctorAvailabilityModel.delete(drAvailabilityId);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Error delete doctor appointment",
+      error: err.message,
+    });
+  }
+};

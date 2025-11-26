@@ -9,5 +9,6 @@ router.get("/searchDrByStatusSepcialityNameDate", doctorConsultationController.s
 router.get("/getDoctorSchedule/:doctorId",doctorConsultationController.getDoctorSchedule);
 router.get("/getAvailableDoctors",doctorConsultationController.getDoctorsAvailable);
 router.post("/addDoctorAvailableTime",doctorConsultationController.addDoctorAvailableTime);
+router.delete("/deleteDoctorAppointment/:drAvailabilityId",doctorConsultationController.deleteDoctorappointment);
 
 module.exports = router;

@@ -34,3 +34,22 @@ exports.getBookReqInfo = async (req, res) => {
         })
     }
 };
+
+
+exports.deleteBookReq = async (req, res) => {
+    try{
+        const bookReqId=req.params.bookReqId;
+        await BookingReqModel.delete(bookReqId);
+        res.status(200).json({
+            success:true,
+            message:"Delete book request done",
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            message:"can't get book req info!",
+            error:err.message,
+        })
+    }
+};

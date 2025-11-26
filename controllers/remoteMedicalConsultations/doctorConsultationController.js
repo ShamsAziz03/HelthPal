@@ -89,3 +89,25 @@ exports.getDoctorsAvailable = async (req, res) => {
     });
   }
 };
+
+//doctor can add new appointment
+exports.addDoctorAvailableTime=async(req,res)=>{
+  try{
+    const data=req.body;
+    const result=await doctorAvailabilityModel.add(data);
+     res.status(200).json({
+      success: true,
+      data: result,
+    });
+  }
+  catch(err){
+    res.status(500).json({
+      success: false,
+      message: "Error adding doctor availablity time",
+      error: err.message,
+    });
+  }
+};
+
+
+

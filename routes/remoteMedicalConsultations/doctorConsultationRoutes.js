@@ -8,5 +8,6 @@ router.get("/searchDoctorByNameId", doctorConsultationController.searchDoctorByN
 router.get("/searchDrByStatusSepcialityNameDate", doctorConsultationController.searchDoctorByStatusSepcialityNameDate);
 router.get("/getDoctorSchedule/:doctorId",doctorConsultationController.getDoctorSchedule);
 router.get("/getAvailableDoctors",doctorConsultationController.getDoctorsAvailable);
+router.post("/addDoctorAvailableTime",doctorConsultationController.addDoctorAvailableTime);
 
 module.exports = router;

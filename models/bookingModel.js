@@ -122,6 +122,31 @@ class Booking {
 
         return result;
     }
+
+    //to get data info of book req 
+    static async getBookReqInfo(filter){
+        const {bookReqId,bookReqStatus,patientId,typeOfReq}=filter;
+        let values=[];
+        let query = "SELECT * FROM healthpal.bookrequests WHERE 1=1 ";
+        if(bookReqId){
+            query+=" AND id = ?";
+            values.push(bookReqId);
+        }
+        if(bookReqStatus){
+            query+=" AND status = ?";
+            values.push(bookReqStatus);
+        }
+        if(patientId){
+            query+=" AND patient_id = ?";
+            values.push(patientId);
+        }
+        if(typeOfReq){
+            query+=" AND type_of_req = ?";
+            values.push(typeOfReq);
+        }
+        const [bookReq] = await db.query(query, values);
+        return bookReq;
+    }
 }
 
 module.exports = Booking

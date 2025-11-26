@@ -41,7 +41,9 @@ exports.searchDoctorByNameId = async (req, res) => {
 exports.searchDoctorByStatusSepcialityNameDate = async (req, res) => {
   try {
     const filters = req.query;
-    const doctor = await doctorModel.searchDrsByStatusSepcialityNameDate(filters);
+    const doctor = await doctorModel.searchDrsByStatusSepcialityNameDate(
+      filters
+    );
 
     res.status(200).json({
       success: true,
@@ -54,5 +56,19 @@ exports.searchDoctorByStatusSepcialityNameDate = async (req, res) => {
       message: "Error searching doctor",
       error: error.message,
     });
+  }
+};
+
+exports.getDoctorSchedule = async (req, res) => {
+  try {
+    const doctorId=  req.params.doctorId;
+    const doctorSchedule=await doctorModel.getDrSchedule(doctorId);
+    res.status(200).json({
+      data: doctorSchedule,
+    })
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching availability", error: error.message });
   }
 };

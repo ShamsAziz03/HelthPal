@@ -5,6 +5,8 @@ const bookingReqController = require("../../controllers/remoteMedicalConsultatio
 router.post("/addBookRequestConsultation",bookingReqController.requestBookingForConsultation);
 router.get("/getBookReqInfo",bookingReqController.getBookReqInfo);
 router.delete("/deleteBookReq/:bookReqId",bookingReqController.deleteBookReq);
+router.get("/getDoctorBooks/:doctorId",bookingReqController.getDoctorBooks);
+
 
 module.exports = router;
 

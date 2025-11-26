@@ -147,6 +147,18 @@ class Booking {
         const [bookReq] = await db.query(query, values);
         return bookReq;
     }
+
+    //to let doctor see his book requests
+    static async getDoctorBooks(doctorId){
+        const query=`  SELECT br.*,u.fullName,da.startTime,da.endTime,da.status as availableStatus
+  FROM healthpal.bookRequests AS br
+  JOIN healthpal.doctoravailability da ON br.availability_id = da.availabilityId
+    JOIN healthpal.doctor d ON da.doctorId = d.doctorId
+    JOIN healthpal.user u ON d.userId = u.userId
+    where da.doctorId= ? `;
+        const [doctorBookReqs] = await db.query(query,[doctorId]);
+        return doctorBookReqs;
+    }
 }
 
 module.exports = Booking

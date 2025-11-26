@@ -53,3 +53,22 @@ exports.deleteBookReq = async (req, res) => {
         })
     }
 };
+
+
+exports.getDoctorBooks = async (req, res) => {
+    try{
+        const doctorId=req.params.doctorId;
+        const result=await BookingReqModel.getDoctorBooks(doctorId);
+        res.status(200).json({
+            success:true,
+            data:result,
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            message:"can't get book req info!",
+            error:err.message,
+        })
+    }
+};

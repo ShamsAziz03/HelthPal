@@ -88,7 +88,18 @@ class Booking {
             return { error: "booking request not found" }
 
         const qry2 = "DELETE FROM healthpal.bookRequests WHERE id = ?;"
-        await db.execute(qry2, [id])
+        await db.execute(qry2, [id]);
+
+        //to do auto increment after deletion
+        const [data]=await db.execute(`SELECT MAX(id)+1 AS next_id FROM bookRequests ;`);
+        await db.execute(`ALTER TABLE bookRequests AUTO_INCREMENT = ${data[0].next_id}`);
+
+        //to set status of avalible slot to be available not requested
+        await db.execute(`UPDATE doctoravailability
+                         SET status = 'Available'
+                         WHERE availabilityId = ? ;`,[reqData[0].availability_id])
+
+
         return { message: "booking request deleted successfully" }
     }
 

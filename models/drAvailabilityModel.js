@@ -85,6 +85,16 @@ class drAvailability {
 
         return { message: "availability deleted successfully" }
     }
+    static async getAvailableDoctors(){
+        const query=`Select dr.doctorId, user.fullName, dr.specialty, dr.rating, 
+        doctoravailability.startTime, doctoravailability.endTime, doctoravailability.status from doctoravailability 
+join doctor dr on doctoravailability.doctorId=dr.doctorId
+join user on dr.userId=user.userId
+where doctoravailability.status="Available"
+`;
+const [result]=await db.execute(query);
+return result;
+    }
 
 }
 

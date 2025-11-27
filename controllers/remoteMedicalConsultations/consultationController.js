@@ -85,3 +85,21 @@ exports.getConsultationInfo=async (req,res)=>{
         })
     }
 };
+
+exports.getPatientConsultations=async (req,res)=>{
+    try{
+        const patientId=req.params.patientId;
+        const result=await ConsultatioModel.getPatientConsultations(patientId);
+        res.status(200).json({
+            success:true,
+            data:result,
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            error:err.message,
+        })
+    }
+};
+

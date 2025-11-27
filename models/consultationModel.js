@@ -199,6 +199,29 @@ class Consultation {
     }
     return data;
   }
+
+  static async getPatientConsultations(patientId) {
+    //to check if patient exist
+    const [patientExist] = await db.execute(
+      "select * from patient where patientId = ?",
+      [patientId]
+    );
+    if (patientExist.length === 0) {
+      return { error: "Can't found this patient" };
+    }
+
+    const [data]=await db.execute(`SELECT p.medicalHistory, b.type_of_req,da.startTime, da.endTime,u.fullName as DrName,
+ c.consultationId,c.consultationType,c.notes,c.prescription,c.status
+  FROM patient p
+  JOIN bookrequests b ON p.patientId = b.patient_id
+  Join doctoravailability da on b.availability_id=da.availabilityId
+  join doctor d on da.doctorId=d.doctorId
+  JOIN user u ON d.userId =u.userId
+  join consultation c on b.id=c.bookRequestId
+  
+  WHERE p.patientId = ? `,[patientId]);
+    return data;
+  }
 }
 
 module.exports = Consultation;

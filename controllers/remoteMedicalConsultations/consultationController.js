@@ -103,3 +103,20 @@ exports.getPatientConsultations=async (req,res)=>{
     }
 };
 
+exports.getDoctorConsultations=async (req,res)=>{
+    try{
+        const doctorId=req.params.doctorId;
+        const result=await ConsultatioModel.getDoctorConsultations(doctorId);
+        res.status(200).json({
+            success:true,
+            data:result,
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            error:err.message,
+        })
+    }
+};
+

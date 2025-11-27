@@ -210,7 +210,8 @@ class Consultation {
       return { error: "Can't found this patient" };
     }
 
-    const [data]=await db.execute(`SELECT p.medicalHistory, b.type_of_req,da.startTime, da.endTime,u.fullName as DrName,
+    const [data] = await db.execute(
+      `SELECT p.medicalHistory, b.type_of_req,da.startTime, da.endTime,u.fullName as DrName,
  c.consultationId,c.consultationType,c.notes,c.prescription,c.status
   FROM patient p
   JOIN bookrequests b ON p.patientId = b.patient_id
@@ -219,7 +220,35 @@ class Consultation {
   JOIN user u ON d.userId =u.userId
   join consultation c on b.id=c.bookRequestId
   
-  WHERE p.patientId = ? `,[patientId]);
+  WHERE p.patientId = ? `,
+      [patientId]
+    );
+    return data;
+  }
+
+  static async getDoctorConsultations(doctorId) {
+    //to check if patient exist
+    const [doctorExist] = await db.execute(
+      "select * from doctor where doctorId = ?",
+      [doctorId]
+    );
+    if (doctorExist.length === 0) {
+      return { error: "Can't found this doctor" };
+    }
+
+    const [data] = await db.execute(
+      `SELECT u.fullName as PatientName, p.medicalHistory, 
+      b.type_of_req,da.startTime, da.endTime,
+ c.consultationId,c.consultationType,c.notes,c.prescription,c.status
+  FROM doctor d
+  Join doctoravailability da on d.doctorId=da.doctorId
+  JOIN bookrequests b ON da.availabilityId=b.availability_id
+  join patient p on b.patient_id=p.patientId
+  JOIN user u ON p.userId =u.userId
+  join consultation c on b.id=c.bookRequestId
+  WHERE d.doctorId = ?`,
+      [doctorId]
+    );
     return data;
   }
 }

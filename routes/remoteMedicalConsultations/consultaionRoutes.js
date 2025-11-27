@@ -8,6 +8,7 @@ router.put("/updateConsultationNotes",consultationController.addNotes);
 router.put("/updateConsultationPrescription",consultationController.addPrescription);
 router.get("/getConsultationInfo/:consultationId",consultationController.getConsultationInfo);
 router.get("/getPatientConsultations/:patientId",consultationController.getPatientConsultations);
+router.get("/getDoctorConsultations/:doctorId",consultationController.getDoctorConsultations);
 
 
 module.exports = router;

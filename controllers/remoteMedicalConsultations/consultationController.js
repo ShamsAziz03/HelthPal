@@ -20,7 +20,7 @@ exports.deleteCosultation = async (req, res) => {
 
 exports.updateStatus = async (req, res) => {
   try {
-    const {consultationId,status} = req.query;
+    const {consultationId,status} = req.body;
     const result = await ConsultatioModel.updateConsultationStatus(consultationId,status);
     res.status(200).json({
       success: true,
@@ -33,5 +33,39 @@ exports.updateStatus = async (req, res) => {
       error: err.message,
     });
   }
+};
+
+exports.addNotes=async (req,res)=>{
+    try{
+        const {consultationId,notes}=req.body;
+        const result=await ConsultatioModel.addNotes(consultationId,notes);
+        res.status(200).json({
+            success:true,
+            data:result,
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            error:err.message,
+        })
+    }
+};
+
+exports.addPrescription=async (req,res)=>{
+    try{
+        const {consultationId,prescription}=req.body;
+        const result=await ConsultatioModel.addPrescription(consultationId,prescription);
+        res.status(200).json({
+            success:true,
+            data:result,
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            error:err.message,
+        })
+    }
 };
 

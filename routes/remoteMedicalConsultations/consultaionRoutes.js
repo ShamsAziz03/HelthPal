@@ -4,5 +4,7 @@ const consultationController = require("../../controllers/remoteMedicalConsultat
 
 router.delete("/deleteConsultation/:consultationId",consultationController.deleteCosultation);
 router.put("/updateConsultationStatus",consultationController.updateStatus);
+router.put("/updateConsultationNotes",consultationController.addNotes);
+router.put("/updateConsultationPrescription",consultationController.addPrescription);
 
 module.exports = router;

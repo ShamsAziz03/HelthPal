@@ -124,29 +124,60 @@ class Consultation {
     }
 
     //if stats cancelled then update availble slot to be available
-    if(status==="Cancelled"){
-        //to find available id to update it
-    const [result2] = await db.execute(
-      `
+    if (status === "Cancelled") {
+      //to find available id to update it
+      const [result2] = await db.execute(
+        `
   SELECT b.availability_id as availability_id
   FROM consultation c
   JOIN bookrequests b
     ON c.bookRequestId = b.id
   WHERE c.consultationId = ? 
 `,
-      [consultationId]
-    );
-    if (result2.length === 0) {
-      return { error: "No availability found for this consultation" };
-    }
+        [consultationId]
+      );
+      if (result2.length === 0) {
+        return { error: "No availability found for this consultation" };
+      }
       //to update status of available slot
-      await Consultation.updateDoctorAvailableSlot(
-      result2[0].availability_id
-    );
-
+      await Consultation.updateDoctorAvailableSlot(result2[0].availability_id);
     }
 
     return { messege: "update consultation status Success" };
+  }
+
+  static async addNotes(consultationId,notes){
+    //to check if consultation exist
+     const [data] = await db.execute(
+      "select * from consultation where consultationId = ?",
+      [consultationId]
+    );
+    if (data.length === 0) {
+      return { error: "Can't found this Consultation to update!" };
+    }
+
+    //to update notes
+    const [result]=await db.execute("update consultation set notes = ? where consultationId = ? ",[notes,consultationId]);
+    if(result.length===0)return {error:"Can't update note of this consultation"}
+
+    return {messege:"update note of this consultation success"}
+  }
+
+  static async addPrescription(consultationId,prescription){
+    //to check if consultation exist
+     const [data] = await db.execute(
+      "select * from consultation where consultationId = ?",
+      [consultationId]
+    );
+    if (data.length === 0) {
+      return { error: "Can't found this Consultation to update!" };
+    }
+
+    //to update prescription
+    const [result]=await db.execute("update consultation set prescription = ? where consultationId = ? ",[prescription,consultationId]);
+    if(result.length===0)return {error:"Can't update prescription of this consultation"}
+
+    return {messege:"update prescription of this consultation success"}
   }
 }
 

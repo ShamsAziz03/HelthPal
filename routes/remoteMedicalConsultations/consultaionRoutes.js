@@ -3,6 +3,6 @@ const router = express.Router();
 const consultationController = require("../../controllers/remoteMedicalConsultations/consultationController");
 
 router.delete("/deleteConsultation/:consultationId",consultationController.deleteCosultation);
-
+router.put("/updateConsultationStatus",consultationController.updateStatus);
 
 module.exports = router;

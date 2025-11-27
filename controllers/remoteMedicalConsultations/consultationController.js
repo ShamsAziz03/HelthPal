@@ -16,3 +16,22 @@ exports.deleteCosultation = async (req, res) => {
     });
   }
 };
+
+
+exports.updateStatus = async (req, res) => {
+  try {
+    const {consultationId,status} = req.query;
+    const result = await ConsultatioModel.updateConsultationStatus(consultationId,status);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "can't update consultation",
+      error: err.message,
+    });
+  }
+};
+

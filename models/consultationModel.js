@@ -93,6 +93,61 @@ class Consultation {
       feedbackFromUpdate: result3,
     };
   }
+
+  //to update status of a consultation
+  static async updateConsultationStatus(consultationId, status) {
+    //to check if status is valid
+    if (
+      status != "Scheduled" &&
+      status != "Completed" &&
+      status != "Cancelled"
+    ) {
+      return { error: "Not valid status" };
+    }
+
+    //to check if consultation is exist
+    const [data] = await db.execute(
+      "select * from consultation where consultationId = ?",
+      [consultationId]
+    );
+    if (data.length === 0) {
+      return { error: "Can't found this Consultation to update!" };
+    }
+
+    //update consultation status
+    const [result] = await db.execute(
+      "UPDATE consultation SET status = ? WHERE consultationId = ?",
+      [status, consultationId]
+    );
+    if (result.affectedRows === 0) {
+      return { error: "updated consultation status Not Successful!" };
+    }
+
+    //if stats cancelled then update availble slot to be available
+    if(status==="Cancelled"){
+        //to find available id to update it
+    const [result2] = await db.execute(
+      `
+  SELECT b.availability_id as availability_id
+  FROM consultation c
+  JOIN bookrequests b
+    ON c.bookRequestId = b.id
+  WHERE c.consultationId = ? 
+`,
+      [consultationId]
+    );
+    if (result2.length === 0) {
+      return { error: "No availability found for this consultation" };
+    }
+      //to update status of available slot
+      await Consultation.updateDoctorAvailableSlot(
+      result2[0].availability_id
+    );
+
+    }
+
+    return { messege: "update consultation status Success" };
+  }
 }
 
 module.exports = Consultation;

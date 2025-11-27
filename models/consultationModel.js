@@ -146,9 +146,9 @@ class Consultation {
     return { messege: "update consultation status Success" };
   }
 
-  static async addNotes(consultationId,notes){
+  static async addNotes(consultationId, notes) {
     //to check if consultation exist
-     const [data] = await db.execute(
+    const [data] = await db.execute(
       "select * from consultation where consultationId = ?",
       [consultationId]
     );
@@ -157,15 +157,19 @@ class Consultation {
     }
 
     //to update notes
-    const [result]=await db.execute("update consultation set notes = ? where consultationId = ? ",[notes,consultationId]);
-    if(result.length===0)return {error:"Can't update note of this consultation"}
+    const [result] = await db.execute(
+      "update consultation set notes = ? where consultationId = ? ",
+      [notes, consultationId]
+    );
+    if (result.length === 0)
+      return { error: "Can't update note of this consultation" };
 
-    return {messege:"update note of this consultation success"}
+    return { messege: "update note of this consultation success" };
   }
 
-  static async addPrescription(consultationId,prescription){
+  static async addPrescription(consultationId, prescription) {
     //to check if consultation exist
-     const [data] = await db.execute(
+    const [data] = await db.execute(
       "select * from consultation where consultationId = ?",
       [consultationId]
     );
@@ -174,10 +178,26 @@ class Consultation {
     }
 
     //to update prescription
-    const [result]=await db.execute("update consultation set prescription = ? where consultationId = ? ",[prescription,consultationId]);
-    if(result.length===0)return {error:"Can't update prescription of this consultation"}
+    const [result] = await db.execute(
+      "update consultation set prescription = ? where consultationId = ? ",
+      [prescription, consultationId]
+    );
+    if (result.length === 0)
+      return { error: "Can't update prescription of this consultation" };
 
-    return {messege:"update prescription of this consultation success"}
+    return { messege: "update prescription of this consultation success" };
+  }
+
+  static async getConsultationDetails(consultationId) {
+    //to check if consultation exist
+    const [data] = await db.execute(
+      "select * from consultation where consultationId = ?",
+      [consultationId]
+    );
+    if (data.length === 0) {
+      return { error: "Can't found this Consultation" };
+    }
+    return data;
   }
 }
 

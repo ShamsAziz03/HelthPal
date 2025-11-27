@@ -6,5 +6,7 @@ router.delete("/deleteConsultation/:consultationId",consultationController.delet
 router.put("/updateConsultationStatus",consultationController.updateStatus);
 router.put("/updateConsultationNotes",consultationController.addNotes);
 router.put("/updateConsultationPrescription",consultationController.addPrescription);
+router.get("/getConsultationInfo/:consultationId",consultationController.getConsultationInfo);
+
 
 module.exports = router;

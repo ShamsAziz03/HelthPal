@@ -69,3 +69,19 @@ exports.addPrescription=async (req,res)=>{
     }
 };
 
+exports.getConsultationInfo=async (req,res)=>{
+    try{
+        const consultationId=req.params.consultationId;
+        const result=await ConsultatioModel.getConsultationDetails(consultationId);
+        res.status(200).json({
+            success:true,
+            data:result,
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            error:err.message,
+        })
+    }
+};

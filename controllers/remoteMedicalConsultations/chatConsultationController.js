@@ -1,11 +1,15 @@
 const ChatModel = require("../../models/chatModel");
 
-exports.sendChatMsg = async (req, res) => {
+exports.sendConsultationChatMsg = async (req, res) => {
   try {
-    const result = await ChatModel.sendGroupMsg();
+    const { senderId, receiverId, message } = req.body;
+    const result = await ChatModel.sendConsultationChatMsg(
+      senderId,
+      receiverId,
+      message
+    );
     res.status(200).json({
       success: true,
-      message: "Chat Send Successfully",
       data: result,
     });
   } catch (err) {

@@ -121,6 +121,15 @@ class Chat {
         return rows;
     }
 
+
+    //to send msgs between dr and patient for consultation
+    static async sendConsultationChatMsg(senderId,receiverId,message){
+      const query=``;
+      const [result]=await db.execute(query,[senderId,receiverId,message]);
+      if(result.affectedRows===0){return {error:` Can't Send Msg from senderId ${senderId} to reciverId ${receiverId}`}}
+      return {result:` Send Msg from senderId ${senderId} to reciverId ${receiverId}: ${message} --- is success`}
+
+    }
   
 }
 

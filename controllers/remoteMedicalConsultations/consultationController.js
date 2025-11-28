@@ -120,3 +120,20 @@ exports.getDoctorConsultations=async (req,res)=>{
     }
 };
 
+exports.updateType = async (req, res) => {
+  try {
+    const {consultationId,type} = req.body;
+    const result = await ConsultatioModel.updateConsultationType(consultationId,type);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "can't update consultation type",
+      error: err.message,
+    });
+  }
+};
+

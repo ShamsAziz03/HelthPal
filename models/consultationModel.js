@@ -258,6 +258,38 @@ class Consultation {
     );
     return data;
   }
+
+    //to update type of a consultation
+  static async updateConsultationType(consultationId, type) {
+    //to check if type is valid
+    if (
+      type != "Chat" &&
+      type != "Video" &&
+      type != "Audio"
+    ) {
+      return { error: "Not valid type" };
+    }
+
+    //to check if consultation is exist
+    const [data] = await db.execute(
+      "select * from consultation where consultationId = ?",
+      [consultationId]
+    );
+    if (data.length === 0) {
+      return { error: "Can't found this Consultation to update type!" };
+    }
+
+    //update consultation consultationType
+    const [result] = await db.execute(
+      "UPDATE consultation SET consultationType = ? WHERE consultationId = ?",
+      [type, consultationId]
+    );
+    if (result.affectedRows === 0) {
+      return { error: "updated consultation type Not Successful!" };
+    }
+
+    return { messege: "update consultation type Success" };
+  }
 }
 
 module.exports = Consultation;

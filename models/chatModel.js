@@ -120,6 +120,8 @@ class Chat {
             return { error: "no messages found between therapist and patient" };
         return rows;
     }
+
+  
 }
 
 module.exports = Chat;

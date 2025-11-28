@@ -191,7 +191,13 @@ class Consultation {
   static async getConsultationDetails(consultationId) {
     //to check if consultation exist
     const [data] = await db.execute(
-      "select * from consultation where consultationId = ?",
+      `SELECT d.userId AS doctorUserId, p.userId as UserIdPatient,c.*
+  FROM consultation c
+  JOIN bookrequests b ON c.bookRequestId=b.id
+  Join doctoravailability da on b.availability_id=da.availabilityId
+  join doctor d on d.doctorId=da.doctorId
+  join patient p on b.patient_id=p.patientId
+  WHERE c.consultationId = ?`,
       [consultationId]
     );
     if (data.length === 0) {

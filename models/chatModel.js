@@ -124,11 +124,28 @@ class Chat {
 
     //to send msgs between dr and patient for consultation
     static async sendConsultationChatMsg(senderId,receiverId,message){
-      const query=``;
-      const [result]=await db.execute(query,[senderId,receiverId,message]);
+      let receivers=[];
+      //first to check if sender and reciver is valid users
+      const [isSenderExist]= await db.execute(`select * from user where userId = ?`,[senderId]);
+      const [isReceiverExist]= await db.execute(`select * from user where userId = ?`,[receiverId]);
+      if(isSenderExist.length===0)return {error:"Sender Is Not Valid User"};
+      if(isReceiverExist.length===0)return {error:"Receiver Is Not Valid User"};
+      //to check if sender and reciver is valid roles - patient or doctor only
+      if(isSenderExist[0].role!=="Doctor"&&isSenderExist[0].role!=="Patient")return {error:"Sender Is Not Doctor or Patient"};
+      if(isReceiverExist[0].role!=="Doctor"&&isReceiverExist[0].role!=="Patient")return {error:"Receiver Is Not Doctor or Patient"};
+
+      receivers.push(receiverId.toString());
+
+      //to add the PK
+      const [data] = await db.execute(
+      `SELECT MAX(chatId)+1 AS next_id FROM chatting ;` );
+      const nextId = data[0].next_id;
+
+
+      const insertQuery=`INSERT INTO chatting (chatId, senderId, receivers,messageTime, message) VALUES (?, ?, ?, ?, ?);`;
+      const [result]=await db.execute(insertQuery,[nextId,senderId,JSON.stringify(receivers),new Date().toISOString().slice(0, 19).replace('T', ' '),message||"new message"]);
       if(result.affectedRows===0){return {error:` Can't Send Msg from senderId ${senderId} to reciverId ${receiverId}`}}
       return {result:` Send Msg from senderId ${senderId} to reciverId ${receiverId}: ${message} --- is success`}
-
     }
   
 }

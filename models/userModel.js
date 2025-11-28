@@ -20,6 +20,7 @@ class User {
       dateOfBirth,
       address,
       consentGiven,
+      isAnonymous,
     } = userData;
 
     const userId = uuidv4();
@@ -49,6 +50,7 @@ class User {
         dateOfBirth,
         address,
         consentGiven,
+        isAnonymous,
       });
     } else if (role === "donor") {
       await Donor.create({
@@ -109,6 +111,13 @@ class User {
 
     const [rows] = await db.execute(query, values);
     return rows[0];
+  }
+
+  // Update patient isAnonymous preference
+  static async updateIsAnonymous(patientId, isAnonymous) {
+    const query = `UPDATE patient SET isAnonymous = ? WHERE patientId = ?`;
+    const [result] = await db.execute(query, [isAnonymous, patientId]);
+    return result;
   }
 }
 

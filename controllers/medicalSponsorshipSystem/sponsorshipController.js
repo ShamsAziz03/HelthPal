@@ -1,4 +1,4 @@
-const Sponsorship = require("../../models/medicalSponsorshipSystem/sponsorshipModel");
+const Sponsorship = require("../../models/MedicalSponsorshipSystem/sponsorshipModel");
 const db = require("../../config/db");
 
 // Get a single sponsorship by ID

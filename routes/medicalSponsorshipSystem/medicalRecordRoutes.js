@@ -7,7 +7,7 @@ const {
   getMedicalRecordById,
   updateMedicalRecord,
   deleteMedicalRecord,
-} = require("../../controllers/medicalSponsorshipSystem/medicalRecordController");
+} = require("../../controllers/MedicalSponsorshipSystem/medicalRecordController");
 
 // Route to get all medical records
 router.get("/", getAllMedicalRecords);

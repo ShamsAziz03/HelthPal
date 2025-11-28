@@ -20,3 +20,19 @@ exports.sendConsultationChatMsg = async (req, res) => {
     });
   }
 };
+
+exports.getConsultationChatMsgs = async (req, res) => {
+  try {
+    const consultationId = req.params.consultationId;
+    const result = await ChatModel.getConsultationChatMsgs(consultationId);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};

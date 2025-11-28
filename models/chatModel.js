@@ -167,6 +167,22 @@ class Chat {
       if(result.affectedRows===0){return {error:` Can't Send Msg from senderId ${senderId} to reciverId ${receiverId}`}}
       return {result:` Send Msg from senderId ${senderId} to reciverId ${receiverId}: ${message} --- is success`}
     }
+
+    
+    //to get msgs between dr and patient for consultation
+    static async getConsultationChatMsgs(consultationId){
+      //to check if consultation id exist 
+      const [isConsultationExist]= await db.execute(`select * from consultation where consultationId = ?`,[consultationId]);
+      if(isConsultationExist.length===0)return {error:"Consultation Is Not Exist"};
+      if(isConsultationExist[0].consultationType!=="Chat")return {error:"Type of Consultation is not Chat!"};
+
+      //to get chat history for consultation
+      const query=`select * from  chatting where consultationId = ?`;
+      const [result]=await db.execute(query,[consultationId]);
+      if(result.affectedRows===0){return {error:`No Msgs for this consultation: ${consultationId}`}}
+      return result;
+    }
+
   
 }
 

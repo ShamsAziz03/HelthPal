@@ -211,15 +211,16 @@ class Consultation {
     }
 
     const [data] = await db.execute(
-      `SELECT p.medicalHistory, b.type_of_req,da.startTime, da.endTime,u.fullName as DrName,
- c.consultationId,c.consultationType,c.notes,c.prescription,c.status
+      `SELECT p.userId AS patientUserId,d.userId as UserIdDoctor,c.consultationId,
+      p.medicalHistory, b.type_of_req,da.startTime,
+       da.endTime,u.fullName as DrName,c.consultationType,c.notes,c.prescription,c.status
   FROM patient p
   JOIN bookrequests b ON p.patientId = b.patient_id
   Join doctoravailability da on b.availability_id=da.availabilityId
   join doctor d on da.doctorId=d.doctorId
   JOIN user u ON d.userId =u.userId
   join consultation c on b.id=c.bookRequestId
-  
+
   WHERE p.patientId = ? `,
       [patientId]
     );
@@ -237,9 +238,9 @@ class Consultation {
     }
 
     const [data] = await db.execute(
-      `SELECT u.fullName as PatientName, p.medicalHistory, 
+      `SELECT d.userId AS doctorUserId, p.userId as UserIdPatient,c.consultationId,u.fullName as PatientName, p.medicalHistory, 
       b.type_of_req,da.startTime, da.endTime,
- c.consultationId,c.consultationType,c.notes,c.prescription,c.status
+ c.consultationType,c.notes,c.prescription,c.status
   FROM doctor d
   Join doctoravailability da on d.doctorId=da.doctorId
   JOIN bookrequests b ON da.availabilityId=b.availability_id

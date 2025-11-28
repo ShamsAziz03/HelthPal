@@ -2,11 +2,12 @@ const ChatModel = require("../../models/chatModel");
 
 exports.sendConsultationChatMsg = async (req, res) => {
   try {
-    const { senderId, receiverId, message } = req.body;
+    const { senderId, receiverId, message, consultationId } = req.body;
     const result = await ChatModel.sendConsultationChatMsg(
       senderId,
       receiverId,
-      message
+      message,
+      consultationId
     );
     res.status(200).json({
       success: true,

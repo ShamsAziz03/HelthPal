@@ -8,5 +8,14 @@ class Session {
     );
     return result;
   }
+
+  static async logSessionInfo(consultationId, meetingUrl) {
+    const [result] = await db.execute(
+      `insert into sessions (consultation_id, meeting_url, provider) values (?, ?, ?)`,
+      [consultationId, meetingUrl, "Daily.co"]
+    );
+
+    return result;
+  }
 }
 module.exports = Session;

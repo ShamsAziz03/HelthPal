@@ -47,7 +47,7 @@ const createRoom = async (room) => {
 //to create new room for audio video calls
 exports.createRoom = async (req, res) => {
   try {
-     const {consultationId,roomName}= req.body;
+    const { consultationId, roomName } = req.body;
     //to check if consultation type is video or audio
     const result = await SessionModel.checkConsultation(consultationId);
     if (result.length === 0) {
@@ -67,6 +67,10 @@ exports.createRoom = async (req, res) => {
     const room = await getRoom(roomName);
     if (room.error) {
       const newRoom = await createRoom(roomName);
+      //to store info of room in db sessions table
+      const result = SessionModel.logSessionInfo(consultationId, newRoom.url);
+      if (result.affectedRows === 0)
+        res.status(500).json({ error: "Can't add session Info to database" });
       res.status(200).send(newRoom);
     } else {
       res.status(200).send(room);

@@ -35,6 +35,7 @@ import doctorConsultationRoutes from "./routes/remoteMedicalConsultations/doctor
 import bookingRequestRoutes from "./routes/remoteMedicalConsultations/bookingRequestRoutes.js";
 import consultationRoutes from "./routes/remoteMedicalConsultations/consultaionRoutes.js";
 import chatConsultationRoutes from "./routes/remoteMedicalConsultations/chatConsultationRoutes.js";
+import translationRoutes from "./routes/remoteMedicalConsultations/translationRoutes.js";
 
 
 // Mental Health & Trauma Support
@@ -81,6 +82,7 @@ app.use("/api/support-groups", supportGroupRoutes);
 app.use("/api/therapy-chats", therapyChattingRoutes);
 
 app.use("/api/chatConsultation",chatConsultationRoutes);
+app.use("/api/translation",translationRoutes);
 
 
 // Error handling middleware

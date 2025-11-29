@@ -47,3 +47,19 @@ exports.translateMsg = async (req, res) => {
     });
   }
 };
+
+exports.getChatTranslationLogs = async (req, res) => {
+  try {
+    const chatId = req.params.chatId;
+    const data = await TranslationModel.getChatTranslationHistory(chatId);
+    res.status(200).json({
+      success: true,
+      data: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};

@@ -4,5 +4,6 @@ const SessionController = require("../../controllers/remoteMedicalConsultations/
 
 router.get("/createRoom", SessionController.createRoom);
 router.get("/getSessionInfo/:sessionId", SessionController.getSessionInfo);
+router.delete("/deleteSession/:sessionId", SessionController.deleteSession);
 
 module.exports = router;

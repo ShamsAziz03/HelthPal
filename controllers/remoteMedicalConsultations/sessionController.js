@@ -104,3 +104,17 @@ exports.getSessionInfo = async (req, res) => {
     });
   }
 };
+
+//to delete session from db
+exports.deleteSession = async (req, res) => {
+  try {
+    const sessionId = req.params.sessionId;
+    const data = await SessionModel.deleteSession(sessionId);
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};

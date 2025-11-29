@@ -47,7 +47,7 @@ const createRoom = async (room) => {
 //to create new room for audio video calls
 exports.createRoom = async (req, res) => {
   try {
-     const {roomName,consultationId}= req.query;
+     const {consultationId,roomName}= req.body;
     //to check if consultation type is video or audio
     const result = await SessionModel.checkConsultation(consultationId);
     if (result.length === 0) {

@@ -82,3 +82,25 @@ exports.createRoom = async (req, res) => {
     });
   }
 };
+
+//to get session info
+exports.getSessionInfo = async (req, res) => {
+  try {
+    const sessionId = req.params.sessionId;
+    const data = await SessionModel.getSessionInfo(sessionId);
+    if (data.length === 0) {
+      res.status(400).json({
+        error: "no such session with this id",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};

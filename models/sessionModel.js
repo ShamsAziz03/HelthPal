@@ -17,5 +17,14 @@ class Session {
 
     return result;
   }
+
+  static async getSessionInfo(sessionId) {
+    const [result] = await db.execute(
+      `select * from sessions where session_id= ?`,
+      [sessionId]
+    );
+
+    return result;
+  }
 }
 module.exports = Session;

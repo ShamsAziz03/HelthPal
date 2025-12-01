@@ -28,6 +28,16 @@ import missionRoutes from "./routes/missionRoutes.js";
 import equipmentRouter from "./routes/equipmentRoutes.js";
 import medicationRouter from "./routes/medicationRoutes.js";
 
+
+//Remote Medical Consulation
+import doctorConsultationRoutes from "./routes/remoteMedicalConsultations/doctorConsultationRoutes.js";
+import bookingRequestRoutes from "./routes/remoteMedicalConsultations/bookingRequestRoutes.js";
+import consultationRoutes from "./routes/remoteMedicalConsultations/consultaionRoutes.js";
+import chatConsultationRoutes from "./routes/remoteMedicalConsultations/chatConsultationRoutes.js";
+import translationRoutes from "./routes/remoteMedicalConsultations/translationRoutes.js";
+import sessionRoutes from "./routes/remoteMedicalConsultations/sessionRoutes.js";
+
+
 // Mental Health & Trauma Support
 import therapySessionRoutes from "./routes/MentalHealth&TraumaSupport/therapySessionRoutes.js";
 import supportGroupRoutes from "./routes/supportGroupRoutes.js";
@@ -56,6 +66,11 @@ app.use("/api/drAvailability", availabilityRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/missions", missionRoutes);
 
+app.use("/api/doctorConsultation",doctorConsultationRoutes);
+app.use("/api/bookingReqForConsultation",bookingRequestRoutes);
+app.use("/api/consultation",consultationRoutes);
+
+
 app.use("/equipment", equipmentRouter);
 app.use("/medication", medicationRouter);
 app.use("/alerts", publichealthaleartRouter);
@@ -64,6 +79,11 @@ app.use("/education", healtheducationRouter);
 app.use("/api/therapy-sessions", therapySessionRoutes);
 app.use("/api/support-groups", supportGroupRoutes);
 app.use("/api/therapy-chats", therapyChattingRoutes);
+
+app.use("/api/chatConsultation",chatConsultationRoutes);
+app.use("/api/translation",translationRoutes);
+app.use("/api/consultationSession",sessionRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

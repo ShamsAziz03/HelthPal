@@ -79,11 +79,24 @@ class drAvailability {
         if (slot.length === 0)
             return { error: "availability slot not found" }
 
-        const [res] = await db.execute("DELETE FROM healthpal.doctoravailability WHERE availabilityId = ?", [availabilityId])
+        const [res] = await db.execute("DELETE FROM healthpal.doctoravailability WHERE availabilityId = ?;", [availabilityId])
         if (res.affectedRows === 0)
             return { error: "failed to delete availability" }
 
+           //to do auto increment after deletion
+           const [data]=await db.execute(`SELECT MAX(availabilityId)+1 AS next_id FROM doctoravailability ;`);
+          await db.execute(`ALTER TABLE doctoravailability AUTO_INCREMENT = ${data[0].next_id}`);
         return { message: "availability deleted successfully" }
+    }
+    static async getAvailableDoctors(){
+        const query=`Select dr.doctorId, user.fullName, dr.specialty, dr.rating, 
+        doctoravailability.startTime, doctoravailability.endTime, doctoravailability.status from doctoravailability 
+join doctor dr on doctoravailability.doctorId=dr.doctorId
+join user on dr.userId=user.userId
+where doctoravailability.status="Available"
+`;
+const [result]=await db.execute(query);
+return result;
     }
 
 }

@@ -6,6 +6,7 @@ const {
   updateIsAnonymous,
   getAllUsers,
   deleteUser,
+  logInUser
 } = require("../controllers/userController");
 
 // Route for updating user's isAnonymous preference
@@ -22,5 +23,8 @@ router.get("/", getAllUsers);
 
 // Route for deleting a user by ID
 router.delete("/:userId", deleteUser);
+
+// Route for logging in a user
+router.post("/login", logInUser);
 
 module.exports = router;

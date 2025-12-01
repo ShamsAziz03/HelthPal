@@ -137,6 +137,17 @@ class User {
   static async deleteById(userId) {
     return await this.delete(userId);
   }
+
+   // Get a user by name and pass 
+  static async logInUser(email,password) {
+    const [users] = await db.execute("SELECT * FROM user WHERE email = ? AND password = ?", [
+      email,
+      password
+    ]);
+    if (users.length===0) return {error:"No user found"};
+    return users[0];
+  }
+
 }
 
 module.exports = User;

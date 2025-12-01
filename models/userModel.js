@@ -119,6 +119,24 @@ class User {
     const [result] = await db.execute(query, [isAnonymous, patientId]);
     return result;
   }
+
+  // Get all users
+  static async findAll() {
+    const query = `SELECT * FROM user`;
+    const [rows] = await db.execute(query);
+    return rows;
+  }
+  // Delete a user by ID
+  static async delete(userId) {
+    const query = `DELETE FROM user WHERE userId = ?`;
+    const [result] = await db.execute(query, [userId]);
+    return result;
+  }
+
+  // Backwards-compatible alias used by controllers
+  static async deleteById(userId) {
+    return await this.delete(userId);
+  }
 }
 
 module.exports = User;

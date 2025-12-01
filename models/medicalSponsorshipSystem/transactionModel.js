@@ -84,6 +84,10 @@ class Transaction {
 
   // Transperency dashboard
   static async getFullSponsorshipReport(sponsorshipId) {
+    const sponsorshipExists = await sponsorshipModel.findById(sponsorshipId);
+    if (!sponsorshipExists) {
+      throw new Error("Sponsorship does not exist");
+    }
     const query = `
       SELECT t.*, u.fullName AS donorName, s.treatmentType, s.goalAmount, s.currentAmount
       FROM transaction t

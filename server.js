@@ -1,47 +1,47 @@
 // server.js
 
-import express from "express";
-import dotenv from "dotenv";
-import db from "./config/db.js";
+const express = require("express");
+const dotenv = require("dotenv");
+const db = require("./config/db");
 
 // Medical Sponsorship System
-import sponsorshipRoutes from "./routes/MedicalSponsorshipSystem/sponsorshipRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import medicalRecordRoutes from "./routes/MedicalSponsorshipSystem/medicalRecordRoutes.js";
-import transactionRoutes from "./routes/MedicalSponsorshipSystem/transactionRoutes.js";
-import patientUpdateRoutes from "./routes/MedicalSponsorshipSystem/patientUpdateRoutes.js";
-import invoiceRoutes from "./routes/MedicalSponsorshipSystem/invoiceRoutes.js";
-import patientFeedbackRoutes from "./routes/MedicalSponsorshipSystem/patientFeedbackRoutes.js";
+const sponsorshipRoutes = require("./routes/MedicalSponsorshipSystem/sponsorshipRoutes");
+const userRoutes = require("./routes/userRoutes");
+const medicalRecordRoutes = require("./routes/MedicalSponsorshipSystem/medicalRecordRoutes");
+const transactionRoutes = require("./routes/MedicalSponsorshipSystem/transactionRoutes");
+const patientUpdateRoutes = require("./routes/MedicalSponsorshipSystem/patientUpdateRoutes");
+const invoiceRoutes = require("./routes/MedicalSponsorshipSystem/invoiceRoutes");
+const patientFeedbackRoutes = require("./routes/MedicalSponsorshipSystem/patientFeedbackRoutes");
 
 // Alerts and educational posts
-import publichealthaleartRouter from "./routes/publicHealthAlertRoutes.js";
-import healtheducationRouter from "./routes/healtheducationRoutes.js";
+const publichealthaleartRouter = require("./routes/publicHealthAlertRoutes");
+const healtheducationRouter = require("./routes/healtheducationRoutes");
 
 //Partnerships & Medical Missions
-import ngoRoutes from "./routes/ngoRoutes.js";
-import collaborationRoutes from "./routes/collaborationRoutes.js";
-import availabilityRoutes from "./routes/drAvailabilityRoutes.js";
-import bookingRoutes from "./routes/bookingRoutes.js";
-import missionRoutes from "./routes/missionRoutes.js";
+const ngoRoutes = require("./routes/ngoRoutes");
+const collaborationRoutes = require("./routes/collaborationRoutes");
+const availabilityRoutes = require("./routes/drAvailabilityRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+const missionRoutes = require("./routes/missionRoutes");
 
 //Medication & Equipment Coordination
-import equipmentRouter from "./routes/equipmentRoutes.js";
-import medicationRouter from "./routes/medicationRoutes.js";
+const equipmentRouter = require("./routes/equipmentRoutes");
+const medicationRouter = require("./routes/medicationRoutes");
 
 
 //Remote Medical Consulation
-import doctorConsultationRoutes from "./routes/remoteMedicalConsultations/doctorConsultationRoutes.js";
-import bookingRequestRoutes from "./routes/remoteMedicalConsultations/bookingRequestRoutes.js";
-import consultationRoutes from "./routes/remoteMedicalConsultations/consultaionRoutes.js";
-import chatConsultationRoutes from "./routes/remoteMedicalConsultations/chatConsultationRoutes.js";
-import translationRoutes from "./routes/remoteMedicalConsultations/translationRoutes.js";
-import sessionRoutes from "./routes/remoteMedicalConsultations/sessionRoutes.js";
+const doctorConsultationRoutes = require("./routes/remoteMedicalConsultations/doctorConsultationRoutes");
+const bookingRequestRoutes = require("./routes/remoteMedicalConsultations/bookingRequestRoutes");
+const consultationRoutes = require("./routes/remoteMedicalConsultations/consultaionRoutes");
+const chatConsultationRoutes = require("./routes/remoteMedicalConsultations/chatConsultationRoutes");
+const translationRoutes = require("./routes/remoteMedicalConsultations/translationRoutes");
+const sessionRoutes = require("./routes/remoteMedicalConsultations/sessionRoutes");
 
 
 // Mental Health & Trauma Support
-import therapySessionRoutes from "./routes/MentalHealth&TraumaSupport/therapySessionRoutes.js";
-import supportGroupRoutes from "./routes/supportGroupRoutes.js";
-import therapyChattingRoutes from "./routes/MentalHealth&TraumaSupport/therapyChattingRoutes.js";
+const therapySessionRoutes = require("./routes/MentalHealth&TraumaSupport/therapySessionRoutes");
+const supportGroupRoutes = require("./routes/supportGroupRoutes");
+const therapyChattingRoutes = require("./routes/MentalHealth&TraumaSupport/therapyChattingRoutes");
 
 dotenv.config();
 
@@ -85,7 +85,6 @@ app.use("/api/translation",translationRoutes);
 app.use("/api/consultationSession",sessionRoutes);
 
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -94,7 +93,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });

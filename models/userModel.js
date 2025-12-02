@@ -5,7 +5,6 @@ const Doctor = require("./doctorModel");
 const { v4: uuidv4 } = require("uuid");
 
 class User {
-  // Create a new user record
   static async create(userData) {
     const {
       email,
@@ -138,16 +137,31 @@ class User {
     return await this.delete(userId);
   }
 
-   // Get a user by name and pass 
-  static async logInUser(email,password) {
-    const [users] = await db.execute("SELECT * FROM user WHERE email = ? AND password = ?", [
+  // Get a user by email
+  static async findByEmail(email) {
+    const [users] = await db.execute("SELECT * FROM user WHERE email = ?", [
       email,
-      password
     ]);
-    if (users.length===0) return {error:"No user found"};
+    if (users.length === 0) return null;
     return users[0];
   }
 
+  static async updateLastLogin(userId) {
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace("T", " ");
+    const query = `UPDATE user SET lastLogin = ? WHERE userId = ?`;
+    const [result] = await db.execute(query, [formattedDate, userId]);
+    return result;
+  }
+
+  static async logInUser(email, password) {
+    const [users] = await db.execute(
+      "SELECT * FROM user WHERE email = ? AND password = ?",
+      [email, password]
+    );
+    if (users.length === 0) return { error: "No user found" };
+    return users[0];
+  }
 }
 
 module.exports = User;

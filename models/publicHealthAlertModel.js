@@ -15,59 +15,61 @@ class PublicHealthAlert {
             const parsed = JSON.parse(jsonString);
             return Array.isArray(parsed) ? parsed : [parsed];
         } catch (error) {
-            console.warn('Invalid JSON in mediaFiles:', jsonString);
+            console.warn('Invalid JSON in affectedAreas:', jsonString);
             return [jsonString];
         }
     }
 
-    static async create(contentData) {
+    // Create a new public health alert
+    static async create(alertData) {
         const {
-            contentId,
+            alertId,
             title,
-            content,
-            category,
-            mediaFiles,
-            language
-        } = contentData;
+            description,
+            severity,
+            affectedAreas,
+            expiresAt
+        } = alertData;
 
         const query = `
-            INSERT INTO HealthEducation
-            (contentId, title, content, category, mediaFiles, language, publishedDate)
+            INSERT INTO PublicHealthAlert
+            (alertId, title, description, severity, affectedAreas, expiresAt, issuedAt)
             VALUES (?, ?, ?, ?, ?, ?, NOW())
         `;
 
-        // Ensure mediaFiles is stored as JSON array
-        let mediaFilesJson = null;
-        if (mediaFiles) {
-            if (Array.isArray(mediaFiles)) {
-                mediaFilesJson = JSON.stringify(mediaFiles);
-            } else if (typeof mediaFiles === 'string') {
+        // Ensure affectedAreas is stored as JSON array
+        let affectedAreasJson = null;
+        if (affectedAreas) {
+            if (Array.isArray(affectedAreas)) {
+                affectedAreasJson = JSON.stringify(affectedAreas);
+            } else if (typeof affectedAreas === 'string') {
                 try {
-                    JSON.parse(mediaFiles);
-                    mediaFilesJson = mediaFiles;
+                    JSON.parse(affectedAreas);
+                    affectedAreasJson = affectedAreas;
                 } catch {
-                    mediaFilesJson = JSON.stringify([mediaFiles]);
+                    affectedAreasJson = JSON.stringify([affectedAreas]);
                 }
             } else {
-                mediaFilesJson = JSON.stringify([mediaFiles]);
+                affectedAreasJson = JSON.stringify([affectedAreas]);
             }
         }
 
         try {
             await db.execute(query, [
-                contentId,
+                alertId,
                 title,
-                content,
-                category,
-                mediaFilesJson,
-                language || 'Arabic'
+                description,
+                severity,
+                affectedAreasJson,
+                expiresAt || null
             ]);
 
-            return { contentId, ...contentData, publishedDate: new Date() };
+            return await this.getById(alertId);
         } catch (error) {
             throw error;
         }
     }
+
     // Get all active public health alerts with optional filters 
     static async getActive(filters = {}) {
         let query = `

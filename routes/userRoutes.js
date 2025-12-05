@@ -9,18 +9,36 @@ const {
   logInUser,
   registerUser,
 } = require("../controllers/userController");
-const { authenticateToken, authorizeRole } = require("../middleware/authMiddleware");
+const {
+  authenticateToken,
+  authorizeRole,
+} = require("../middleware/authMiddleware");
 
 router.post("/register", registerUser);
 router.post("/login", logInUser);
 
-router.put("/updateIsAnonymous/:patientId", authenticateToken, updateIsAnonymous);
+router.put(
+  "/updateIsAnonymous/:patientId",
+  authenticateToken,
+  authorizeRole("Patient"),
+  updateIsAnonymous
+);
 
 router.get("/:userId", authenticateToken, getUserById);
 
-router.post("/", authenticateToken, authorizeRole("admin"), createUser);
+router.post("/", authenticateToken, authorizeRole("Admin"), createUser);
 
-router.get("/", authenticateToken, authorizeRole("admin", "doctor"), getAllUsers);
-router.delete("/:userId", authenticateToken, authorizeRole("admin"), deleteUser);
+router.get(
+  "/",
+  authenticateToken,
+  authorizeRole("Admin", "doctor"),
+  getAllUsers
+);
+router.delete(
+  "/:userId",
+  authenticateToken,
+  authorizeRole("Admin"),
+  deleteUser
+);
 
 module.exports = router;

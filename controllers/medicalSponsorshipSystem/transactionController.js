@@ -1,15 +1,19 @@
 const Transaction = require("../../models/MedicalSponsorshipSystem/transactionModel");
+const currencyConversion = require("../../services/currencyConversion");
+const convertToILS =
+  currencyConversion.convertToILS || currencyConversion.convertUSDToILS;
 
 // Create a new transaction
 exports.createTransaction = async (req, res) => {
   try {
     console.log("Creating transaction with data:", req.body);
-    const transactionData = req.body;
+
+    const data = req.body;
     if (
-      !transactionData.donorId ||
-      !transactionData.sponsorshipId ||
-      !transactionData.amount ||
-      !transactionData.paymentMethod
+      !data.donorId ||
+      !data.sponsorshipId ||
+      !data.amount ||
+      !data.paymentMethod
     ) {
       return res.status(400).json({
         success: false,
@@ -17,11 +21,28 @@ exports.createTransaction = async (req, res) => {
           "donorId, sponsorshipId, amount, and paymentMethod are required",
       });
     }
-    const newTransaction = await Transaction.create(transactionData);
+
+    const fromCurrency = data.currency || "USD"; // default USD
+    const amountILS = await convertToILS(data.amount, fromCurrency);
+
+    if (!amountILS && amountILS !== 0) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to convert currency to ILS",
+      });
+    }
+
+    data.amountILS = amountILS;
+
+    const newTransaction = await Transaction.create(data);
+
     res.status(201).json({
       success: true,
       message: "Transaction created successfully",
-      data: newTransaction,
+      data: {
+        ...newTransaction,
+        amountILS,
+      },
     });
   } catch (error) {
     console.error("Error creating transaction:", error);
@@ -32,14 +53,32 @@ exports.createTransaction = async (req, res) => {
     });
   }
 };
+
 // Get all transactions
 exports.getAllTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.findAll();
+
+    const enhanced = await Promise.all(
+      transactions.map(async (t) => {
+        let ils = null;
+        try {
+          ils = await convertToILS(t.amount, t.currency || "USD");
+        } catch (err) {
+          console.error(
+            `Conversion error for transaction ${t.transactionId}:`,
+            err.message || err
+          );
+          ils = null;
+        }
+        return { ...t, amountILS: ils };
+      })
+    );
+
     res.status(200).json({
       success: true,
       count: transactions.length,
-      data: transactions,
+      data: enhanced, // return converted results
     });
   } catch (error) {
     console.error("Error fetching transactions:", error);
@@ -59,7 +98,20 @@ exports.getTransactionById = async (req, res) => {
     if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
     }
-    res.status(200).json({ success: true, data: transaction });
+
+    const amountILS = await convertToILS(
+      transaction.amount,
+      transaction.currency || "USD"
+    );
+    transaction.amountILS = amountILS;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        ...transaction,
+        amountILS: amountILS,
+      },
+    });
   } catch (error) {
     console.error("Error fetching transaction by ID:", error);
     res.status(500).json({
@@ -134,6 +186,11 @@ exports.getFullSponsorshipReport = async (req, res) => {
 exports.deleteTransaction = async (req, res) => {
   try {
     const { transactionId } = req.params;
+    const transaction = await Transaction.findById(transactionId);
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
     const result = await Transaction.delete(transactionId);
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Transaction not found" });

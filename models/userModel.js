@@ -60,12 +60,12 @@ class User {
     } else if (role === "doctor") {
       await Doctor.create({
         userId,
-        specialty: null,
-        licenseNumber: null,
-        languages: [],
-        yearsOfExperience: 0,
-        isVerified: false,
-        rating: null,
+        specialty: userData.specialty,
+        licenseNumber: userData.licenseNumber,
+        languages: userData.languages,
+        yearsOfExperience: userData.yearsOfExperience,
+        isVerified: userData.isVerified,
+        rating: userData.rating,
       });
     }
 

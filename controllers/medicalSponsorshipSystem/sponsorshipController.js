@@ -54,6 +54,20 @@ exports.getAllSponsorships = async (req, res) => {
 exports.getSponsorshipsByPatientId = async (req, res) => {
   try {
     const { patientId } = req.params;
+    if (!patientId) {
+      return res.status(400).json({
+        success: false,
+        message: "patientId parameter is required",
+      });
+    }
+    const checkSql = `SELECT * FROM patient WHERE patientId = ?`;
+    const [patientRows] = await db.execute(checkSql, [patientId]);
+    if (patientRows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Patient not found",
+      });
+    }
     console.log(`Fetching sponsorships for patient ${patientId}`);
     const sponsorships = await Sponsorship.findByPatientId(patientId);
     res.status(200).json({

@@ -5,18 +5,32 @@ const {
   getAllInvoices,
   getInvoiceById,
   deleteInvoiceById,
-} = require("../../controllers/MedicalSponsorshipSystem/invoiceController");
+} = require("../../controllers/medicalSponsorshipSystem/invoiceController");
+const {
+  authenticateToken,
+  authorizeRole,
+} = require("../../middleware/authMiddleware");
 
 // Route for creating a new invoice
-router.post("/", createInvoice);
+router.post("/", authenticateToken, authorizeRole("Admin"), createInvoice);
 
 // Route for getting all invoices
-router.get("/", getAllInvoices);
+router.get("/", authenticateToken, authorizeRole("Admin"), getAllInvoices);
 
 // Route for getting a single invoice by ID
-router.get("/:invoiceId", getInvoiceById);
+router.get(
+  "/:invoiceId",
+  authenticateToken,
+  authorizeRole("Admin", "Donor", "Patient"),
+  getInvoiceById
+);
 
 // Route for deleting an invoice by ID
-router.delete("/:invoiceId", deleteInvoiceById);
+router.delete(
+  "/:invoiceId",
+  authenticateToken,
+  authorizeRole("Admin"),
+  deleteInvoiceById
+);
 
 module.exports = router;

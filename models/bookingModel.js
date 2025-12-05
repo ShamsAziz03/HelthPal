@@ -88,8 +88,87 @@ class Booking {
             return { error: "booking request not found" }
 
         const qry2 = "DELETE FROM healthpal.bookRequests WHERE id = ?;"
-        await db.execute(qry2, [id])
+        await db.execute(qry2, [id]);
+
+        //to do auto increment after deletion
+        const [data]=await db.execute(`SELECT MAX(id)+1 AS next_id FROM bookRequests ;`);
+        await db.execute(`ALTER TABLE bookRequests AUTO_INCREMENT = ${data[0].next_id}`);
+
+        //to set status of avalible slot to be available not requested
+        await db.execute(`UPDATE doctoravailability
+                         SET status = 'Available'
+                         WHERE availabilityId = ? ;`,[reqData[0].availability_id])
+
+
         return { message: "booking request deleted successfully" }
+    }
+
+    //to add book request by patient 
+    static async addBookReqForConsultation(data){
+        const {patient_id, availability_id, description}=data;
+
+         //ensure that patient is exist 
+        const qry1 = "SELECT * FROM healthpal.patient WHERE patientId = ?;"
+        const [patient] = await db.query(qry1, [patient_id])
+        if (patient.length === 0)
+            return { error: "patient not found" }
+
+
+        //ensure that selected slot is exist and available 
+        const qry2 = "SELECT * FROM healthpal.doctoravailability WHERE availabilityId = ?;"
+        const [availability] = await db.query(qry2, [availability_id])
+        if (availability.length === 0)
+            return { error: "availability slot not found" }
+
+        if (availability[0].status !== 'Available')
+            return { error: "slot is not available for booking" }
+
+       // insert book request
+        const query3=`INSERT INTO healthpal.bookRequests (patient_id, availability_id, description,status,type_of_req) VALUES (?, ?, ?,?,?)`;
+        const [result]=await db.execute(query3,[patient_id, availability_id, description || "","pending","consultation"]);
+
+         // update slot status to "Requested"
+        const qry4 = "UPDATE healthpal.doctoravailability SET status = 'Requested' WHERE availabilityId = ?"
+        await db.execute(qry4, [availability_id])
+
+        return result;
+    }
+
+    //to get data info of book req 
+    static async getBookReqInfo(filter){
+        const {bookReqId,bookReqStatus,patientId,typeOfReq}=filter;
+        let values=[];
+        let query = "SELECT * FROM healthpal.bookrequests WHERE 1=1 ";
+        if(bookReqId){
+            query+=" AND id = ?";
+            values.push(bookReqId);
+        }
+        if(bookReqStatus){
+            query+=" AND status = ?";
+            values.push(bookReqStatus);
+        }
+        if(patientId){
+            query+=" AND patient_id = ?";
+            values.push(patientId);
+        }
+        if(typeOfReq){
+            query+=" AND type_of_req = ?";
+            values.push(typeOfReq);
+        }
+        const [bookReq] = await db.query(query, values);
+        return bookReq;
+    }
+
+    //to let doctor see his book requests
+    static async getDoctorBooks(doctorId){
+        const query=`  SELECT br.*,u.fullName,da.startTime,da.endTime,da.status as availableStatus
+  FROM healthpal.bookRequests AS br
+  JOIN healthpal.doctoravailability da ON br.availability_id = da.availabilityId
+    JOIN healthpal.doctor d ON da.doctorId = d.doctorId
+    JOIN healthpal.user u ON d.userId = u.userId
+    where da.doctorId= ? `;
+        const [doctorBookReqs] = await db.query(query,[doctorId]);
+        return doctorBookReqs;
     }
 }
 

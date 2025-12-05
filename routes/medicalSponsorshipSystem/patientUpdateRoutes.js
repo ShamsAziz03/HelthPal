@@ -1,0 +1,34 @@
+const express = require("express");
+const router = express.Router();
+const {
+  createPatientUpdate,
+  getAllPatientUpdates,
+  getPatientUpdateById,
+  getUpdatesByPatientId,
+  getUpdatesBySponsorshipId,
+  updatePatientUpdate,
+  deletePatientUpdate,
+} = require("../../controllers/MedicalSponsorshipSystem/patientUpdateController");
+
+// Route for getting all patient updates
+router.get("/", getAllPatientUpdates);
+
+// Route for getting a single patient update by ID
+router.get("/:updateId", getPatientUpdateById);
+
+// Route for getting updates by patient ID
+router.get("/patient/:patientId", getUpdatesByPatientId);
+
+// Route for getting updates by sponsorship ID
+router.get("/sponsorship/:sponsorshipId", getUpdatesBySponsorshipId);
+
+// Route for creating a new patient update
+router.post("/", createPatientUpdate);
+
+// Route for updating a patient update
+router.put("/:updateId", updatePatientUpdate);
+
+// Route for deleting a patient update
+router.delete("/:updateId", deletePatientUpdate);
+
+module.exports = router;

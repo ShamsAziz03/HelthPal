@@ -5,6 +5,8 @@ const collaborationController = {
         try {
             const data = req.body
             const newCollaboration = await collaboration.add(data)
+            if (newCollaboration.error)
+                return res.status(400).json({ error: newCollaboration.error })
             res.status(200).json(newCollaboration)
         } catch (err) {
             res.status(500).json({ error: err.message })

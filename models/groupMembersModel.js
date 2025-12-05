@@ -29,8 +29,8 @@ class GroupMembers {
         const sql = `SELECT sg.groupId, sg.groupName, sg.description,
                     JSON_ARRAYAGG(JSON_OBJECT('userId', u.userId, 'fullName', u.fullName)) AS members
                     FROM supportgroup sg
-                    LEFT JOIN group_members gm ON sg.groupId = gm.groupId
-                    LEFT JOIN user u ON gm.userId = u.userId
+                    JOIN group_members gm ON sg.groupId = gm.groupId
+                    JOIN user u ON gm.userId = u.userId
                     GROUP BY sg.groupId;`
         const [rows] = await db.query(sql)
         return rows

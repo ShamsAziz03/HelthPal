@@ -66,9 +66,9 @@ app.use("/api/drAvailability", availabilityRoutes);
 app.use("/api/booking", bookingRoutes);
 app.use("/api/missions", missionRoutes);
 
-app.use("/api/doctorConsultation",doctorConsultationRoutes);
-app.use("/api/bookingReqForConsultation",bookingRequestRoutes);
-app.use("/api/consultation",consultationRoutes);
+app.use("/api/doctorConsultation", doctorConsultationRoutes);
+app.use("/api/bookingReqForConsultation", bookingRequestRoutes);
+app.use("/api/consultation", consultationRoutes);
 
 
 app.use("/equipment", equipmentRouter);
@@ -80,9 +80,9 @@ app.use("/api/therapy-sessions", therapySessionRoutes);
 app.use("/api/support-groups", supportGroupRoutes);
 app.use("/api/therapy-chats", therapyChattingRoutes);
 
-app.use("/api/chatConsultation",chatConsultationRoutes);
-app.use("/api/translation",translationRoutes);
-app.use("/api/consultationSession",sessionRoutes);
+app.use("/api/chatConsultation", chatConsultationRoutes);
+app.use("/api/translation", translationRoutes);
+app.use("/api/consultationSession", sessionRoutes);
 
 
 app.use((err, req, res, next) => {

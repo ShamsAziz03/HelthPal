@@ -20,13 +20,21 @@ const {
 router.use(authenticateToken);
 
 // Route for getting all sponsorships
-router.get("/", getAllSponsorships);
+router.get("/", authorizeRole("Admin"), getAllSponsorships);
 
 // Route for getting a single sponsorship by ID
-router.get("/:sponsorshipId", getSponsorshipById);
+router.get(
+  "/:sponsorshipId",
+  authorizeRole("Admin", "Donor", "Doctor"),
+  getSponsorshipById
+);
 
 // Route for getting sponsorships by patient ID
-router.get("/patient/:patientId", getSponsorshipsByPatientId);
+router.get(
+  "/patient/:patientId",
+  authorizeRole("Admin", "Patient", "Doctor"),
+  getSponsorshipsByPatientId
+);
 
 // Route for creating a new sponsorship
 router.post("/", authorizeRole("Admin"), createSponsorship);

@@ -31,7 +31,11 @@ router.get(
 );
 
 // Route for getting transactions by sponsorship ID
-router.get("/transaction/:sponsorshipId", getTransactionsBySponsorshipId);
+router.get(
+  "/transaction/:sponsorshipId",
+  authorizeRole("Admin", "Donor"),
+  getTransactionsBySponsorshipId
+);
 
 // Route for getting donor donation history
 router.get(
@@ -41,7 +45,11 @@ router.get(
 );
 
 // Route for getting full sponsorship report
-router.get("/sponsorship/:sponsorshipId/report", getFullSponsorshipReport);
+router.get(
+  "/sponsorship/:sponsorshipId/report",
+  authorizeRole("Admin"),
+  getFullSponsorshipReport
+);
 
 // Route for deleting a transaction
 router.delete("/:transactionId", authorizeRole("Admin"), deleteTransaction);

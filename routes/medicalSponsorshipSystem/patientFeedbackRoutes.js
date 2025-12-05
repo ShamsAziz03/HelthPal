@@ -19,7 +19,11 @@ router.use(authenticateToken);
 router.get("/", authorizeRole("Admin"), getAllFeedbacks);
 
 // Route for getting a single patient feedback by ID
-router.get("/:feedbackId", getFeedbackById);
+router.get(
+  "/:feedbackId",
+  authorizeRole("Admin", "Patient", "Doctor", "Donor"),
+  getFeedbackById
+);
 
 // Route for creating a new patient feedback
 router.post("/", authorizeRole("Patient"), createPatientFeedback);

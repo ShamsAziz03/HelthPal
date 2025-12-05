@@ -30,7 +30,7 @@ router.get(
 // Route for getting updates by patient ID
 router.get(
   "/patient/:patientId",
-  authorizeRole("Admin", "Doctor"),
+  authorizeRole("Admin", "Doctor", "Patient"),
   getUpdatesByPatientId
 );
 

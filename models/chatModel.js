@@ -1,6 +1,5 @@
 const db = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
-const { deleteGroup } = require("../controllers/supportGroupController");
 
 class Chat {
   static async sendGroupMsg(data) {
@@ -120,6 +119,70 @@ class Chat {
             return { error: "no messages found between therapist and patient" };
         return rows;
     }
+
+
+    //to send msgs between dr and patient for consultation
+    static async sendConsultationChatMsg(senderId,receiverId,message,consultationId){
+      let receivers=[];
+      //first to check if sender and reciver is valid users
+      const [isSenderExist]= await db.execute(`select * from user where userId = ?`,[senderId]);
+      const [isReceiverExist]= await db.execute(`select * from user where userId = ?`,[receiverId]);
+      if(isSenderExist.length===0)return {error:"Sender Is Not Valid User"};
+      if(isReceiverExist.length===0)return {error:"Receiver Is Not Valid User"};
+      //to check if sender and reciver is valid roles - patient or doctor only
+      if(isSenderExist[0].role!=="Doctor"&&isSenderExist[0].role!=="Patient")return {error:"Sender Is Not Doctor or Patient"};
+      if(isReceiverExist[0].role!=="Doctor"&&isReceiverExist[0].role!=="Patient")return {error:"Receiver Is Not Doctor or Patient"};
+
+      //to check if consultation id exist 
+      const [isConsultationExist]= await db.execute(`select * from consultation where consultationId = ?`,[consultationId]);
+      if(isConsultationExist.length===0)return {error:"Consultation Is Not Exist"};
+      if(isConsultationExist[0].consultationType!=="Chat")return {error:"Type of Consultation is not Chat!"};
+
+
+      //to check if patient and doctor is from the consultation
+      const [data2]= await db.execute(`SELECT d.userId AS doctorUserId, p.userId as UserIdPatient
+  FROM consultation c
+  JOIN bookrequests b ON c.bookRequestId=b.id
+  Join doctoravailability da on b.availability_id=da.availabilityId
+  join doctor d on d.doctorId=da.doctorId
+  join patient p on b.patient_id=p.patientId
+  WHERE c.consultationId = ? `,[consultationId]);
+      if(data2.length===0)return {error:"the patient or doctor is not envolved in the consultation, choose correct sender and recevier ids"};
+      if(data2[0].doctorUserId!==senderId.toString()&&data2[0].UserIdPatient!==senderId.toString())return {error:"The Sender is not envolved in this consultation"};
+      if(data2[0].doctorUserId!==receiverId.toString()&&data2[0].UserIdPatient!==receiverId.toString())return {error:"The Recevier is not envolved in this consultation"};
+
+
+
+      receivers.push(receiverId.toString());
+
+      //to add the PK
+      const [data] = await db.execute(
+      `SELECT MAX(chatId)+1 AS next_id FROM chatting ;` );
+      const nextId = data[0].next_id;
+
+
+      const insertQuery=`INSERT INTO chatting (chatId, senderId, receivers,messageTime, message,consultationId) VALUES (?, ?, ?, ?, ?, ?);`;
+      const [result]=await db.execute(insertQuery,[nextId,senderId,JSON.stringify(receivers),new Date().toISOString().slice(0, 19).replace('T', ' '),message||"new message",consultationId]);
+      if(result.affectedRows===0){return {error:` Can't Send Msg from senderId ${senderId} to reciverId ${receiverId}`}}
+      return {result:` Send Msg from senderId ${senderId} to reciverId ${receiverId}: ${message} --- is success`}
+    }
+
+    
+    //to get msgs between dr and patient for consultation
+    static async getConsultationChatMsgs(consultationId){
+      //to check if consultation id exist 
+      const [isConsultationExist]= await db.execute(`select * from consultation where consultationId = ?`,[consultationId]);
+      if(isConsultationExist.length===0)return {error:"Consultation Is Not Exist"};
+      if(isConsultationExist[0].consultationType!=="Chat")return {error:"Type of Consultation is not Chat!"};
+
+      //to get chat history for consultation
+      const query=`select * from  chatting where consultationId = ?`;
+      const [result]=await db.execute(query,[consultationId]);
+      if(result.affectedRows===0){return {error:`No Msgs for this consultation: ${consultationId}`}}
+      return result;
+    }
+
+  
 }
 
 module.exports = Chat;

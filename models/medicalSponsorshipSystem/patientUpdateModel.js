@@ -5,6 +5,24 @@ class PatientUpdate {
   // Create a new patient update record
   static async create(updateData) {
     const { sponsorshipId, patientId, updateText } = updateData;
+
+    // Validate required fields
+    if (!sponsorshipId) throw new Error("sponsorshipId is required");
+    if (!patientId) throw new Error("patientId is required");
+
+    // Ensure the sponsorship exists and belongs to the provided patientId
+    const checkSql = `SELECT patientId FROM sponsorship WHERE sponsorshipId = ?`;
+    const [rows] = await db.execute(checkSql, [sponsorshipId]);
+    if (!rows || rows.length === 0) {
+      throw new Error("Sponsorship not found");
+    }
+    const sponsorshipPatientId = rows[0].patientId;
+    if (sponsorshipPatientId !== patientId) {
+      throw new Error(
+        "Provided patientId does not match the sponsorship's patientId"
+      );
+    }
+
     const updateId = uuidv4();
     const updateDate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const query = `INSERT INTO patient_updates (updateId, sponsorshipId, patientId, updateText)
@@ -40,6 +58,22 @@ class PatientUpdate {
     const sql = `SELECT * FROM patient_updates WHERE patientId = ? ORDER BY updateDate DESC`;
     const [rows] = await db.execute(sql, [patientId]);
     return rows;
+  }
+
+  // Update an existing patient update
+  static async update(updateId, updateData) {
+    const { updateText } = updateData;
+    const query = `UPDATE patient_updates SET updateText = ? WHERE updateId = ?`;
+    const values = [updateText, updateId];
+    const [result] = await db.execute(query, values);
+    return result;
+  }
+
+  // Delete a patient update
+  static async delete(updateId) {
+    const query = `DELETE FROM patient_updates WHERE updateId = ?`;
+    const [result] = await db.execute(query, [updateId]);
+    return result;
   }
 }
 

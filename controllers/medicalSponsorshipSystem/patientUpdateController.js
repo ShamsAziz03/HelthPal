@@ -109,3 +109,43 @@ exports.getUpdatesByPatientId = async (req, res) => {
     });
   }
 };
+
+// Update a patient update
+exports.updatePatientUpdate = async (req, res) => {
+  try {
+    const { updateId } = req.params;
+    const updateData = req.body;
+    const updatedUpdate = await PatientUpdate.update(updateId, updateData);
+    res.status(200).json({
+      success: true,
+      message: "Patient update updated successfully",
+      data: updatedUpdate,
+    });
+  } catch (error) {
+    console.error("Error updating patient update:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating patient update",
+      error: error.message,
+    });
+  }
+};
+
+// Delete a patient update
+exports.deletePatientUpdate = async (req, res) => {
+  try {
+    const { updateId } = req.params;
+    await PatientUpdate.delete(updateId);
+    res.status(200).json({
+      success: true,
+      message: "Patient update deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting patient update:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting patient update",
+      error: error.message,
+    });
+  }
+};

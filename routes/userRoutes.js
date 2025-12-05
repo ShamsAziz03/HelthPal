@@ -4,15 +4,23 @@ const {
   createUser,
   getUserById,
   updateIsAnonymous,
+  getAllUsers,
+  deleteUser,
+  logInUser,
+  registerUser,
 } = require("../controllers/userController");
+const { authenticateToken, authorizeRole } = require("../middleware/authMiddleware");
 
-// Route for updating user's isAnonymous preference
-router.put("/updateIsAnonymous/:patientId", updateIsAnonymous);
+router.post("/register", registerUser);
+router.post("/login", logInUser);
 
-// Route for getting a user by ID
-router.get("/:userId", getUserById);
+router.put("/updateIsAnonymous/:patientId", authenticateToken, updateIsAnonymous);
 
-// Route for creating a new user
-router.post("/", createUser);
+router.get("/:userId", authenticateToken, getUserById);
+
+router.post("/", authenticateToken, authorizeRole("admin"), createUser);
+
+router.get("/", authenticateToken, authorizeRole("admin", "doctor"), getAllUsers);
+router.delete("/:userId", authenticateToken, authorizeRole("admin"), deleteUser);
 
 module.exports = router;

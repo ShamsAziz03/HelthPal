@@ -5,7 +5,6 @@ const Doctor = require("./doctorModel");
 const { v4: uuidv4 } = require("uuid");
 
 class User {
-  // Create a new user record
   static async create(userData) {
     const {
       email,
@@ -118,6 +117,50 @@ class User {
     const query = `UPDATE patient SET isAnonymous = ? WHERE patientId = ?`;
     const [result] = await db.execute(query, [isAnonymous, patientId]);
     return result;
+  }
+
+  // Get all users
+  static async findAll() {
+    const query = `SELECT * FROM user`;
+    const [rows] = await db.execute(query);
+    return rows;
+  }
+  // Delete a user by ID
+  static async delete(userId) {
+    const query = `DELETE FROM user WHERE userId = ?`;
+    const [result] = await db.execute(query, [userId]);
+    return result;
+  }
+
+  // Backwards-compatible alias used by controllers
+  static async deleteById(userId) {
+    return await this.delete(userId);
+  }
+
+  // Get a user by email
+  static async findByEmail(email) {
+    const [users] = await db.execute("SELECT * FROM user WHERE email = ?", [
+      email,
+    ]);
+    if (users.length === 0) return null;
+    return users[0];
+  }
+
+  static async updateLastLogin(userId) {
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace("T", " ");
+    const query = `UPDATE user SET lastLogin = ? WHERE userId = ?`;
+    const [result] = await db.execute(query, [formattedDate, userId]);
+    return result;
+  }
+
+  static async logInUser(email, password) {
+    const [users] = await db.execute(
+      "SELECT * FROM user WHERE email = ? AND password = ?",
+      [email, password]
+    );
+    if (users.length === 0) return { error: "No user found" };
+    return users[0];
   }
 }
 

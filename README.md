@@ -488,7 +488,7 @@ The application includes comprehensive error handling and logging:
 | **Backend Developer** | Shams Aziz |  backend architecture, API design ,Node.js development, route implementation, business logic,Database management, services layer, integrations|
 | **Backend Developer** | Yara Daraghmeh | backend architecture, API design ,Node.js development, route implementation, business logic,Database management, services layer, integrations |
 | **Backend Developer** | Aya Sawallha | backend architecture, API design ,Node.js development, route implementation, business logic,Database management, services layer, integrations  |
-| **Database Administrator** | Raheeq Qassrawi | backend architecture, API design ,Node.js development, route implementation, business logic,Database management, services layer, integrations  |
+| **Backend Developer** | Raheeq Qassrawi | backend architecture, API design ,Node.js development, route implementation, business logic,Database management, services layer, integrations  |
 
 ---
 

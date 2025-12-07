@@ -3,6 +3,7 @@
 # HealthPal
 
 ### Digital Healthcare Platform for Palestinians
+<img width="789" height="316" alt="newhealtpalwhite" src="https://github.com/user-attachments/assets/77dc926c-8153-4fd7-aa43-afcdda4db8e0" />
 
 
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)

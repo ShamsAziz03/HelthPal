@@ -44,44 +44,6 @@ The project focuses on delivering a robust, scalable, and secure backend API whi
 
 ---
 
-## Key Features
-
-### For Patients
-- **Remote Medical Consultations**: Book virtual appointments with qualified doctors across multiple specialties
-- **Low-Bandwidth Support**: Audio-only calls and asynchronous messaging for areas with limited connectivity
-- **Medical Translation**: Integrated Arabic ↔ English translation for international doctor-patient communication
-- **Treatment Sponsorship**: Access crowdfunded medical treatments including surgeries, cancer care, dialysis, and rehabilitation
-- **Medication Coordination**: Request critical medications with delivery matching from NGOs and volunteers
-- **Health Education**: Access localized health guides, public alerts, and educational content
-- **Mental Health Support**: Trauma counseling, support groups, and anonymous therapy chat services
-
-### For Doctors
-- **Professional Profile**: Showcase expertise, certifications, and specializations
-- **Consultation Management**: Schedule and conduct virtual consultations with patients
-- **Medical Records Access**: View patient histories and medical information securely
-- **Transparent Feedback**: Provide detailed consultation notes and treatment recommendations
-
-### For Donors
-- **Treatment Sponsorship**: Fund specific medical cases with full transparency
-- **Donation Dashboard**: Track where contributions are allocated with invoices and receipts
-- **Patient Impact**: Receive updates on patient recovery and treatment progress
-- **Verified Cases**: Access verified patient profiles with complete medical history
-
-### For NGOs & Medical Missions
-- **Organization Dashboard**: Manage medical missions, equipment registries, and volunteer coordination
-- **Equipment Tracking**: Maintain inventory of oxygen tanks, wheelchairs, dialysis machines, and other medical equipment
-- **Crowdsourced Resources**: Share surplus medicines and tools from hospitals and pharmacies
-- **Mission Scheduling**: Coordinate surgical camps and specialist visits
-- **Volunteer Management**: Register international doctors and coordinate availability
-
-### For Administrators
-- **Platform Management**: Oversee user verification, doctor credentials, and NGO partnerships
-- **Quality Control**: Monitor consultations, user feedback, and safety compliance
-- **Analytics & Reporting**: Generate comprehensive usage reports and platform statistics
-- **Content Management**: Manage health education resources, guidelines, and public health alerts
-
----
-
 ## System Architecture
 
 HealthPal follows a **RESTful API Architecture** with a layered design pattern for optimal separation of concerns and scalable communication:

@@ -25,6 +25,8 @@ const supportGroupController = {
     getGroupById: async (req, res) => {
         try {
             const group = await supportGroup.getById(req.params.id);
+            if (group.error) 
+                return res.status(404).json(group)
             res.json(group);
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -71,7 +73,9 @@ const supportGroupController = {
     joinGroup: async (req, res) => {
         try {
             const result = await groupMembers.addMember(req.body)
-            if (result.error) 
+            if (result.error === "the user already is a member of this group") 
+                return res.status(400).json(result)
+            if (result.error)
                 return res.status(404).json(result)
             res.json(result)
         } catch (err) {

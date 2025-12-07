@@ -24,6 +24,8 @@ class SupportGroup {
     static async getById(id) {
         const qry = "SELECT * FROM supportgroup WHERE groupId = ?;"
         const [rows] = await db.query(qry, [id])
+        if(rows.length === 0)
+            return { error: "support group does not exist" }
         return rows[0]
     }
     
